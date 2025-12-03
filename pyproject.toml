@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "beautifulsoup4>=4.14.3",
+    "flet[all]==0.28.3",
     "requests>=2.32.5",
     "win11toast>=0.36.2",
 ]
