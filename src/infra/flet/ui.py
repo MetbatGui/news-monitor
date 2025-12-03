@@ -74,11 +74,8 @@ def main(page: ft.Page):
             
             if not search_terms:
                  await view.update_status("키워드 또는 종목명을 추가해주세요.")
-                 is_monitoring = False
                  await view.set_monitoring_state(False)
                  break
-            
-            # Accumulate articles
             
             try:
                 for term in search_terms:
@@ -88,6 +85,11 @@ def main(page: ft.Page):
                         if article.link not in current_links:
                             all_articles.append(article)
                             current_links.add(article.link)
+                            # Send notification
+                            try:
+                                toaster.send_notification(article)
+                            except Exception as e:
+                                print(f"Notification error: {e}")
                     
                 # Sort by date descending (newest first)
                 all_articles.sort(key=lambda x: x.date, reverse=True)
