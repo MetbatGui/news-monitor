@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import List
 
 from adapters.infrastructure.newspim_scraper import NewspimScraper
+from adapters.infrastructure.keyword_storage import KeywordStorage
 from infra.flet.views.main_view import MainView
 from domain.model import Article
 
@@ -16,6 +17,10 @@ def main(page: ft.Page):
     # State
     is_monitoring = False
     scraper = NewspimScraper()
+    storage = KeywordStorage()
+    
+    # Load initial keywords
+    initial_data = storage.load()
     
     def on_start_stop(monitoring: bool):
         nonlocal is_monitoring
@@ -23,7 +28,15 @@ def main(page: ft.Page):
         if is_monitoring:
             page.run_task(monitor_loop)
             
-    view = MainView(on_start_stop=on_start_stop)
+    def on_keyword_change(keywords: List[str], stock_names: List[str]):
+        storage.save(keywords, stock_names)
+            
+    view = MainView(
+        on_start_stop=on_start_stop,
+        initial_keywords=initial_data.get("keywords", []),
+        initial_stock_names=initial_data.get("stock_names", []),
+        on_keyword_change=on_keyword_change
+    )
     page.add(view)
     
     async def monitor_loop():

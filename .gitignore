@@ -10,3 +10,4 @@ wheels/
 .venv
 logs/
 *.html
+config/keywords.json

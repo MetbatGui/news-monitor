@@ -2,9 +2,9 @@ import flet as ft
 from typing import List, Callable
 
 class KeywordManager(ft.Column):
-    def __init__(self, label: str = "키워드 추가", on_change: Callable[[List[str]], None] = None):
+    def __init__(self, label: str = "키워드 추가", initial_keywords: List[str] = None, on_change: Callable[[List[str]], None] = None):
         super().__init__()
-        self.keywords: List[str] = []
+        self.keywords: List[str] = initial_keywords if initial_keywords else []
         self.on_change = on_change
         
         self.input_field = ft.TextField(
@@ -12,11 +12,14 @@ class KeywordManager(ft.Column):
             width=200, 
             on_submit=self.add_keyword
         )
+        
         self.add_button = ft.IconButton(
             icon=ft.Icons.ADD, 
             on_click=self.add_keyword
         )
+        
         self.chips_row = ft.Row(wrap=True, spacing=5)
+        self.update_chips()
         
         self.controls = [
             ft.Row([self.input_field, self.add_button]),

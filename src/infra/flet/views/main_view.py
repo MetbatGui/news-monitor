@@ -7,11 +7,24 @@ from infra.flet.components.status_bar import StatusBar
 from domain.model import Article
 
 class MainView(ft.Column):
-    def __init__(self, on_start_stop: Callable[[bool], None]):
+    def __init__(self, on_start_stop: Callable[[bool], None], 
+                 initial_keywords: List[str] = None,
+                 initial_stock_names: List[str] = None,
+                 on_keyword_change: Callable[[List[str], List[str]], None] = None):
         super().__init__()
         
-        self.keyword_manager = KeywordManager(label="키워드 추가")
-        self.stock_manager = KeywordManager(label="종목명 추가")
+        self.on_keyword_change = on_keyword_change
+        
+        self.keyword_manager = KeywordManager(
+            label="키워드 추가", 
+            initial_keywords=initial_keywords,
+            on_change=lambda _: self._handle_change()
+        )
+        self.stock_manager = KeywordManager(
+            label="종목명 추가", 
+            initial_keywords=initial_stock_names,
+            on_change=lambda _: self._handle_change()
+        )
         self.control_panel = ControlPanel(on_start_stop=on_start_stop)
         self.status_bar = StatusBar()
         self.results_list = ft.ListView(expand=True, spacing=10, padding=20, auto_scroll=False)
@@ -31,6 +44,10 @@ class MainView(ft.Column):
             self.results_list
         ]
         self.expand = True
+
+    def _handle_change(self):
+        if self.on_keyword_change:
+            self.on_keyword_change(self.keyword_manager.keywords, self.stock_manager.keywords)
 
     async def set_articles(self, articles: List[Article]):
         self.results_list.controls.clear()
