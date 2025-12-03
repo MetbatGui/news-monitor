@@ -3,6 +3,9 @@ import asyncio
 import time
 from datetime import datetime
 from typing import List
+import threading
+import pystray
+from PIL import Image, ImageDraw
 
 from adapters.infrastructure.newspim_scraper import NewspimScraper
 from adapters.infrastructure.keyword_storage import KeywordStorage
@@ -10,16 +13,64 @@ from adapters.infrastructure.win_toast import WinToast
 from infra.flet.views.main_view import MainView
 from domain.model import Article
 
+def create_image():
+    # Generate an image for the tray icon
+    width = 64
+    height = 64
+    color1 = "#2196F3" # Blue
+    color2 = "white"
+    image = Image.new('RGB', (width, height), color1)
+    dc = ImageDraw.Draw(image)
+    dc.rectangle(
+        (width // 4, height // 4, width * 3 // 4, height * 3 // 4),
+        fill=color2)
+    return image
+
 def main(page: ft.Page):
     page.title = "Newspim Monitor"
     page.padding = 20
     page.theme_mode = ft.ThemeMode.LIGHT
-    
+    page.window_prevent_close = True # Prevent app from closing on X click
+
     # State
     is_monitoring = False
     scraper = NewspimScraper()
     storage = KeywordStorage()
-    toaster = WinToast()
+    
+    def restore_window():
+        page.window_minimized = False
+        page.window_visible = True
+        page.update()
+        page.window_to_front()
+
+    toaster = WinToast(on_click=restore_window)
+    
+    # Tray Icon Setup
+    def on_open(icon, item):
+        restore_window()
+
+    def on_exit(icon, item):
+        nonlocal is_monitoring
+        is_monitoring = False
+        icon.stop()
+        page.window_destroy()
+
+    icon = pystray.Icon("Newspim Monitor", create_image(), "Newspim Monitor", menu=pystray.Menu(
+        pystray.MenuItem("Open", on_open),
+        pystray.MenuItem("Exit", on_exit)
+    ))
+
+    def run_tray():
+        icon.run()
+
+    threading.Thread(target=run_tray, daemon=True).start()
+
+    def on_window_event(e):
+        if e.data == "close":
+            page.window_visible = False
+            page.update()
+
+    page.on_window_event = on_window_event
     
     # Load initial keywords
     initial_data = storage.load()
