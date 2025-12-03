@@ -1,0 +1,35 @@
+import flet as ft
+import webbrowser
+from domain.model import Article
+
+class ArticleCard(ft.Card):
+    def __init__(self, article: Article):
+        super().__init__()
+        self.article = article
+        self.content = ft.Container(
+            content=ft.Row(
+                [
+                    ft.Icon(ft.Icons.ARTICLE),
+                    ft.VerticalDivider(width=10, color=ft.Colors.TRANSPARENT),
+                    ft.Text(
+                        article.title, 
+                        weight=ft.FontWeight.BOLD, 
+                        size=16, 
+                        max_lines=2, 
+                        overflow=ft.TextOverflow.ELLIPSIS, 
+                        expand=True
+                    ),
+                    ft.Column(
+                        [
+                            ft.Text("뉴스핌", size=12, color=ft.Colors.GREY),
+                            ft.Text(article.date, size=12, color=ft.Colors.GREY)
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        horizontal_alignment=ft.CrossAxisAlignment.END,
+                    )
+                ],
+                alignment=ft.MainAxisAlignment.SPACE_BETWEEN
+            ),
+            padding=15,
+            on_click=lambda _: webbrowser.open(article.link)
+        )
