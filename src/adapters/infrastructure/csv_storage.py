@@ -44,6 +44,7 @@ class CsvStorage(StorageRepository):
                     article.title,
                     article.link,
                     article.date,
+                    article.keyword,
                     datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 ])
         except Exception as e:

@@ -22,7 +22,11 @@ class ArticleCard(ft.Card):
                     ft.Column(
                         [
                             ft.Text("뉴스핌", size=12, color=ft.Colors.GREY),
-                            ft.Text(article.date, size=12, color=ft.Colors.GREY)
+                            ft.Text(article.date, size=12, color=ft.Colors.GREY),
+                            ft.Container(
+                                content=ft.Text(article.keyword, size=12, color=ft.Colors.BLUE),
+                                visible=bool(article.keyword)
+                            )
                         ],
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.END,

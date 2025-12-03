@@ -7,3 +7,4 @@ class Article:
     title: str
     link: str
     date: str
+    keyword: str = ""

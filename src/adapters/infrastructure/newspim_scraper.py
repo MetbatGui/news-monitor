@@ -56,7 +56,8 @@ class NewspimScraper(NewsRepository):
                         id=article_id,
                         title=title,
                         link=link,
-                        date=date_str
+                        date=date_str,
+                        keyword=keyword
                     ))
                     
                 except Exception as e:
