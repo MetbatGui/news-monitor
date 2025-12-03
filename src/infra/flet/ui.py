@@ -6,6 +6,7 @@ from typing import List
 
 from adapters.infrastructure.newspim_scraper import NewspimScraper
 from adapters.infrastructure.keyword_storage import KeywordStorage
+from adapters.infrastructure.win_toast import WinToast
 from infra.flet.views.main_view import MainView
 from domain.model import Article
 
@@ -18,6 +19,7 @@ def main(page: ft.Page):
     is_monitoring = False
     scraper = NewspimScraper()
     storage = KeywordStorage()
+    toaster = WinToast()
     
     # Load initial keywords
     initial_data = storage.load()
