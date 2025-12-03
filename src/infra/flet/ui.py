@@ -14,19 +14,24 @@ from infra.flet.views.main_view import MainView
 from domain.model import Article
 
 def create_image():
-    # Generate an image for the tray icon
-    width = 64
-    height = 64
-    color1 = "#2196F3" # Blue
-    color2 = "white"
-    image = Image.new('RGB', (width, height), color1)
-    dc = ImageDraw.Draw(image)
-    dc.rectangle(
-        (width // 4, height // 4, width * 3 // 4, height * 3 // 4),
-        fill=color2)
-    return image
+    try:
+        # Generate an image for the tray icon
+        width = 64
+        height = 64
+        color1 = "#2196F3" # Blue
+        color2 = "white"
+        image = Image.new('RGB', (width, height), color1)
+        dc = ImageDraw.Draw(image)
+        dc.rectangle(
+            (width // 4, height // 4, width * 3 // 4, height * 3 // 4),
+            fill=color2)
+        return image
+    except Exception as e:
+        print(f"Image creation error: {e}")
+        return None
 
 def main(page: ft.Page):
+    print("App started")
     page.title = "Newspim Monitor"
     page.padding = 20
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -43,7 +48,11 @@ def main(page: ft.Page):
         page.update()
         page.window_to_front()
 
-    toaster = WinToast(on_click=restore_window)
+    try:
+        toaster = WinToast(on_click=restore_window)
+    except Exception as e:
+        print(f"WinToast init error: {e}")
+        toaster = None
     
     # Tray Icon Setup
     def on_open(icon, item):
@@ -55,15 +64,26 @@ def main(page: ft.Page):
         icon.stop()
         page.window_destroy()
 
-    icon = pystray.Icon("Newspim Monitor", create_image(), "Newspim Monitor", menu=pystray.Menu(
-        pystray.MenuItem("Open", on_open),
-        pystray.MenuItem("Exit", on_exit)
-    ))
+    try:
+        icon = pystray.Icon("Newspim Monitor", create_image(), "Newspim Monitor", menu=pystray.Menu(
+            pystray.MenuItem("Open", on_open),
+            pystray.MenuItem("Exit", on_exit)
+        ))
 
-    def run_tray():
-        icon.run()
+        def run_tray():
+            try:
+                time.sleep(3) # Wait for Flet to initialize
+                print("Starting tray icon...")
+                if icon.icon is None:
+                    print("Icon image is None, regenerating...")
+                    icon.icon = create_image()
+                icon.run()
+            except Exception as e:
+                print(f"Tray icon run error: {e}")
 
-    threading.Thread(target=run_tray, daemon=True).start()
+        threading.Thread(target=run_tray, daemon=True).start()
+    except Exception as e:
+        print(f"Tray icon setup error: {e}")
 
     def on_window_event(e):
         if e.data == "close":
@@ -140,7 +160,8 @@ def main(page: ft.Page):
                             current_links.add(article.link)
                             # Send notification
                             try:
-                                toaster.send_notification(article)
+                                if toaster:
+                                    toaster.send_notification(article)
                             except Exception as e:
                                 print(f"Notification error: {e}")
                     
