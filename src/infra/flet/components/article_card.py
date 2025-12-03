@@ -3,9 +3,10 @@ import webbrowser
 from domain.model import Article
 
 class ArticleCard(ft.Card):
-    def __init__(self, article: Article):
+    def __init__(self, article: Article, is_highlighted: bool = False):
         super().__init__()
         self.article = article
+        self.color = ft.Colors.YELLOW_50 if is_highlighted else None
         self.content = ft.Container(
             content=ft.Row(
                 [

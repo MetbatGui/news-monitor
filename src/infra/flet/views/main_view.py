@@ -6,6 +6,8 @@ from infra.flet.components.article_card import ArticleCard
 from infra.flet.components.status_bar import StatusBar
 from domain.model import Article
 
+from datetime import datetime, timedelta
+
 class MainView(ft.Column):
     def __init__(self, on_start_stop: Callable[[bool], None], 
                  initial_keywords: List[str] = None,
@@ -49,10 +51,21 @@ class MainView(ft.Column):
         if self.on_keyword_change:
             self.on_keyword_change(self.keyword_manager.keywords, self.stock_manager.keywords)
 
+    def _is_recent(self, date_str: str) -> bool:
+        try:
+            # date_str format: "YYYY-MM-DD HH:MM"
+            article_date = datetime.strptime(date_str, "%Y-%m-%d %H:%M")
+            now = datetime.now()
+            diff = now - article_date
+            return diff <= timedelta(minutes=5)
+        except Exception:
+            return False
+
     async def set_articles(self, articles: List[Article]):
         self.results_list.controls.clear()
         for article in articles:
-            self.results_list.controls.append(ArticleCard(article))
+            is_highlighted = self._is_recent(article.date)
+            self.results_list.controls.append(ArticleCard(article, is_highlighted=is_highlighted))
         self.results_list.update()
 
     def add_article(self, article: Article):

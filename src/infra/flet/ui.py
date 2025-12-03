@@ -41,6 +41,32 @@ def main(page: ft.Page):
     
     async def monitor_loop():
         nonlocal is_monitoring
+        all_articles = []
+        current_links = set()
+        
+        # Baseline fetch - get current articles but don't display them
+        keywords = view.get_keywords()
+        stock_names = view.get_stock_names()
+        search_terms = keywords + stock_names
+        
+        if not search_terms:
+             await view.update_status("키워드 또는 종목명을 추가해주세요.")
+             is_monitoring = False
+             await view.set_monitoring_state(False)
+             return
+
+        await view.update_status("초기 데이터 수집 중... (화면에 표시되지 않음)")
+        try:
+            for term in search_terms:
+                if not is_monitoring: break
+                articles = await asyncio.to_thread(scraper.fetch_reports, term)
+                for article in articles:
+                    current_links.add(article.link)
+        except Exception as e:
+            print(f"Baseline fetch error: {e}")
+            
+        await view.update_status(f"모니터링 시작... ({datetime.now().strftime('%H:%M:%S')}) - 새로운 기사 대기 중")
+
         while is_monitoring:
             keywords = view.get_keywords()
             stock_names = view.get_stock_names()
@@ -52,24 +78,22 @@ def main(page: ft.Page):
                  await view.set_monitoring_state(False)
                  break
             
-            all_articles = []
-            
-            await view.update_status(f"검색 중... ({datetime.now().strftime('%H:%M:%S')})")
+            # Accumulate articles
             
             try:
                 for term in search_terms:
                     if not is_monitoring: break
                     articles = await asyncio.to_thread(scraper.fetch_reports, term)
-                    all_articles.extend(articles)
+                    for article in articles:
+                        if article.link not in current_links:
+                            all_articles.append(article)
+                            current_links.add(article.link)
                     
-                # Remove duplicates based on Link
-                unique_articles = list({a.link: a for a in all_articles}.values())
-                
                 # Sort by date descending (newest first)
-                unique_articles.sort(key=lambda x: x.date, reverse=True)
+                all_articles.sort(key=lambda x: x.date, reverse=True)
                 
-                await view.set_articles(unique_articles)
-                await view.update_status(f"업데이트 완료 ({datetime.now().strftime('%H:%M:%S')}) - {len(unique_articles)}건 발견")
+                await view.set_articles(all_articles)
+                await view.update_status(f"업데이트 완료 ({datetime.now().strftime('%H:%M:%S')}) - 총 {len(all_articles)}건")
                 
             except Exception as e:
                 await view.update_status(f"오류 발생: {str(e)}")
