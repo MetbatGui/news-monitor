@@ -3,8 +3,8 @@ import os
 from datetime import datetime
 from typing import Set
 
-from src.domain.model import Article
-from src.ports.storage_port import StorageRepository
+from domain.model import Article
+from ports.storage_port import StorageRepository
 
 class CsvStorage(StorageRepository):
     def __init__(self, base_dir: str = "logs"):

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from src.domain.model import Article
+from domain.model import Article
 
 class NewsRepository(ABC):
     @abstractmethod

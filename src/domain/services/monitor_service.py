@@ -2,10 +2,10 @@ import asyncio
 from datetime import datetime
 from typing import Set
 
-from src.config import Config
-from src.ports.news_port import NewsRepository
-from src.ports.storage_port import StorageRepository
-from src.ports.alert_port import AlertSystem
+from config import Config
+from ports.news_port import NewsRepository
+from ports.storage_port import StorageRepository
+from ports.alert_port import AlertSystem
 
 class MonitorService:
     def __init__(

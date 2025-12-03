@@ -1,7 +1,7 @@
 import webbrowser
 from win11toast import toast
-from src.domain.model import Article
-from src.ports.alert_port import AlertSystem
+from domain.model import Article
+from ports.alert_port import AlertSystem
 
 class WinToast(AlertSystem):
     def send_notification(self, article: Article) -> None:

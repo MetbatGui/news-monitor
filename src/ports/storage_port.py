@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Set
-from src.domain.model import Article
+from domain.model import Article
 
 class StorageRepository(ABC):
     @abstractmethod

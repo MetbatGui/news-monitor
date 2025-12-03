@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.domain.model import Article
+from domain.model import Article
 
 class AlertSystem(ABC):
     @abstractmethod
