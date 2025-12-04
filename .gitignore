@@ -13,3 +13,4 @@ logs/
 config/keywords.json
 
 *.zip
+/assets/audio

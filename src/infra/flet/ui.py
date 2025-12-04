@@ -52,6 +52,15 @@ def main(page: ft.Page):
     tts.generate_audio("뉴스핌")
     tts.generate_audio("인포스탁")
     
+    # Load initial keywords and pre-generate audio
+    initial_data = storage.load()
+    initial_keywords = initial_data.get("keywords", [])
+    initial_stock_names = initial_data.get("stock_names", [])
+    
+    print("Pre-generating audio for keywords...")
+    for k in initial_keywords + initial_stock_names:
+        tts.generate_audio(k)
+    
     def restore_window():
         page.window_minimized = False
         page.window_visible = True
