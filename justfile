@@ -8,3 +8,6 @@ setup:
 
 run:
     uv run python src/main.py
+
+package:
+    git archive -o news-monitor.zip HEAD
