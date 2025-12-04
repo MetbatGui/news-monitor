@@ -48,18 +48,21 @@ def main(page: ft.Page):
     storage = KeywordStorage()
     tts = TTSService()
     
-    # Pre-generate audio for sources
-    tts.generate_audio("뉴스핌")
-    tts.generate_audio("인포스탁")
-    
-    # Load initial keywords and pre-generate audio
+    # Load initial keywords
     initial_data = storage.load()
     initial_keywords = initial_data.get("keywords", [])
     initial_stock_names = initial_data.get("stock_names", [])
-    
-    print("Pre-generating audio for keywords...")
-    for k in initial_keywords + initial_stock_names:
-        tts.generate_audio(k)
+
+    def pre_generate_audio():
+        print("Pre-generating audio for keywords...")
+        # Pre-generate audio for sources
+        tts.generate_audio("뉴스핌")
+        tts.generate_audio("인포스탁")
+        
+        for k in initial_keywords + initial_stock_names:
+            tts.generate_audio(k)
+            
+    threading.Thread(target=pre_generate_audio, daemon=True).start()
     
     def restore_window():
         page.window_minimized = False
