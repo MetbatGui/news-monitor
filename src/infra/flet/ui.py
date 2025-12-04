@@ -10,6 +10,7 @@ import win32gui
 import win32con
 
 from adapters.infrastructure.newspim_scraper import NewspimScraper
+from adapters.infrastructure.infostock_scraper import InfostockScraper
 from adapters.infrastructure.keyword_storage import KeywordStorage
 from adapters.infrastructure.win_toast import WinToast
 from infra.flet.views.main_view import MainView
@@ -41,7 +42,8 @@ def main(page: ft.Page):
 
     # State
     is_monitoring = False
-    scraper = NewspimScraper()
+    is_monitoring = False
+    scrapers = [NewspimScraper(), InfostockScraper()]
     storage = KeywordStorage()
     
     def restore_window():
@@ -144,9 +146,10 @@ def main(page: ft.Page):
         try:
             for term in search_terms:
                 if not is_monitoring: break
-                articles = await asyncio.to_thread(scraper.fetch_reports, term)
-                for article in articles:
-                    current_links.add(article.link)
+                for scraper in scrapers:
+                    articles = await asyncio.to_thread(scraper.fetch_reports, term)
+                    for article in articles:
+                        current_links.add(article.link)
         except Exception as e:
             print(f"Baseline fetch error: {e}")
             
@@ -165,17 +168,18 @@ def main(page: ft.Page):
             try:
                 for term in search_terms:
                     if not is_monitoring: break
-                    articles = await asyncio.to_thread(scraper.fetch_reports, term)
-                    for article in articles:
-                        if article.link not in current_links:
-                            all_articles.append(article)
-                            current_links.add(article.link)
-                            # Send notification
-                            try:
-                                if toaster:
-                                    toaster.send_notification(article)
-                            except Exception as e:
-                                print(f"Notification error: {e}")
+                    for scraper in scrapers:
+                        articles = await asyncio.to_thread(scraper.fetch_reports, term)
+                        for article in articles:
+                            if article.link not in current_links:
+                                all_articles.append(article)
+                                current_links.add(article.link)
+                                # Send notification
+                                try:
+                                    if toaster:
+                                        toaster.send_notification(article)
+                                except Exception as e:
+                                    print(f"Notification error: {e}")
                     
                 # Sort by date descending (newest first)
                 all_articles.sort(key=lambda x: x.date, reverse=True)
