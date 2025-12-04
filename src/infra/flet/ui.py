@@ -6,6 +6,8 @@ from typing import List
 import threading
 import pystray
 from PIL import Image, ImageDraw
+import win32gui
+import win32con
 
 from adapters.infrastructure.newspim_scraper import NewspimScraper
 from adapters.infrastructure.keyword_storage import KeywordStorage
@@ -45,11 +47,17 @@ def main(page: ft.Page):
     def restore_window():
         page.window_minimized = False
         page.window_visible = True
-        # Force window to front using always_on_top trick
-        page.window_always_on_top = True
         page.update()
-        page.window_always_on_top = False
-        page.update()
+        
+        try:
+            hwnd = win32gui.FindWindow(None, "Newspim Monitor")
+            if hwnd:
+                # Force restore if minimized
+                win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+                # Force foreground
+                win32gui.SetForegroundWindow(hwnd)
+        except Exception as e:
+            print(f"Error forcing window to front: {e}")
 
 
     try:
