@@ -2,6 +2,8 @@ import os
 import pyttsx3
 import winsound
 import threading
+import queue
+import time
 
 class TTSService:
     def __init__(self, base_dir: str = "assets/audio"):
@@ -10,6 +12,11 @@ class TTSService:
         self.engine = pyttsx3.init()
         # Set property if needed (e.g. rate, volume)
         self.engine.setProperty('rate', 150)
+        
+        # Playback queue and worker
+        self.queue = queue.Queue()
+        self.worker_thread = threading.Thread(target=self._playback_worker, daemon=True)
+        self.worker_thread.start()
 
     def _get_filepath(self, text: str) -> str:
         # Sanitize filename
@@ -32,32 +39,31 @@ class TTSService:
         return filepath
 
     def play_audio(self, text: str):
-        """Plays the audio file for the given text asynchronously."""
-        filepath = self._get_filepath(text)
-        if os.path.exists(filepath):
-            try:
-                # SND_FILENAME: filename is passed
-                # SND_ASYNC: play asynchronously
-                winsound.PlaySound(filepath, winsound.SND_FILENAME | winsound.SND_ASYNC)
-            except Exception as e:
-                print(f"Error playing audio '{text}': {e}")
-        else:
-            print(f"Audio file not found for '{text}': {filepath}")
-            # Fallback: try to generate and play? Or just log.
-            # self.generate_audio(text)
-            
+        """Queues the audio file for the given text."""
+        self.queue.put([text])
+
     def play_sequence(self, texts: list[str]):
-        """Plays a sequence of texts. Note: winsound.SND_ASYNC interrupts previous sound.
-        To play sequentially, we need to wait or use synchronous play in a thread."""
-        
-        def _play():
-            for text in texts:
-                filepath = self._get_filepath(text)
-                if os.path.exists(filepath):
-                    try:
-                        # SND_NODEFAULT: don't play default sound if file not found
-                        winsound.PlaySound(filepath, winsound.SND_FILENAME | winsound.SND_NODEFAULT)
-                    except Exception as e:
-                        print(f"Error playing sequence '{text}': {e}")
-        
-        threading.Thread(target=_play, daemon=True).start()
+        """Queues a sequence of texts."""
+        self.queue.put(texts)
+
+    def _playback_worker(self):
+        """Worker thread to play audio files sequentially."""
+        while True:
+            try:
+                texts = self.queue.get()
+                for text in texts:
+                    filepath = self._get_filepath(text)
+                    if os.path.exists(filepath):
+                        try:
+                            # SND_NODEFAULT: don't play default sound if file not found
+                            # SND_NOSTOP: don't stop currently playing sound (though we are serial here)
+                            winsound.PlaySound(filepath, winsound.SND_FILENAME | winsound.SND_NODEFAULT)
+                        except Exception as e:
+                            print(f"Error playing '{text}': {e}")
+                    else:
+                        print(f"Audio file not found for '{text}'")
+                
+                self.queue.task_done()
+            except Exception as e:
+                print(f"Error in playback worker: {e}")
+                time.sleep(1)

@@ -187,6 +187,8 @@ def main(page: ft.Page):
                  break
             
             try:
+                new_articles_this_cycle = []  # Track new articles in this cycle
+                
                 for term in search_terms:
                     if not is_monitoring: break
                     for scraper in scrapers:
@@ -195,18 +197,28 @@ def main(page: ft.Page):
                             if article.link not in current_links:
                                 all_articles.append(article)
                                 current_links.add(article.link)
+                                new_articles_this_cycle.append((article, term))
+                                
                                 # Send notification
                                 try:
                                     if toaster:
                                         toaster.send_notification(article)
-                                    
-                                    # Play TTS
-                                    source_name = "뉴스핌" if "newspim" in article.link else "인포스탁"
-                                    # term is the keyword/stock name that triggered this
-                                    tts.play_sequence([source_name, term])
-                                    
                                 except Exception as e:
-                                    print(f"Notification/TTS error: {e}")
+                                    print(f"Notification error: {e}")
+                
+                # Group new articles by platform and play TTS
+                if new_articles_this_cycle:
+                    platform_groups = {}  # {platform_name: [keyword1, keyword2, ...]}
+                    
+                    for article, term in new_articles_this_cycle:
+                        source_name = "뉴스핌" if "newspim" in article.link else "인포스탁"
+                        if source_name not in platform_groups:
+                            platform_groups[source_name] = []
+                        platform_groups[source_name].append(term)
+                    
+                    # Play TTS: platform name once, then all keywords for that platform
+                    for platform_name, keywords in platform_groups.items():
+                        tts.play_sequence([platform_name] + keywords)
                     
                 # Sort by date descending (newest first)
                 all_articles.sort(key=lambda x: x.date, reverse=True)
