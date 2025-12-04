@@ -13,6 +13,7 @@ from adapters.infrastructure.newspim_scraper import NewspimScraper
 from adapters.infrastructure.infostock_scraper import InfostockScraper
 from adapters.infrastructure.keyword_storage import KeywordStorage
 from adapters.infrastructure.win_toast import WinToast
+from adapters.infrastructure.tts_service import TTSService
 from infra.flet.views.main_view import MainView
 from domain.model import Article
 
@@ -45,6 +46,11 @@ def main(page: ft.Page):
     is_monitoring = False
     scrapers = [NewspimScraper(), InfostockScraper()]
     storage = KeywordStorage()
+    tts = TTSService()
+    
+    # Pre-generate audio for sources
+    tts.generate_audio("뉴스핌")
+    tts.generate_audio("인포스탁")
     
     def restore_window():
         page.window_minimized = False
@@ -117,6 +123,9 @@ def main(page: ft.Page):
             
     def on_keyword_change(keywords: List[str], stock_names: List[str]):
         storage.save(keywords, stock_names)
+        # Generate audio for new keywords
+        for k in keywords + stock_names:
+            tts.generate_audio(k)
             
     view = MainView(
         on_start_stop=on_start_stop,
@@ -178,8 +187,14 @@ def main(page: ft.Page):
                                 try:
                                     if toaster:
                                         toaster.send_notification(article)
+                                    
+                                    # Play TTS
+                                    source_name = "뉴스핌" if "newspim" in article.link else "인포스탁"
+                                    # term is the keyword/stock name that triggered this
+                                    tts.play_sequence([source_name, term])
+                                    
                                 except Exception as e:
-                                    print(f"Notification error: {e}")
+                                    print(f"Notification/TTS error: {e}")
                     
                 # Sort by date descending (newest first)
                 all_articles.sort(key=lambda x: x.date, reverse=True)

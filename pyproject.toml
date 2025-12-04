@@ -12,5 +12,6 @@ dependencies = [
     "pystray>=0.19.5",
     "requests>=2.32.5",
     "win11toast>=0.36.2",
+    "pyttsx3>=2.90",
 
 ]
