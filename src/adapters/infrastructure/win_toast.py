@@ -1,8 +1,27 @@
 import webbrowser
 import platform
 from win11toast import toast as toast11
+import win11toast
 from domain.model import Article
 from ports.alert_port import AlertSystem
+
+# Monkeypatch win11toast.activated_args to fix TypeError with winrt
+# The original code tries to call e.user_input(), but it's a property returning a ValueSet (not callable).
+def patched_activated_args(_, event):
+    try:
+        from win11toast import ToastActivatedEventArgs
+        e = ToastActivatedEventArgs._from(event)
+        # We don't use user_input, so we can safely return empty dict
+        # This avoids the buggy iteration/call on e.user_input
+        return {
+            'arguments': e.arguments,
+            'user_input': {}
+        }
+    except Exception as e:
+        print(f"Error in patched_activated_args: {e}")
+        return {'arguments': '', 'user_input': {}}
+
+win11toast.activated_args = patched_activated_args
 
 class WinToast(AlertSystem):
     def __init__(self, on_click=None):

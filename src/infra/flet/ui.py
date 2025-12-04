@@ -45,8 +45,12 @@ def main(page: ft.Page):
     def restore_window():
         page.window_minimized = False
         page.window_visible = True
+        # Force window to front using always_on_top trick
+        page.window_always_on_top = True
         page.update()
-        page.window_to_front()
+        page.window_always_on_top = False
+        page.update()
+
 
     try:
         toaster = WinToast(on_click=restore_window)
