@@ -38,9 +38,9 @@ class ArticleTable(ft.Column):
             vertical_lines=ft.BorderSide(1, ft.Colors.GREY_300),
             horizontal_lines=ft.BorderSide(1, ft.Colors.GREY_300),
             heading_row_color=ft.Colors.GREY_200,
-            heading_row_height=50,
-            data_row_min_height=60,
-            data_row_max_height=100,
+            heading_row_height=40,  # 50 → 40
+            data_row_min_height=45,  # 60 → 45
+            data_row_max_height=70,  # 100 → 70
             column_spacing=30,
             width=1400,  # 테이블 너비 설정
         )
@@ -84,7 +84,7 @@ class ArticleTable(ft.Column):
                                 size=12,
                                 text_align=ft.TextAlign.CENTER
                             ),
-                            padding=8,
+                            padding=5,
                             alignment=ft.alignment.center,
                         )
                     ),
@@ -97,7 +97,7 @@ class ArticleTable(ft.Column):
                                 overflow=ft.TextOverflow.ELLIPSIS,
                                 text_align=ft.TextAlign.LEFT,
                             ),
-                            padding=8,
+                            padding=5,
                         )
                     ),
                     ft.DataCell(
@@ -108,7 +108,7 @@ class ArticleTable(ft.Column):
                                 color=ft.Colors.BLUE,
                                 text_align=ft.TextAlign.CENTER,
                             ),
-                            padding=8,
+                            padding=5,
                             alignment=ft.alignment.center,
                         )
                     ),
@@ -120,7 +120,7 @@ class ArticleTable(ft.Column):
                                 weight=ft.FontWeight.NORMAL,
                                 text_align=ft.TextAlign.CENTER
                             ),
-                            padding=8,
+                            padding=5,
                             alignment=ft.alignment.center,
                         )
                     ),
