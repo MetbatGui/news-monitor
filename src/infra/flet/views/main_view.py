@@ -2,7 +2,7 @@ import flet as ft
 from typing import List, Callable
 from infra.flet.components.keyword_manager import KeywordManager
 from infra.flet.components.control_panel import ControlPanel
-from infra.flet.components.article_card import ArticleCard
+from infra.flet.components.article_table import ArticleTable
 from infra.flet.components.status_bar import StatusBar
 from domain.model import Article
 
@@ -29,7 +29,7 @@ class MainView(ft.Column):
         )
         self.control_panel = ControlPanel(on_start_stop=on_start_stop)
         self.status_bar = StatusBar()
-        self.results_list = ft.ListView(expand=True, spacing=10, padding=20, auto_scroll=False)
+        self.article_table = ArticleTable()
         
         self.controls = [
             ft.Row(
@@ -43,7 +43,7 @@ class MainView(ft.Column):
             ),
             ft.Divider(),
             self.status_bar,
-            self.results_list
+            self.article_table
         ]
         self.expand = True
 
@@ -51,30 +51,31 @@ class MainView(ft.Column):
         if self.on_keyword_change:
             self.on_keyword_change(self.keyword_manager.keywords, self.stock_manager.keywords)
 
-    def _is_recent(self, date_str: str) -> bool:
-        try:
-            # date_str format: "YYYY-MM-DD HH:MM"
-            article_date = datetime.strptime(date_str, "%Y-%m-%d %H:%M")
-            now = datetime.now()
-            diff = now - article_date
-            return diff <= timedelta(minutes=5)
-        except Exception:
-            return False
+    def _get_recent_links(self, articles: List[Article]) -> set:
+        """최근 5분 이내 기사 링크 반환"""
+        recent_links = set()
+        now = datetime.now()
+        
+        for article in articles:
+            try:
+                # date_str format: "YYYY-MM-DD HH:MM"
+                article_date = datetime.strptime(article.date, "%Y-%m-%d %H:%M")
+                diff = now - article_date
+                if diff <= timedelta(minutes=5):
+                    recent_links.add(article.link)
+            except Exception:
+                pass
+        
+        return recent_links
 
     async def set_articles(self, articles: List[Article]):
-        self.results_list.controls.clear()
-        for article in articles:
-            is_highlighted = self._is_recent(article.date)
-            self.results_list.controls.append(ArticleCard(article, is_highlighted=is_highlighted))
-        self.results_list.update()
-
-    def add_article(self, article: Article):
-        self.results_list.controls.append(ArticleCard(article))
-        self.results_list.update()
+        highlighted_links = self._get_recent_links(articles)
+        self.article_table.set_articles(articles, highlighted_links)
+        self.article_table.update()
 
     def clear_results(self):
-        self.results_list.controls.clear()
-        self.results_list.update()
+        self.article_table.set_articles([])
+        self.article_table.update()
 
     async def update_status(self, msg: str):
         self.status_bar.update_status(msg)
@@ -87,3 +88,4 @@ class MainView(ft.Column):
 
     async def set_monitoring_state(self, is_monitoring: bool):
         self.control_panel.set_monitoring_state(is_monitoring)
+
