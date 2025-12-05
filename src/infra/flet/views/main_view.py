@@ -69,8 +69,19 @@ class MainView(ft.Column):
         return recent_links
 
     async def set_articles(self, articles: List[Article]):
-        highlighted_links = self._get_recent_links(articles)
-        self.article_table.set_articles(articles, highlighted_links)
+        # 정렬: 1. DART 우선, 2. 시간순 (최신순)
+        def sort_key(article: Article):
+            # DART 여부 판단
+            is_dart = "dart.fss.or.kr" in article.link
+            # DART면 0, 아니면 1 (0이 먼저 오도록)
+            source_priority = 0 if is_dart else 1
+            # 시간은 역순 (최신이 먼저)
+            return (source_priority, article.date)
+        
+        sorted_articles = sorted(articles, key=sort_key, reverse=True)
+        
+        highlighted_links = self._get_recent_links(sorted_articles)
+        self.article_table.set_articles(sorted_articles, highlighted_links)
         self.article_table.update()
 
     def clear_results(self):
