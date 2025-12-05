@@ -26,7 +26,7 @@ class DartRssScraper(NewsRepository):
         articles = []
         
         try:
-            response = requests.get(self.rss_url, timeout=10)
+            response = requests.get(self.rss_url, timeout=20)
             response.raise_for_status()
             
             # XML 파싱

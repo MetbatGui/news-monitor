@@ -25,7 +25,7 @@ class InfostockScraper(NewsRepository):
                 "sc_word": keyword
             }
             
-            response = requests.post(self.SEARCH_URL, headers=headers, data=data, timeout=10)
+            response = requests.post(self.SEARCH_URL, headers=headers, data=data, timeout=20)
             response.raise_for_status()
             # Fix encoding issue
             # Fix encoding issue
