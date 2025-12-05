@@ -11,11 +11,13 @@ import win32con
 
 from adapters.infrastructure.newspim_scraper import NewspimScraper
 from adapters.infrastructure.infostock_scraper import InfostockScraper
+from adapters.infrastructure.dart_rss_scraper import DartRssScraper
 from adapters.infrastructure.keyword_storage import KeywordStorage
 from adapters.infrastructure.win_toast import WinToast
 from adapters.infrastructure.tts_service import TTSService
 from infra.flet.views.main_view import MainView
 from domain.model import Article
+from config import DartConfig
 
 def create_image():
     try:
@@ -43,8 +45,11 @@ def main(page: ft.Page):
 
     # State
     is_monitoring = False
-    is_monitoring = False
-    scrapers = [NewspimScraper(), InfostockScraper()]
+    scrapers = [
+        NewspimScraper(), 
+        InfostockScraper(),
+        DartRssScraper(DartConfig.RSS_URL)
+    ]
     storage = KeywordStorage()
     tts = TTSService()
     
@@ -58,6 +63,7 @@ def main(page: ft.Page):
         # Pre-generate audio for sources
         tts.generate_audio("뉴스핌")
         tts.generate_audio("인포스탁")
+        tts.generate_audio("DART")
         
         for k in initial_keywords + initial_stock_names:
             tts.generate_audio(k)
@@ -211,7 +217,16 @@ def main(page: ft.Page):
                     platform_groups = {}  # {platform_name: [keyword1, keyword2, ...]}
                     
                     for article, term in new_articles_this_cycle:
-                        source_name = "뉴스핌" if "newspim" in article.link else "인포스탁"
+                        # 출처 구분: 링크로 판단
+                        if "newspim" in article.link:
+                            source_name = "뉴스핌"
+                        elif "infostockdaily" in article.link:
+                            source_name = "인포스탁"
+                        elif "dart.fss.or.kr" in article.link:
+                            source_name = "DART"
+                        else:
+                            source_name = "알 수 없음"
+                            
                         if source_name not in platform_groups:
                             platform_groups[source_name] = []
                         platform_groups[source_name].append(term)
