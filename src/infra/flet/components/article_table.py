@@ -38,11 +38,11 @@ class ArticleTable(ft.Column):
             vertical_lines=ft.BorderSide(1, ft.Colors.GREY_300),
             horizontal_lines=ft.BorderSide(1, ft.Colors.GREY_300),
             heading_row_color=ft.Colors.GREY_200,
-            heading_row_height=40,  # 50 → 40
-            data_row_min_height=45,  # 60 → 45
-            data_row_max_height=70,  # 100 → 70
+            heading_row_height=35,  # 40 → 35
+            data_row_min_height=35,  # 45 → 35
+            data_row_max_height=50,  # 70 → 50
             column_spacing=30,
-            width=1400,  # 테이블 너비 설정
+            width=1400,
         )
         
         # 스크롤 가능한 컨테이너로 감싸기 (중앙정렬)
