@@ -26,7 +26,11 @@ class DartRssScraper(NewsRepository):
         articles = []
         
         try:
-            response = requests.get(self.rss_url, timeout=20)
+            # User-Agent 헤더 추가 (서버 차단 방지)
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            }
+            response = requests.get(self.rss_url, headers=headers, timeout=20)
             response.raise_for_status()
             
             # XML 파싱
