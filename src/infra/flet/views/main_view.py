@@ -73,8 +73,8 @@ class MainView(ft.Column):
         def sort_key(article: Article):
             # DART 여부 판단
             is_dart = "dart.fss.or.kr" in article.link
-            # DART면 0, 아니면 1 (0이 먼저 오도록)
-            source_priority = 0 if is_dart else 1
+            # DART면 1, 아니면 0 (reverse=True이므로 1이 먼저)
+            source_priority = 1 if is_dart else 0
             # 시간은 역순 (최신이 먼저)
             return (source_priority, article.date)
         

@@ -4,7 +4,7 @@ sys.path.insert(0, 'src')
 
 from infra.flet.components.article_table import ArticleTable
 from domain.model import Article
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def main(page: ft.Page):
     page.title = "테이블 UI 테스트"
@@ -48,7 +48,7 @@ def main(page: ft.Page):
                 "금리", "대량보유", "원전", "바이오", "태양광",
                 "OLED", "실적", "변압기", "자기주식", "증권"]
     
-    for i in range(20):
+    for i in range(10):  # 20 → 10
         source_type = i % 3
         source_name, base_link = sources[source_type]
         
@@ -67,9 +67,17 @@ def main(page: ft.Page):
     # 테이블 생성
     article_table = ArticleTable()
     
+    # 정렬: 1. DART 우선, 2. 시간순 (최신순)
+    def sort_key(article):
+        is_dart = "dart.fss.or.kr" in article.link
+        source_priority = 1 if is_dart else 0  # DART=1, 기타=0 (reverse=True이므로 1이 먼저)
+        return (source_priority, article.date)
+    
+    sorted_articles = sorted(test_articles, key=sort_key, reverse=True)
+    
     # 최근 기사 (첫 번째) 하이라이트
-    highlighted_links = {test_articles[0].link}
-    article_table.set_articles(test_articles, highlighted_links)
+    highlighted_links = {sorted_articles[0].link}
+    article_table.set_articles(sorted_articles, highlighted_links)
     
     # 페이지에 추가
     page.add(
