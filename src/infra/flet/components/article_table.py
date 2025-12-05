@@ -16,7 +16,7 @@ class ArticleTable(ft.Column):
         self.data_table = ft.DataTable(
             columns=[
                 ft.DataColumn(
-                    ft.Text("출처", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
+                    ft.Text("시간", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
                     numeric=False,
                 ),
                 ft.DataColumn(
@@ -28,7 +28,7 @@ class ArticleTable(ft.Column):
                     numeric=False,
                 ),
                 ft.DataColumn(
-                    ft.Text("날짜", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
+                    ft.Text("출처", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
                     numeric=False,
                 ),
             ],
@@ -74,15 +74,14 @@ class ArticleTable(ft.Column):
             is_highlighted = article.link in highlighted_links
             bg_color = ft.Colors.YELLOW_50 if is_highlighted else None
             
-            # DataRow 생성
+            # DataRow 생성 (순서: 시간, 제목, 키워드, 출처)
             row = ft.DataRow(
                 cells=[
                     ft.DataCell(
                         ft.Container(
                             content=ft.Text(
-                                source, 
-                                size=13, 
-                                weight=ft.FontWeight.NORMAL,
+                                article.date, 
+                                size=12,
                                 text_align=ft.TextAlign.CENTER
                             ),
                             padding=8,
@@ -116,8 +115,9 @@ class ArticleTable(ft.Column):
                     ft.DataCell(
                         ft.Container(
                             content=ft.Text(
-                                article.date, 
-                                size=12,
+                                source, 
+                                size=13, 
+                                weight=ft.FontWeight.NORMAL,
                                 text_align=ft.TextAlign.CENTER
                             ),
                             padding=8,
