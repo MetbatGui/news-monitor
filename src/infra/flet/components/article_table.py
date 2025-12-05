@@ -82,7 +82,7 @@ class ArticleTable(ft.Column):
                             content=ft.Text(
                                 source, 
                                 size=13, 
-                                weight=ft.FontWeight.W500,
+                                weight=ft.FontWeight.NORMAL,
                                 text_align=ft.TextAlign.CENTER
                             ),
                             padding=8,
