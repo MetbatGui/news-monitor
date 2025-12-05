@@ -1,5 +1,5 @@
 import re
-import requests
+import httpx
 from bs4 import BeautifulSoup
 from typing import List
 
@@ -10,7 +10,7 @@ class InfostockScraper(NewsRepository):
     BASE_URL = "https://www.infostockdaily.co.kr"
     SEARCH_URL = "https://www.infostockdaily.co.kr/news/articleList.html"
 
-    def fetch_reports(self, keyword: str) -> List[Article]:
+    async def fetch_reports(self, keyword: str) -> List[Article]:
         articles = []
         
         try:
@@ -25,11 +25,11 @@ class InfostockScraper(NewsRepository):
                 "sc_word": keyword
             }
             
-            response = requests.post(self.SEARCH_URL, headers=headers, data=data, timeout=20)
-            response.raise_for_status()
-            # Fix encoding issue
-            # Fix encoding issue
-            response.encoding = 'utf-8'
+            async with httpx.AsyncClient() as client:
+                response = await client.post(self.SEARCH_URL, headers=headers, data=data, timeout=20)
+                response.raise_for_status()
+                # Fix encoding issue
+                response.encoding = 'utf-8'
             
             soup = BeautifulSoup(response.text, 'html.parser')
             items = soup.select(".list-block")

@@ -1,5 +1,5 @@
 import re
-import requests
+import httpx
 from bs4 import BeautifulSoup
 from typing import List
 
@@ -8,7 +8,7 @@ from ports.news_port import NewsRepository
 from config import Config
 
 class NewspimScraper(NewsRepository):
-    def fetch_reports(self, keyword: str) -> List[Article]:
+    async def fetch_reports(self, keyword: str) -> List[Article]:
         # URL dynamic generation
         url = f"https://www.newspim.com/search?searchword={keyword}"
         articles = []
@@ -17,8 +17,9 @@ class NewspimScraper(NewsRepository):
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
             }
-            response = requests.get(url, headers=headers, timeout=20)
-            response.raise_for_status()
+            async with httpx.AsyncClient() as client:
+                response = await client.get(url, headers=headers, timeout=20)
+                response.raise_for_status()
             
             soup = BeautifulSoup(response.text, 'html.parser')
             # User provided structure:

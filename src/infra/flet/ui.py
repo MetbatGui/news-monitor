@@ -192,13 +192,24 @@ def main(page: ft.Page):
                  await view.set_monitoring_state(False)
                  break
             
+            
             try:
                 new_articles_this_cycle = []  # Track new articles in this cycle
                 
                 for term in search_terms:
                     if not is_monitoring: break
-                    for scraper in scrapers:
-                        articles = await asyncio.to_thread(scraper.fetch_reports, term)
+                    
+                    # 모든 스크래퍼를 병렬로 실행
+                    tasks = [scraper.fetch_reports(term) for scraper in scrapers]
+                    results = await asyncio.gather(*tasks, return_exceptions=True)
+                    
+                    # 결과 처리
+                    for result in results:
+                        if isinstance(result, Exception):
+                            print(f"Scraper error: {result}")
+                            continue
+                        
+                        articles = result
                         for article in articles:
                             if article.link not in current_links:
                                 all_articles.append(article)

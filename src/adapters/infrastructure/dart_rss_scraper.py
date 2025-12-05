@@ -1,4 +1,4 @@
-import requests
+import httpx
 import xml.etree.ElementTree as ET
 from typing import List
 from datetime import datetime
@@ -13,7 +13,7 @@ class DartRssScraper(NewsRepository):
     def __init__(self, rss_url: str = "https://dart.fss.or.kr/api/todayRSS.xml"):
         self.rss_url = rss_url
     
-    def fetch_reports(self, keyword: str = "") -> List[Article]:
+    async def fetch_reports(self, keyword: str = "") -> List[Article]:
         """RSS 피드에서 공시 정보를 가져옵니다.
         
         Args:
@@ -30,8 +30,9 @@ class DartRssScraper(NewsRepository):
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
             }
-            response = requests.get(self.rss_url, headers=headers, timeout=20)
-            response.raise_for_status()
+            async with httpx.AsyncClient() as client:
+                response = await client.get(self.rss_url, headers=headers, timeout=20)
+                response.raise_for_status()
             
             # XML 파싱
             root = ET.fromstring(response.content)
