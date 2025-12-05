@@ -173,8 +173,17 @@ def main(page: ft.Page):
         try:
             for term in search_terms:
                 if not is_monitoring: break
-                for scraper in scrapers:
-                    articles = await asyncio.to_thread(scraper.fetch_reports, term)
+                
+                # 모든 스크래퍼를 병렬로 실행하여 베이스라인 수집
+                tasks = [scraper.fetch_reports(term) for scraper in scrapers]
+                results = await asyncio.gather(*tasks, return_exceptions=True)
+                
+                for result in results:
+                    if isinstance(result, Exception):
+                        print(f"Baseline fetch error: {result}")
+                        continue
+                    
+                    articles = result
                     for article in articles:
                         current_links.add(article.link)
         except Exception as e:
