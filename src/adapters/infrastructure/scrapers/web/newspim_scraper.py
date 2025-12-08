@@ -59,7 +59,7 @@ class NewspimScraper(NewsRepository):
                         link=link,
                         date=date_str,
                         keyword=keyword,
-                        source="뉴스핌"
+                        source=self.get_source_name()
                     ))
                     
                 except Exception as e:

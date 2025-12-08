@@ -74,7 +74,7 @@ class InfostockScraper(NewsRepository):
                         link=link,
                         date=date_str,
                         keyword=keyword,
-                        source="인포스탁"
+                        source=self.get_source_name()
                     ))
                     
                 except Exception as e:
@@ -85,3 +85,6 @@ class InfostockScraper(NewsRepository):
             print(f"Infostock scraping error: {e}")
             
         return articles
+
+    def get_source_name(self) -> str:
+        return "인포스탁"

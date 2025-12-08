@@ -48,7 +48,8 @@ class FnScraper(BaseWebScraper):
             title=title,
             link=link,
             date=date_str,
-            keyword=keyword
+            keyword=keyword,
+            source=self.get_source_name()
         )
     
     def get_source_name(self) -> str:

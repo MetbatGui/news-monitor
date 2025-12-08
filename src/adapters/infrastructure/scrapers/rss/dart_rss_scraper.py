@@ -86,7 +86,7 @@ class DartRssScraper(NewsRepository):
                         link=link,
                         date=date_str,
                         keyword=keyword if keyword else category,
-                        source="DART"
+                        source=self.get_source_name()
                     ))
                     
                 except Exception as e:
@@ -130,3 +130,6 @@ class DartRssScraper(NewsRepository):
         except Exception as e:
             print(f"Date conversion error for '{pub_date}': {e}")
             return pub_date  # 파싱 실패시 원본 반환
+    
+    def get_source_name(self) -> str:
+        return "DART"
