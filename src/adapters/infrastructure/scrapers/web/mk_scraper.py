@@ -60,4 +60,4 @@ class MKScraper(BaseWebScraper):
         )
     
     def get_source_name(self) -> str:
-        return "mk"
+        return "매일경제"

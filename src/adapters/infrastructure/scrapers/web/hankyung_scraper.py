@@ -58,4 +58,4 @@ class HankyungScraper(BaseWebScraper):
         )
     
     def get_source_name(self) -> str:
-        return "hankyung"
+        return "한국경제"

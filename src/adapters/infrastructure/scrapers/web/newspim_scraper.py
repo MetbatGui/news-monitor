@@ -70,3 +70,6 @@ class NewspimScraper(NewsRepository):
             print(f"Scraping error: {e}")
             
         return articles
+
+    def get_source_name(self) -> str:
+        return "뉴스핌"

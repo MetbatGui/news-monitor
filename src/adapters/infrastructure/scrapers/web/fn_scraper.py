@@ -52,4 +52,4 @@ class FnScraper(BaseWebScraper):
         )
     
     def get_source_name(self) -> str:
-        return "fn"
+        return "파이낸셜뉴스"

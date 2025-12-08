@@ -46,4 +46,4 @@ class EdailyScraper(BaseWebScraper):
         )
     
     def get_source_name(self) -> str:
-        return "edaily"
+        return "이데일리"

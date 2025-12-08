@@ -53,4 +53,4 @@ class YonhapScraper(BaseWebScraper):
         )
     
     def get_source_name(self) -> str:
-        return "yonhap"
+        return "연합뉴스"

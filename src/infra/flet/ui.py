@@ -287,35 +287,8 @@ def main(page: ft.Page):
                     platform_groups = {}  # {platform_name: [keyword1, keyword2, ...]}
                     
                     for article, term in new_articles_this_cycle:
-                        # 출처 구분: 링크로 판단
-                        if "newspim" in article.link:
-                            source_name = "뉴스핌"
-                        elif "infostockdaily" in article.link:
-                            source_name = "인포스탁"
-                        elif "dart.fss.or.kr" in article.link:
-                            source_name = "DART"
-                        elif "edaily.co.kr" in article.link:
-                            source_name = "이데일리"
-                        elif "hankyung.com" in article.link:
-                            source_name = "한국경제"
-                        elif "mk.co.kr" in article.link:
-                            source_name = "매일경제"
-                        elif "mt.co.kr" in article.link:
-                            source_name = "머니투데이"
-                        elif "yna.co.kr" in article.link:
-                            source_name = "연합뉴스"
-                        elif "asiae.co.kr" in article.link:
-                            source_name = "아시아경제"
-                        elif "etoday.co.kr" in article.link:
-                            source_name = "이투데이"
-                        elif "heraldcorp.com" in article.link:
-                            source_name = "헤럴드경제"
-                        elif "sedaily.com" in article.link:
-                            source_name = "서울경제"
-                        elif "fnnews.com" in article.link:
-                            source_name = "파이낸셜뉴스"
-                        else:
-                            source_name = "알 수 없음"
+                        # article에서 source 사용 (스크래퍼가 이미 설정함)
+                        source_name = article.source if article.source else "알 수 없음"
                             
                         if source_name not in platform_groups:
                             platform_groups[source_name] = []

@@ -53,4 +53,4 @@ class HeraldScraper(BaseWebScraper):
         )
     
     def get_source_name(self) -> str:
-        return "herald"
+        return "헤럴드경제"

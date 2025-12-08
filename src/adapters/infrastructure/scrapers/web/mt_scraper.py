@@ -47,4 +47,4 @@ class MTScraper(BaseWebScraper):
         )
     
     def get_source_name(self) -> str:
-        return "mt"
+        return "머니투데이"

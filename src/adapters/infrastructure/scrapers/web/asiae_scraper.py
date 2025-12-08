@@ -53,4 +53,4 @@ class AsiaeScraper(BaseWebScraper):
         )
     
     def get_source_name(self) -> str:
-        return "asiae"
+        return "아시아경제"
