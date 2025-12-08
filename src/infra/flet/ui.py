@@ -140,10 +140,23 @@ def main(page: ft.Page):
             page.run_task(monitor_loop)
             
     def on_keyword_change(keywords: List[str], stock_names: List[str]):
+        """키워드 변경 시 호출되는 콜백 함수
+        
+        - JSON 파일에 저장
+        - TTS 오디오를 백그라운드 스레드에서 비동기 생성 (UI 차단 방지)
+        """
         storage.save(keywords, stock_names)
-        # Generate audio for new keywords
-        for k in keywords + stock_names:
-            tts.generate_audio(k)
+        
+        # TTS 오디오 생성을 백그라운드 스레드에서 실행하여 UI 딜레이 방지
+        def generate_audio_async():
+            for k in keywords + stock_names:
+                try:
+                    tts.generate_audio(k)
+                except Exception as e:
+                    print(f"Error generating audio for '{k}': {e}")
+        
+        threading.Thread(target=generate_audio_async, daemon=True).start()
+        print(f"Saved keywords, generating TTS audio in background for {len(keywords + stock_names)} items...")
             
     view = MainView(
         on_start_stop=on_start_stop,
