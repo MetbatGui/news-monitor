@@ -285,9 +285,13 @@ def main(page: ft.Page):
                                 except Exception as e:
                                     logger.debug(f"알림 오류: {e}")
                 
-                # Group new articles by platform and play TTS
+                 # Group new articles by platform and play TTS
                 if new_articles_this_cycle:
-                    platform_groups = {}  # {platform_name: [keyword1, keyword2, ...]}
+                    logger.debug(f"새 기사 {len(new_articles_this_cycle)}개 발견")
+                    for article, term in new_articles_this_cycle:
+                        logger.debug(f"  - {article.source}: {term} ({article.title[:30]}...)")
+                    
+                    platform_groups = {}  # {platform_name: [keyword1, keyword2, ...]} 시간순
                     
                     for article, term in new_articles_this_cycle:
                         # article에서 source 사용 (스크래퍼가 이미 설정함)
@@ -295,10 +299,11 @@ def main(page: ft.Page):
                             
                         if source_name not in platform_groups:
                             platform_groups[source_name] = []
-                        platform_groups[source_name].append(term)
+                        platform_groups[source_name].append(term)  # 시간순으로 추가 (중복 허용)
                     
-                    # Play TTS: platform name once, then all keywords for that platform
+                    # Play TTS: platform name once, then all keywords in chronological order
                     for platform_name, keywords in platform_groups.items():
+                        logger.debug(f"TTS 재생: {platform_name} + {keywords}")
                         tts.play_sequence([platform_name] + keywords)
                     
                 # Sort by date descending (newest first)
