@@ -1,6 +1,9 @@
 import json
 import os
 from typing import List, Dict
+import logging
+
+logger = logging.getLogger(__name__)
 
 class KeywordStorage:
     def __init__(self, filepath: str = "config/keywords.json"):
@@ -17,7 +20,7 @@ class KeywordStorage:
             with open(self.filepath, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            print(f"Error loading keywords: {e}")
+            logger.error(f"키워드 로드 오류: {e}")
             return {"keywords": [], "stock_names": []}
 
     def save(self, keywords: List[str], stock_names: List[str]) -> None:
@@ -29,4 +32,4 @@ class KeywordStorage:
             with open(self.filepath, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
         except Exception as e:
-            print(f"Error saving keywords: {e}")
+            logger.error(f"키워드 저장 오류: {e}")

@@ -3,9 +3,12 @@ import httpx
 from bs4 import BeautifulSoup
 from typing import List, Optional
 from datetime import datetime
+import logging
 
 from domain.model import Article
 from ports.news_port import NewsRepository
+
+logger = logging.getLogger(__name__)
 
 
 class BaseWebScraper(NewsRepository, ABC):
@@ -45,7 +48,7 @@ class BaseWebScraper(NewsRepository, ABC):
             soup = BeautifulSoup(html, 'html.parser')
             articles = await self._parse_articles(soup, keyword)
         except Exception as e:
-            print(f"Scraping error for {self.get_source_name()}: {e}")
+            logger.error(f"{self.get_source_name()} 스크래핑 오류: {e}", exc_info=True)
             
         return articles
     
@@ -89,7 +92,7 @@ class BaseWebScraper(NewsRepository, ABC):
                         article = replace(article, source=source_name)
                     articles.append(article)
             except Exception as e:
-                print(f"Error parsing item in {source_name}: {e}")
+                logger.debug(f"{source_name} 항목 파싱 오류: {e}")
                 continue
                 
         return articles

@@ -2,9 +2,12 @@ import csv
 import os
 from datetime import datetime
 from typing import Set
+import logging
 
 from domain.model import Article
 from ports.storage_port import StorageRepository
+
+logger = logging.getLogger(__name__)
 
 class CsvStorage(StorageRepository):
     def __init__(self, base_dir: str = "logs"):
@@ -29,7 +32,7 @@ class CsvStorage(StorageRepository):
                     if row and row[0].isdigit():
                         ids.add(int(row[0]))
         except Exception as e:
-            print(f"Error loading CSV: {e}")
+            logger.error(f"CSV 로드 오류: {e}")
             
         return ids
 
@@ -48,4 +51,4 @@ class CsvStorage(StorageRepository):
                     datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 ])
         except Exception as e:
-            print(f"Error saving to CSV: {e}")
+            logger.error(f"CSV 저장 오류: {e}")

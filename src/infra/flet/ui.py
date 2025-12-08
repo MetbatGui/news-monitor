@@ -8,6 +8,7 @@ import pystray
 from PIL import Image, ImageDraw
 import win32gui
 import win32con
+import logging
 
 from adapters.infrastructure.scrapers.web.newspim_scraper import NewspimScraper
 from adapters.infrastructure.scrapers.web.edaily_scraper import EdailyScraper
@@ -29,6 +30,8 @@ from infra.flet.views.main_view import MainView
 from domain.model import Article
 from config import DartConfig
 
+logger = logging.getLogger(__name__)
+
 def create_image():
     try:
         # Generate an image for the tray icon
@@ -43,11 +46,11 @@ def create_image():
             fill=color2)
         return image
     except Exception as e:
-        print(f"Image creation error: {e}")
+        logger.error(f"이미지 생성 오류: {e}")
         return None
 
 def main(page: ft.Page):
-    print("App started")
+    logger.info("앱 시작")
     page.title = "Newspim Monitor"
     page.padding = 20
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -69,7 +72,7 @@ def main(page: ft.Page):
     initial_stock_names = initial_data.get("stock_names", [])
 
     def pre_generate_audio():
-        print("Pre-generating audio for keywords...")
+        logger.info("키워드 오디오 사전 생성 중...")
         # Pre-generate audio for sources
         tts.generate_audio("뉴스핌")
         tts.generate_audio("인포스탁")
@@ -103,13 +106,13 @@ def main(page: ft.Page):
                 # Force foreground
                 win32gui.SetForegroundWindow(hwnd)
         except Exception as e:
-            print(f"Error forcing window to front: {e}")
+            logger.debug(f"창 전면 표시 오류: {e}")
 
 
     try:
         toaster = WinToast(on_click=restore_window)
     except Exception as e:
-        print(f"WinToast init error: {e}")
+        logger.error(f"WinToast 초기화 오류: {e}")
         toaster = None
     
     # Tray Icon Setup
@@ -131,17 +134,17 @@ def main(page: ft.Page):
         def run_tray():
             try:
                 time.sleep(3) # Wait for Flet to initialize
-                print("Starting tray icon...")
+                logger.debug("트레이 아이콘 시작...")
                 if icon.icon is None:
-                    print("Icon image is None, regenerating...")
+                    logger.debug("아이콘 이미지 없음, 재생성 중...")
                     icon.icon = create_image()
                 icon.run()
             except Exception as e:
-                print(f"Tray icon run error: {e}")
+                logger.error(f"트레이 아이콘 실행 오류: {e}")
 
         threading.Thread(target=run_tray, daemon=True).start()
     except Exception as e:
-        print(f"Tray icon setup error: {e}")
+        logger.error(f"트레이 아이콘 설정 오류: {e}")
 
     def on_window_event(e):
         if e.data == "close":
@@ -173,10 +176,10 @@ def main(page: ft.Page):
                 try:
                     tts.generate_audio(k)
                 except Exception as e:
-                    print(f"Error generating audio for '{k}': {e}")
+                    logger.debug(f"'{k}' 오디오 생성 오류: {e}")
         
         threading.Thread(target=generate_audio_async, daemon=True).start()
-        print(f"Saved keywords, generating TTS audio in background for {len(keywords + stock_names)} items...")
+        logger.info(f"키워드 저장 완료, {len(keywords + stock_names)}개 항목 TTS 오디오 백그라운드 생성 중...")
             
     view = MainView(
         on_start_stop=on_start_stop,
@@ -230,14 +233,14 @@ def main(page: ft.Page):
                 
                 for result in results:
                     if isinstance(result, Exception):
-                        print(f"Baseline fetch error: {result}")
+                        logger.debug(f"베이스라인 가져오기 오류: {result}")
                         continue
                     
                     articles = result
                     for article in articles:
                         current_links.add(article.link)
         except Exception as e:
-            print(f"Baseline fetch error: {e}")
+            logger.error(f"베이스라인 가져오기 오류: {e}")
             
         await view.update_status(f"모니터링 시작... ({datetime.now().strftime('%H:%M:%S')}) - 새로운 기사 대기 중")
 
@@ -265,7 +268,7 @@ def main(page: ft.Page):
                     # 결과 처리
                     for result in results:
                         if isinstance(result, Exception):
-                            print(f"Scraper error: {result}")
+                            logger.debug(f"스크래퍼 오류: {result}")
                             continue
                         
                         articles = result
@@ -280,7 +283,7 @@ def main(page: ft.Page):
                                     if toaster:
                                         toaster.send_notification(article)
                                 except Exception as e:
-                                    print(f"Notification error: {e}")
+                                    logger.debug(f"알림 오류: {e}")
                 
                 # Group new articles by platform and play TTS
                 if new_articles_this_cycle:

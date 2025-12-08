@@ -2,10 +2,13 @@ import re
 import httpx
 from bs4 import BeautifulSoup
 from typing import List
+import logging
 
 from domain.model import Article
 from ports.news_port import NewsRepository
 from config import Config
+
+logger = logging.getLogger(__name__)
 
 class NewspimScraper(NewsRepository):
     async def fetch_reports(self, keyword: str) -> List[Article]:
@@ -63,11 +66,11 @@ class NewspimScraper(NewsRepository):
                     ))
                     
                 except Exception as e:
-                    print(f"Error parsing item: {e}")
+                    logger.debug(f"항목 파싱 오류: {e}")
                     continue
                     
         except Exception as e:
-            print(f"Scraping error: {e}")
+            logger.error(f"스크래핑 오류: {e}", exc_info=True)
             
         return articles
 

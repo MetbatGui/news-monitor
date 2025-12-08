@@ -2,9 +2,12 @@ import httpx
 import xml.etree.ElementTree as ET
 from typing import List
 from datetime import datetime
+import logging
 
 from domain.model import Article
 from ports.news_port import NewsRepository
+
+logger = logging.getLogger(__name__)
 
 
 class DartRssScraper(NewsRepository):
@@ -90,11 +93,11 @@ class DartRssScraper(NewsRepository):
                     ))
                     
                 except Exception as e:
-                    print(f"Error parsing RSS item: {e}")
+                    logger.debug(f"RSS 항목 파싱 오류: {e}")
                     continue
                     
         except Exception as e:
-            print(f"RSS fetching error: {e}")
+            logger.error(f"RSS 가져오기 오류: {e}", exc_info=True)
             
         return articles
     
@@ -128,7 +131,7 @@ class DartRssScraper(NewsRepository):
             dt_kst = dt + timedelta(hours=9)
             return dt_kst.strftime("%Y-%m-%d %H:%M")
         except Exception as e:
-            print(f"Date conversion error for '{pub_date}': {e}")
+            logger.warning(f"날짜 변환 오류 '{pub_date}': {e}")
             return pub_date  # 파싱 실패시 원본 반환
     
     def get_source_name(self) -> str:

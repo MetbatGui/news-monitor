@@ -3,6 +3,9 @@ import platform
 from win11toast import toast as toast11
 import win11toast
 from domain.model import Article
+import logging
+
+logger = logging.getLogger(__name__)
 from ports.alert_port import AlertSystem
 
 # Monkeypatch win11toast.activated_args to fix TypeError with winrt
@@ -18,7 +21,7 @@ def patched_activated_args(_, event):
             'user_input': {}
         }
     except Exception as e:
-        print(f"Error in patched_activated_args: {e}")
+        logger.debug(f"활성화된 인자 패치 오류: {e}")
         return {'arguments': '', 'user_input': {}}
 
 win11toast.activated_args = patched_activated_args
@@ -40,4 +43,4 @@ class WinToast(AlertSystem):
                 duration="short"
             )
         except Exception as e:
-            print(f"Toast error: {e}")
+            logger.debug(f"토스트 알림 오류: {e}")

@@ -1,11 +1,14 @@
 import asyncio
 from datetime import datetime
 from typing import Set
+import logging
 
 from config import Config
 from ports.news_port import NewsRepository
 from ports.storage_port import StorageRepository
 from ports.alert_port import AlertSystem
+
+logger = logging.getLogger(__name__)
 
 class MonitorService:
     def __init__(
@@ -21,11 +24,11 @@ class MonitorService:
 
     async def run(self):
         """메인 감시 루프를 실행한다 (비동기)."""
-        print(f"Monitor Service Started. ({Config.START_HOUR}:00 ~ {Config.END_HOUR}:00)")
+        logger.info(f"모니터 서비스 시작 ({Config.START_HOUR}:00 ~ {Config.END_HOUR}:00)")
         
         # 초기화: 오늘 이미 수집한 기사 ID 로드
         self.seen_ids = self.storage_repo.load_today_ids()
-        print(f"Loaded {len(self.seen_ids)} seen IDs.")
+        logger.info(f"저장된 ID {len(self.seen_ids)}개 로드 완료")
 
         while True:
             # 시작 시간 기록
@@ -35,7 +38,7 @@ class MonitorService:
                 # 동기 작업인 스캔 로직을 별도 스레드에서 실행하여 이벤트 루프 차단 방지
                 await asyncio.to_thread(self._scan_process)
             except Exception as e:
-                print(f"Error in monitor loop: {e}")
+                logger.error(f"모니터 루프 오류: {e}", exc_info=True)
             
             # 경과 시간 계산 및 대기 (정확히 60초 간격 유지)
             elapsed = asyncio.get_running_loop().time() - start_time
@@ -57,16 +60,16 @@ class MonitorService:
             self._last_check_date = today_str
             
         if self._last_check_date != today_str:
-            print(f"Date changed: {self._last_check_date} -> {today_str}. Resetting cache.")
+            logger.info(f"날짜 변경: {self._last_check_date} -> {today_str}. 캐시 초기화")
             self.seen_ids.clear()
             self._last_check_date = today_str
         
         # 운영 시간 체크
         if not (Config.START_HOUR <= now.hour < Config.END_HOUR):
-            print(f"Outside operating hours ({now.strftime('%H:%M')}).")
+            logger.debug(f"운영 시간 외 ({now.strftime('%H:%M')})")
             return
 
-        print(f"Scanning at {now.strftime('%H:%M:%S')}...")
+        logger.debug(f"스캔 중... {now.strftime('%H:%M:%S')}")
         
         # 기사 조회
         articles = self.news_repo.fetch_reports(Config.KEYWORD)
@@ -80,7 +83,7 @@ class MonitorService:
                 continue
 
             if article.id not in self.seen_ids:
-                print(f"New Article Found: {article.title}")
+                logger.info(f"새 기사 발견: {article.title}")
                 
                 # 알림 발송
                 self.alert_system.send_notification(article)

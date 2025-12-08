@@ -2,9 +2,12 @@ import re
 import httpx
 from bs4 import BeautifulSoup
 from typing import List
+import logging
 
 from domain.model import Article
 from ports.news_port import NewsRepository
+
+logger = logging.getLogger(__name__)
 
 class InfostockScraper(NewsRepository):
     BASE_URL = "https://www.infostockdaily.co.kr"
@@ -78,11 +81,11 @@ class InfostockScraper(NewsRepository):
                     ))
                     
                 except Exception as e:
-                    print(f"Error parsing Infostock item: {e}")
+                    logger.debug(f"인포스탁 항목 파싱 오류: {e}")
                     continue
                     
         except Exception as e:
-            print(f"Infostock scraping error: {e}")
+            logger.error(f"인포스탁 스크래핑 오류: {e}", exc_info=True)
             
         return articles
 

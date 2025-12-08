@@ -5,6 +5,9 @@ import threading
 import queue
 import time
 import traceback
+import logging
+
+logger = logging.getLogger(__name__)
 
 class TTSService:
     def __init__(self, base_dir: str = "assets/audio"):
@@ -34,15 +37,10 @@ class TTSService:
                 # Note: save_to_file is blocking usually.
                 self.engine.save_to_file(text, filepath)
                 self.engine.runAndWait()
-                print(f"✓ Generated audio for '{text}': {filepath}")
+                logger.debug(f"'{text}' 오디오 생성 완료: {filepath}")
             except Exception as e:
-                print(f"✗ Error generating audio for '{text}':")
-                print(f"  - Text: {text}")
-                print(f"  - Target filepath: {filepath}")
-                print(f"  - Error type: {type(e).__name__}")
-                print(f"  - Error message: {e}")
-                print(f"  - Traceback:")
-                traceback.print_exc()
+                logger.error(f"'{text}' 오디오 생성 오류: {e}", exc_info=True, 
+                           extra={'text': text, 'filepath': filepath})
         return filepath
 
     def play_audio(self, text: str):
@@ -68,30 +66,14 @@ class TTSService:
                             # SND_NODEFAULT: don't play default sound if file not found
                             # SND_NOSTOP: don't stop currently playing sound (though we are serial here)
                             winsound.PlaySound(filepath, winsound.SND_FILENAME | winsound.SND_NODEFAULT)
-                            print(f"♪ Played '{text}' ({file_size} bytes)")
+                            logger.debug(f"'{text}' 재생 완료 ({file_size} bytes)")
                         except Exception as e:
-                            print(f"✗ Error playing '{text}':")
-                            print(f"  - Text: {text}")
-                            print(f"  - Filepath: {filepath}")
-                            print(f"  - File exists: {os.path.exists(filepath)}")
-                            if os.path.exists(filepath):
-                                print(f"  - File size: {os.path.getsize(filepath)} bytes")
-                            print(f"  - Error type: {type(e).__name__}")
-                            print(f"  - Error message: {e}")
-                            if hasattr(e, 'winerror'):
-                                print(f"  - WinError code: {e.winerror}")
-                            if hasattr(e, 'strerror'):
-                                print(f"  - String error: {e.strerror}")
-                            print(f"  - Traceback:")
-                            traceback.print_exc()
+                            logger.error(f"'{text}' 재생 오류: {e}", exc_info=True,
+                                       extra={'filepath': filepath, 'exists': os.path.exists(filepath)})
                     else:
-                        print(f"✗ Audio file not found for '{text}': {filepath}")
+                        logger.warning(f"'{text}' 오디오 파일 없음: {filepath}")
                 
                 self.queue.task_done()
             except Exception as e:
-                print(f"✗ Error in playback worker:")
-                print(f"  - Error type: {type(e).__name__}")
-                print(f"  - Error message: {e}")
-                print(f"  - Traceback:")
-                traceback.print_exc()
+                logger.error(f"재생 워커 오류: {e}", exc_info=True)
                 time.sleep(1)
