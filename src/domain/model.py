@@ -8,3 +8,4 @@ class Article:
     link: str
     date: str
     keyword: str = ""
+    source: str = ""  # 뉴스 출처 (예: "이데일리", "연합뉴스")

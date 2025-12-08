@@ -73,7 +73,8 @@ class InfostockScraper(NewsRepository):
                         title=title,
                         link=link,
                         date=date_str,
-                        keyword=keyword
+                        keyword=keyword,
+                        source="인포스탁"
                     ))
                     
                 except Exception as e:

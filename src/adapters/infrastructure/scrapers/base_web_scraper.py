@@ -77,14 +77,19 @@ class BaseWebScraper(NewsRepository, ABC):
         articles = []
         selector = self.get_news_list_selector()
         news_list = soup.select(selector)
+        source_name = self.get_source_name()
         
         for item in news_list:
             try:
                 article = self.parse_article(item, keyword)
                 if article:
+                    # source 필드가 비어있으면 자동으로 채우기
+                    if not article.source:
+                        from dataclasses import replace
+                        article = replace(article, source=source_name)
                     articles.append(article)
             except Exception as e:
-                print(f"Error parsing item in {self.get_source_name()}: {e}")
+                print(f"Error parsing item in {source_name}: {e}")
                 continue
                 
         return articles

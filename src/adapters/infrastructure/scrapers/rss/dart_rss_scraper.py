@@ -85,7 +85,8 @@ class DartRssScraper(NewsRepository):
                         title=full_title,
                         link=link,
                         date=date_str,
-                        keyword=keyword if keyword else category
+                        keyword=keyword if keyword else category,
+                        source="DART"
                     ))
                     
                 except Exception as e:

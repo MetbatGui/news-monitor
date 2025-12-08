@@ -58,7 +58,8 @@ class NewspimScraper(NewsRepository):
                         title=title,
                         link=link,
                         date=date_str,
-                        keyword=keyword
+                        keyword=keyword,
+                        source="뉴스핌"
                     ))
                     
                 except Exception as e:
