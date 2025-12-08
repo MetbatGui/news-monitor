@@ -67,8 +67,8 @@ class ArticleTable(ft.Column):
             highlighted_links = set()
         
         for article in articles:
-            # 출처 판단
-            source = self._get_source_name(article.link)
+            # 출처: article.source 직접 사용
+            source = article.source if article.source else "알 수 없음"
             
             # 하이라이트 여부
             is_highlighted = article.link in highlighted_links
@@ -130,14 +130,3 @@ class ArticleTable(ft.Column):
             )
             
             self.data_table.rows.append(row)
-    
-    def _get_source_name(self, link: str) -> str:
-        """링크로 출처 판단"""
-        if "newspim" in link:
-            return "뉴스핌"
-        elif "infostockdaily" in link:
-            return "인포스탁"
-        elif "dart.fss.or.kr" in link:
-            return "DART"
-        else:
-            return "알 수 없음"
