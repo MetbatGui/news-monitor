@@ -10,6 +10,10 @@ import win32gui
 import win32con
 
 from adapters.infrastructure.scrapers.web.newspim_scraper import NewspimScraper
+from adapters.infrastructure.scrapers.web.edaily_scraper import EdailyScraper
+from adapters.infrastructure.scrapers.web.hankyung_scraper import HankyungScraper
+from adapters.infrastructure.scrapers.web.mk_scraper import MKScraper
+from adapters.infrastructure.scrapers.web.mt_scraper import MTScraper
 from adapters.infrastructure.scrapers.rss.infostock_scraper import InfostockScraper
 from adapters.infrastructure.scrapers.rss.dart_rss_scraper import DartRssScraper
 from adapters.infrastructure.keyword_storage import KeywordStorage
@@ -175,6 +179,17 @@ def main(page: ft.Page):
         all_articles = []
         current_links = set()
         
+        # 스크래퍼 초기화
+        scrapers = [
+            NewspimScraper(),
+            EdailyScraper(),
+            HankyungScraper(),
+            MKScraper(),
+            MTScraper(),
+            InfostockScraper(),
+            DartRssScraper()
+        ]
+        
         # Baseline fetch - get current articles but don't display them
         keywords = view.get_keywords()
         stock_names = view.get_stock_names()
@@ -261,6 +276,14 @@ def main(page: ft.Page):
                             source_name = "인포스탁"
                         elif "dart.fss.or.kr" in article.link:
                             source_name = "DART"
+                        elif "edaily.co.kr" in article.link:
+                            source_name = "이데일리"
+                        elif "hankyung.com" in article.link:
+                            source_name = "한국경제"
+                        elif "mk.co.kr" in article.link:
+                            source_name = "매일경제"
+                        elif "mt.co.kr" in article.link:
+                            source_name = "머니투데이"
                         else:
                             source_name = "알 수 없음"
                             
