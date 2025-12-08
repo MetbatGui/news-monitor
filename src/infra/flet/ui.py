@@ -9,9 +9,9 @@ from PIL import Image, ImageDraw
 import win32gui
 import win32con
 
-from adapters.infrastructure.newspim_scraper import NewspimScraper
-from adapters.infrastructure.infostock_scraper import InfostockScraper
-from adapters.infrastructure.dart_rss_scraper import DartRssScraper
+from adapters.infrastructure.scrapers.web.newspim_scraper import NewspimScraper
+from adapters.infrastructure.scrapers.rss.infostock_scraper import InfostockScraper
+from adapters.infrastructure.scrapers.rss.dart_rss_scraper import DartRssScraper
 from adapters.infrastructure.keyword_storage import KeywordStorage
 from adapters.infrastructure.win_toast import WinToast
 from adapters.infrastructure.tts_service import TTSService
