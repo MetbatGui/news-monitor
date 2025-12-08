@@ -4,6 +4,7 @@ import winsound
 import threading
 import queue
 import time
+import traceback
 
 class TTSService:
     def __init__(self, base_dir: str = "assets/audio"):
@@ -33,9 +34,15 @@ class TTSService:
                 # Note: save_to_file is blocking usually.
                 self.engine.save_to_file(text, filepath)
                 self.engine.runAndWait()
-                print(f"Generated audio for '{text}': {filepath}")
+                print(f"✓ Generated audio for '{text}': {filepath}")
             except Exception as e:
-                print(f"Error generating audio for '{text}': {e}")
+                print(f"✗ Error generating audio for '{text}':")
+                print(f"  - Text: {text}")
+                print(f"  - Target filepath: {filepath}")
+                print(f"  - Error type: {type(e).__name__}")
+                print(f"  - Error message: {e}")
+                print(f"  - Traceback:")
+                traceback.print_exc()
         return filepath
 
     def play_audio(self, text: str):
@@ -55,15 +62,36 @@ class TTSService:
                     filepath = self._get_filepath(text)
                     if os.path.exists(filepath):
                         try:
+                            # File info for debugging
+                            file_size = os.path.getsize(filepath)
+                            
                             # SND_NODEFAULT: don't play default sound if file not found
                             # SND_NOSTOP: don't stop currently playing sound (though we are serial here)
                             winsound.PlaySound(filepath, winsound.SND_FILENAME | winsound.SND_NODEFAULT)
+                            print(f"♪ Played '{text}' ({file_size} bytes)")
                         except Exception as e:
-                            print(f"Error playing '{text}': {e}")
+                            print(f"✗ Error playing '{text}':")
+                            print(f"  - Text: {text}")
+                            print(f"  - Filepath: {filepath}")
+                            print(f"  - File exists: {os.path.exists(filepath)}")
+                            if os.path.exists(filepath):
+                                print(f"  - File size: {os.path.getsize(filepath)} bytes")
+                            print(f"  - Error type: {type(e).__name__}")
+                            print(f"  - Error message: {e}")
+                            if hasattr(e, 'winerror'):
+                                print(f"  - WinError code: {e.winerror}")
+                            if hasattr(e, 'strerror'):
+                                print(f"  - String error: {e.strerror}")
+                            print(f"  - Traceback:")
+                            traceback.print_exc()
                     else:
-                        print(f"Audio file not found for '{text}'")
+                        print(f"✗ Audio file not found for '{text}': {filepath}")
                 
                 self.queue.task_done()
             except Exception as e:
-                print(f"Error in playback worker: {e}")
+                print(f"✗ Error in playback worker:")
+                print(f"  - Error type: {type(e).__name__}")
+                print(f"  - Error message: {e}")
+                print(f"  - Traceback:")
+                traceback.print_exc()
                 time.sleep(1)
