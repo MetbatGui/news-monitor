@@ -18,6 +18,7 @@ from adapters.infrastructure.scrapers.web.yonhap_scraper import YonhapScraper
 from adapters.infrastructure.scrapers.web.asiae_scraper import AsiaeScraper
 from adapters.infrastructure.scrapers.web.etoday_scraper import EtodayScraper
 from adapters.infrastructure.scrapers.web.herald_scraper import HeraldScraper
+from adapters.infrastructure.scrapers.web.seoul_scraper import SeoulScraper
 from adapters.infrastructure.scrapers.rss.infostock_scraper import InfostockScraper
 from adapters.infrastructure.scrapers.rss.dart_rss_scraper import DartRssScraper
 from adapters.infrastructure.keyword_storage import KeywordStorage
@@ -80,6 +81,7 @@ def main(page: ft.Page):
         tts.generate_audio("아시아경제")
         tts.generate_audio("이투데이")
         tts.generate_audio("헤럴드경제")
+        tts.generate_audio("서울경제")
         
         for k in initial_keywords + initial_stock_names:
             tts.generate_audio(k)
@@ -198,6 +200,7 @@ def main(page: ft.Page):
             AsiaeScraper(),
             EtodayScraper(),
             HeraldScraper(),
+            SeoulScraper(),
             InfostockScraper(),
             DartRssScraper()
         ]
@@ -304,6 +307,8 @@ def main(page: ft.Page):
                             source_name = "이투데이"
                         elif "heraldcorp.com" in article.link:
                             source_name = "헤럴드경제"
+                        elif "sedaily.com" in article.link:
+                            source_name = "서울경제"
                         else:
                             source_name = "알 수 없음"
                             
