@@ -2,7 +2,7 @@ import re
 from typing import Optional
 
 from domain.model import Article
-from adapters.infrastructure.base_web_scraper import BaseWebScraper
+from adapters.infrastructure.scrapers.base_web_scraper import BaseWebScraper
 
 
 class HankyungScraper(BaseWebScraper):
