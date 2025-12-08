@@ -111,6 +111,14 @@ class BaseWebScraper(NewsRepository, ABC):
         """
         return datetime.now().strftime("%Y-%m-%d")
     
+    def get_current_datetime(self) -> str:
+        """현재 날짜와 시간 반환 (YYYY-MM-DD HH:MM 포맷)
+        
+        Returns:
+            현재 날짜와 시간 문자열 (예: "2025-12-08 15:30")
+        """
+        return datetime.now().strftime("%Y-%m-%d %H:%M")
+    
     def normalize_date(self, date_str: str) -> str:
         """날짜 문자열을 표준 형식으로 변환
         
