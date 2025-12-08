@@ -65,6 +65,7 @@ def main(page: ft.Page):
         tts.generate_audio("인포스탁")
         tts.generate_audio("DART")
         tts.generate_audio("이데일리")
+        tts.generate_audio("한국경제")
         
         for k in initial_keywords + initial_stock_names:
             tts.generate_audio(k)
