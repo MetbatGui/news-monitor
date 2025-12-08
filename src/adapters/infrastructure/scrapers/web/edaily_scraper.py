@@ -34,16 +34,8 @@ class EdailyScraper(BaseWebScraper):
             if match:
                 article_id = int(match.group(1))
         
-        # 날짜 추출
-        date_elem = item.select_one('div.author_category')
-        date_str = ''
-        if date_elem:
-            # 첫 번째 텍스트 노드에서 날짜 추출 (2025.12.08)
-            text_parts = date_elem.get_text(strip=True).split()
-            if text_parts:
-                date_text = text_parts[0]  # "2025.12.08"
-                # "2025.12.08" -> "2025-12-08 HH:MM" (검색 시점의 시간 사용)
-                date_str = self.normalize_date(date_text) + f' {self.get_current_time()}'
+        # 날짜: 시스템 시간 사용
+        date_str = self.get_current_datetime()
         
         return Article(
             id=article_id,
