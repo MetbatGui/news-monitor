@@ -32,6 +32,7 @@ class WinToast(AlertSystem):
 
     def send_notification(self, article: Article) -> None:
         try:
+            logger.info(f"토스트 알림 시도: {article.title[:50]}...")
             # Use win11toast for all Windows versions (supports Win 10+)
             # If on_click is provided, use it. Otherwise default to opening the link.
             click_handler = (lambda args: self.on_click()) if self.on_click else (lambda args: webbrowser.open(article.link))
@@ -42,5 +43,6 @@ class WinToast(AlertSystem):
                 on_click=click_handler,
                 duration="short"
             )
+            logger.info(f"토스트 알림 전송 완료: {article.title[:50]}...")
         except Exception as e:
-            logger.debug(f"토스트 알림 오류: {e}")
+            logger.error(f"토스트 알림 오류: {e}", exc_info=True)

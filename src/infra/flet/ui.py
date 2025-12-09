@@ -281,9 +281,12 @@ def main(page: ft.Page):
                                 # Send notification
                                 try:
                                     if toaster:
+                                        logger.info(f"알림 전송: {article.source} - {article.title[:30]}...")
                                         toaster.send_notification(article)
+                                    else:
+                                        logger.warning("toaster가 None이어서 알림을 전송할 수 없습니다")
                                 except Exception as e:
-                                    logger.debug(f"알림 오류: {e}")
+                                    logger.error(f"알림 오류: {e}", exc_info=True)
                 
                  # Group new articles by platform and play TTS
                 if new_articles_this_cycle:
