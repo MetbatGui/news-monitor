@@ -4,6 +4,7 @@ from adapters.infrastructure.scrapers.rss.asiae_rss_scraper import AsiaeRssScrap
 from adapters.infrastructure.scrapers.rss.dart_rss_scraper import DartRssScraper
 from adapters.infrastructure.scrapers.rss.edaily_rss_scraper import EdailyRssScraper
 from adapters.infrastructure.scrapers.rss.etoday_rss_scraper import EtodayRssScraper
+from adapters.infrastructure.scrapers.rss.hankyung_rss_scraper import HankyungRssScraper
 from adapters.infrastructure.scrapers.rss.herald_rss_scraper import HeraldRssScraper
 from adapters.infrastructure.scrapers.rss.mk_rss_scraper import MKRssScraper
 from adapters.infrastructure.scrapers.rss.yonhap_rss_scraper import YonhapRssScraper
@@ -14,6 +15,7 @@ __all__ = [
     'DartRssScraper',
     'EdailyRssScraper',
     'EtodayRssScraper',
+    'HankyungRssScraper',
     'HeraldRssScraper',
     'MKRssScraper',
     'YonhapRssScraper',
