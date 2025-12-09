@@ -9,7 +9,7 @@ class FnScraper(BaseWebScraper):
     """파이낸셜뉴스 검색 결과를 스크래핑하는 클래스"""
     
     def build_search_url(self, keyword: str) -> str:
-        return f"https://www.fnnews.com/search?search_txt={keyword}"
+        return f"https://www.fnnews.com/search?search_txt={keyword}&page=0&search_type=chronological&cont_type=tit"
     
     def get_news_list_selector(self) -> str:
         return 'ul.list_article > li'
