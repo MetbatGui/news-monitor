@@ -9,7 +9,7 @@ class MTScraper(BaseWebScraper):
     """머니투데이 검색 결과를 스크래핑하는 클래스"""
     
     def build_search_url(self, keyword: str) -> str:
-        return f"https://www.mt.co.kr/search?keyword={keyword}"
+        return f"https://www.mt.co.kr/search?keyword={keyword}&filter=title"
     
     def get_news_list_selector(self) -> str:
         return 'ul.list_wrap > li.article_item'
