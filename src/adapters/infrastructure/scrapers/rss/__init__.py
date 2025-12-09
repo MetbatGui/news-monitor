@@ -8,6 +8,7 @@ from adapters.infrastructure.scrapers.rss.hankyung_rss_scraper import HankyungRs
 from adapters.infrastructure.scrapers.rss.herald_rss_scraper import HeraldRssScraper
 from adapters.infrastructure.scrapers.rss.mk_rss_scraper import MKRssScraper
 from adapters.infrastructure.scrapers.rss.newspim_rss_scraper import NewspimRssScraper
+from adapters.infrastructure.scrapers.rss.seoul_rss_scraper import SeoulRssScraper
 from adapters.infrastructure.scrapers.rss.yonhap_rss_scraper import YonhapRssScraper
 from adapters.infrastructure.scrapers.rss.infostock_scraper import InfostockScraper
 
@@ -20,6 +21,7 @@ __all__ = [
     'HeraldRssScraper',
     'MKRssScraper',
     'NewspimRssScraper',
+    'SeoulRssScraper',
     'YonhapRssScraper',
     'InfostockScraper',
 ]
