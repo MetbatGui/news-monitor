@@ -4,6 +4,7 @@ from adapters.infrastructure.scrapers.rss.dart_rss_scraper import DartRssScraper
 from adapters.infrastructure.scrapers.rss.edaily_rss_scraper import EdailyRssScraper
 from adapters.infrastructure.scrapers.rss.herald_rss_scraper import HeraldRssScraper
 from adapters.infrastructure.scrapers.rss.mk_rss_scraper import MKRssScraper
+from adapters.infrastructure.scrapers.rss.yonhap_rss_scraper import YonhapRssScraper
 from adapters.infrastructure.scrapers.rss.infostock_scraper import InfostockScraper
 
 __all__ = [
@@ -11,5 +12,6 @@ __all__ = [
     'EdailyRssScraper',
     'HeraldRssScraper',
     'MKRssScraper',
+    'YonhapRssScraper',
     'InfostockScraper',
 ]
