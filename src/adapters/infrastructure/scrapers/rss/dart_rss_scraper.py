@@ -1,7 +1,8 @@
 import httpx
+import re
 import xml.etree.ElementTree as ET
-from typing import List
-from datetime import datetime
+from typing import List, Optional
+from datetime import datetime, timedelta
 import logging
 
 from domain.model import Article
@@ -12,6 +13,9 @@ logger = logging.getLogger(__name__)
 
 class DartRssScraper(NewsRepository):
     """DART 전자공시 RSS 피드에서 공시 정보를 가져오는 스크래퍼"""
+    
+    # RSS 네임스페이스
+    RSS_NAMESPACE = {'dc': 'http://purl.org/dc/elements/1.1/'}
     
     def __init__(self, rss_url: str = "https://dart.fss.or.kr/api/todayRSS.xml"):
         self.rss_url = rss_url
@@ -28,8 +32,26 @@ class DartRssScraper(NewsRepository):
         """
         articles = []
         
+        # RSS XML 가져오기
+        root = await self._fetch_rss_content()
+        if root is None:
+            return articles
+        
+        # 각 item 처리
+        for item in root.findall('.//item'):
+            article = self._process_rss_item(item, keyword)
+            if article:
+                articles.append(article)
+        
+        return articles
+    
+    async def _fetch_rss_content(self) -> Optional[ET.Element]:
+        """RSS XML 콘텐츠를 가져와서 파싱합니다.
+        
+        Returns:
+            파싱된 XML root element, 실패시 None
+        """
         try:
-            # User-Agent 헤더 추가 (서버 차단 방지)
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
             }
@@ -37,69 +59,109 @@ class DartRssScraper(NewsRepository):
                 response = await client.get(self.rss_url, headers=headers, timeout=20)
                 response.raise_for_status()
             
-            # XML 파싱
-            root = ET.fromstring(response.content)
-            
-            # RSS 2.0 네임스페이스
-            ns = {'dc': 'http://purl.org/dc/elements/1.1/'}
-            
-            # 각 item 처리
-            for item in root.findall('.//item'):
-                try:
-                    # 필드 추출
-                    title_elem = item.find('title')
-                    link_elem = item.find('link')
-                    category_elem = item.find('category')
-                    pub_date_elem = item.find('pubDate')
-                    creator_elem = item.find('dc:creator', ns)
-                    guid_elem = item.find('guid')
-                    
-                    title = title_elem.text if title_elem is not None and title_elem.text else ""
-                    link = link_elem.text if link_elem is not None and link_elem.text else ""
-                    category = category_elem.text if category_elem is not None and category_elem.text else ""
-                    pub_date = pub_date_elem.text if pub_date_elem is not None and pub_date_elem.text else ""
-                    creator = creator_elem.text if creator_elem is not None and creator_elem.text else ""
-                    guid = guid_elem.text if guid_elem is not None and guid_elem.text else ""
-                    
-                    # 키워드 필터링 (keyword가 지정된 경우)
-                    # 제목, 회사명, 카테고리 중 하나라도 키워드 포함하면 통과
-                    if keyword:
-                        keyword_lower = keyword.lower()
-                        title_lower = title.lower()
-                        creator_lower = creator.lower()
-                        category_lower = category.lower()
-                        
-                        if not (keyword_lower in title_lower or 
-                                keyword_lower in creator_lower or 
-                                keyword_lower in category_lower):
-                            continue
-                    
-                    # guid에서 rcpNo 추출 (ID로 사용)
-                    article_id = self._extract_rcp_no(guid)
-                    
-                    # pubDate 포맷 변환: "Fri, 05 Dec 2025 04:28:00 GMT" -> "2025-12-05 04:28"
-                    date_str = self._convert_date_format(pub_date)
-                    
-                    # Article 생성 (title에 category와 creator 포함)
-                    full_title = f"({category}){creator} - {title}"
-                    
-                    articles.append(Article(
-                        id=article_id,
-                        title=full_title,
-                        link=link,
-                        date=date_str,
-                        keyword=keyword if keyword else category,
-                        source=self.get_source_name()
-                    ))
-                    
-                except Exception as e:
-                    logger.debug(f"RSS 항목 파싱 오류: {e}")
-                    continue
-                    
+            return ET.fromstring(response.content)
         except Exception as e:
             logger.error(f"RSS 가져오기 오류: {e}", exc_info=True)
+            return None
+    
+    def _process_rss_item(self, item: ET.Element, keyword: str) -> Optional[Article]:
+        """단일 RSS item을 처리하여 Article로 변환합니다.
+        
+        Args:
+            item: RSS item element
+            keyword: 필터링할 키워드
             
-        return articles
+        Returns:
+            Article 객체, 필터링되거나 오류시 None
+        """
+        try:
+            # 필드 추출
+            fields = self._extract_item_fields(item)
+            
+            # 키워드 필터링
+            if keyword and not self._matches_keyword(
+                keyword, 
+                fields['title'], 
+                fields['creator'], 
+                fields['category']
+            ):
+                return None
+            
+            # Article 생성
+            return self._create_article_from_fields(fields, keyword)
+            
+        except Exception as e:
+            logger.debug(f"RSS 항목 파싱 오류: {e}")
+            return None
+    
+    def _extract_item_fields(self, item: ET.Element) -> dict:
+        """RSS item에서 필드를 추출합니다.
+        
+        Args:
+            item: RSS item element
+            
+        Returns:
+            추출된 필드 dict
+        """
+        return {
+            'title': self._get_element_text(item.find('title')),
+            'link': self._get_element_text(item.find('link')),
+            'category': self._get_element_text(item.find('category')),
+            'pub_date': self._get_element_text(item.find('pubDate')),
+            'creator': self._get_element_text(item.find('dc:creator', self.RSS_NAMESPACE)),
+            'guid': self._get_element_text(item.find('guid'))
+        }
+    
+    def _get_element_text(self, element: Optional[ET.Element]) -> str:
+        """XML Element에서 텍스트를 안전하게 추출합니다.
+        
+        Args:
+            element: XML Element (None 가능)
+            
+        Returns:
+            Element의 text 또는 빈 문자열
+        """
+        return element.text if element is not None and element.text else ""
+    
+    def _matches_keyword(self, keyword: str, title: str, creator: str, category: str) -> bool:
+        """키워드가 title, creator, category 중 하나에 포함되는지 확인합니다.
+        
+        Args:
+            keyword: 검색 키워드
+            title: 제목
+            creator: 회사명
+            category: 카테고리
+            
+        Returns:
+            매칭 여부
+        """
+        keyword_lower = keyword.lower()
+        return (keyword_lower in title.lower() or 
+                keyword_lower in creator.lower() or 
+                keyword_lower in category.lower())
+    
+    def _create_article_from_fields(self, fields: dict, keyword: str) -> Article:
+        """추출된 필드로 Article 객체를 생성합니다.
+        
+        Args:
+            fields: _extract_item_fields에서 반환된 필드 dict
+            keyword: 검색 키워드
+            
+        Returns:
+            Article 객체
+        """
+        article_id = self._extract_rcp_no(fields['guid'])
+        date_str = self._convert_date_format(fields['pub_date'])
+        full_title = f"({fields['category']}){fields['creator']} - {fields['title']}"
+        
+        return Article(
+            id=article_id,
+            title=full_title,
+            link=fields['link'],
+            date=date_str,
+            keyword=keyword if keyword else fields['category'],
+            source=self.get_source_name()
+        )
     
     def _extract_rcp_no(self, guid: str) -> int:
         """GUID에서 rcpNo 추출
@@ -110,7 +172,6 @@ class DartRssScraper(NewsRepository):
         Returns:
             rcpNo (정수)
         """
-        import re
         match = re.search(r'rcpNo=(\d+)', guid)
         return int(match.group(1)) if match else 0
     
@@ -124,15 +185,12 @@ class DartRssScraper(NewsRepository):
             변환된 날짜 문자열 (예: "2025-12-05 04:28")
         """
         try:
-            # RFC-822 형식 파싱
             dt = datetime.strptime(pub_date, "%a, %d %b %Y %H:%M:%S %Z")
-            # KST 시간대로 변환 (+9시간)
-            from datetime import timedelta
             dt_kst = dt + timedelta(hours=9)
             return dt_kst.strftime("%Y-%m-%d %H:%M")
         except Exception as e:
             logger.warning(f"날짜 변환 오류 '{pub_date}': {e}")
-            return pub_date  # 파싱 실패시 원본 반환
+            return pub_date
     
     def get_source_name(self) -> str:
         return "DART"
