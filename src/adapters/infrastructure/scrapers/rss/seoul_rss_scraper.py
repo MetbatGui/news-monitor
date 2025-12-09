@@ -56,15 +56,23 @@ class SeoulRssScraper(NewsRepository):
                 response = await client.get(self.rss_url, headers=headers, timeout=20)
                 response.raise_for_status()
             
-            # XML 텍스트 정리 (malformed XML 문자 처리)
-            xml_text = response.text
-            
-            # 잘못된 앰퍼샌드 이스케이프: & -> &amp; (단, 이미 이스케이프된 것 제외)
-            # 정규식으로 &lt;, &gt;, &amp;, &quot;, &apos;가 아닌 & 찾기
-            import re
-            xml_text = re.sub(r'&(?!(amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)', '&amp;', xml_text)
-            
-            return ET.fromstring(xml_text.encode('utf-8'))
+            # lxml을 사용하여 malformed XML을 복구 모드로 파싱
+            try:
+                from lxml import etree as lxml_ET
+                parser = lxml_ET.XMLParser(recover=True, encoding='utf-8')
+                root = lxml_ET.fromstring(response.content, parser=parser)
+                
+                # lxml Element를 표준 ET Element로 변환
+                xml_str = lxml_ET.tostring(root, encoding='unicode')
+                return ET.fromstring(xml_str)
+            except ImportError:
+                logger.warning("lxml not installed, falling back to standard ET")
+                # lxml이 없으면 기존 방식 사용
+                xml_text = response.text
+                import re
+                xml_text = re.sub(r'&(?!(amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)', '&amp;', xml_text)
+                return ET.fromstring(xml_text.encode('utf-8'))
+                
         except ET.ParseError as e:
             logger.error(f"RSS XML 파싱 오류: {e}")
             logger.debug(f"문제 라인 근처: {str(e)}")
