@@ -10,17 +10,17 @@ import win32gui
 import win32con
 import logging
 
-from adapters.infrastructure.scrapers.web.newspim_scraper import NewspimScraper
-from adapters.infrastructure.scrapers.web.edaily_scraper import EdailyScraper
-from adapters.infrastructure.scrapers.web.hankyung_scraper import HankyungScraper
-from adapters.infrastructure.scrapers.web.mk_scraper import MKScraper
 from adapters.infrastructure.scrapers.web.mt_scraper import MTScraper
-from adapters.infrastructure.scrapers.web.yonhap_scraper import YonhapScraper
-from adapters.infrastructure.scrapers.web.asiae_scraper import AsiaeScraper
-from adapters.infrastructure.scrapers.web.etoday_scraper import EtodayScraper
-from adapters.infrastructure.scrapers.web.herald_scraper import HeraldScraper
-from adapters.infrastructure.scrapers.web.seoul_scraper import SeoulScraper
 from adapters.infrastructure.scrapers.web.fn_scraper import FnScraper
+from adapters.infrastructure.scrapers.rss.newspim_rss_scraper import NewspimRssScraper
+from adapters.infrastructure.scrapers.rss.edaily_rss_scraper import EdailyRssScraper
+from adapters.infrastructure.scrapers.rss.hankyung_rss_scraper import HankyungRssScraper
+from adapters.infrastructure.scrapers.rss.mk_rss_scraper import MKRssScraper
+from adapters.infrastructure.scrapers.rss.yonhap_rss_scraper import YonhapRssScraper
+from adapters.infrastructure.scrapers.rss.asiae_rss_scraper import AsiaeRssScraper
+from adapters.infrastructure.scrapers.rss.etoday_rss_scraper import EtodayRssScraper
+from adapters.infrastructure.scrapers.rss.herald_rss_scraper import HeraldRssScraper
+from adapters.infrastructure.scrapers.rss.seoul_rss_scraper import SeoulRssScraper
 from adapters.infrastructure.scrapers.rss.infostock_scraper import InfostockScraper
 from adapters.infrastructure.scrapers.rss.dart_rss_scraper import DartRssScraper
 from adapters.infrastructure.keyword_storage import KeywordStorage
@@ -59,7 +59,7 @@ def main(page: ft.Page):
     # State
     is_monitoring = False
     scrapers = [
-        NewspimScraper(), 
+        NewspimRssScraper(), 
         InfostockScraper(),
         DartRssScraper(DartConfig.RSS_URL)
     ]
@@ -196,16 +196,16 @@ def main(page: ft.Page):
         
         # 스크래퍼 초기화
         scrapers = [
-            NewspimScraper(),
-            EdailyScraper(),
-            HankyungScraper(),
-            MKScraper(),
+            NewspimRssScraper(),
+            EdailyRssScraper(),
+            HankyungRssScraper(),
+            MKRssScraper(),
             MTScraper(),
-            YonhapScraper(),
-            AsiaeScraper(),
-            EtodayScraper(),
-            HeraldScraper(),
-            SeoulScraper(),
+            YonhapRssScraper(),
+            AsiaeRssScraper(),
+            EtodayRssScraper(),
+            HeraldRssScraper(),
+            SeoulRssScraper(),
             FnScraper(),
             InfostockScraper(),
             DartRssScraper()
