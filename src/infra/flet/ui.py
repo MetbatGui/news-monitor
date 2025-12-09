@@ -20,7 +20,7 @@ from adapters.infrastructure.scrapers.rss.yonhap_rss_scraper import YonhapRssScr
 from adapters.infrastructure.scrapers.rss.asiae_rss_scraper import AsiaeRssScraper
 from adapters.infrastructure.scrapers.rss.etoday_rss_scraper import EtodayRssScraper
 from adapters.infrastructure.scrapers.rss.herald_rss_scraper import HeraldRssScraper
-from adapters.infrastructure.scrapers.rss.seoul_rss_scraper import SeoulRssScraper
+# from adapters.infrastructure.scrapers.rss.seoul_rss_scraper import SeoulRssScraper  # 비활성화: RSS XML malformed
 from adapters.infrastructure.scrapers.rss.infostock_scraper import InfostockScraper
 from adapters.infrastructure.scrapers.rss.dart_rss_scraper import DartRssScraper
 from adapters.infrastructure.keyword_storage import KeywordStorage
@@ -85,7 +85,7 @@ def main(page: ft.Page):
         tts.generate_audio("아시아경제")
         tts.generate_audio("이투데이")
         tts.generate_audio("헤럴드경제")
-        tts.generate_audio("서울경제")
+        # tts.generate_audio("서울경제")  # 비활성화: RSS XML malformed
         tts.generate_audio("파이낸셜뉴스")
         
         for k in initial_keywords + initial_stock_names:
@@ -205,7 +205,7 @@ def main(page: ft.Page):
             AsiaeRssScraper(),
             EtodayRssScraper(),
             HeraldRssScraper(),
-            SeoulRssScraper(),
+            # SeoulRssScraper(),  # 비활성화: RSS XML malformed
             FnScraper(),
             InfostockScraper(),
             DartRssScraper()
