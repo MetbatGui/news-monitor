@@ -258,6 +258,8 @@ def main(page: ft.Page):
             try:
                 new_articles_this_cycle = []  # Track new articles in this cycle
                 
+                today_str = datetime.now().strftime("%Y-%m-%d")
+                
                 for term in search_terms:
                     if not is_monitoring: break
                     
@@ -273,6 +275,15 @@ def main(page: ft.Page):
                         
                         articles = result
                         for article in articles:
+                            # 날짜 필터링: 오늘 기사가 아니면 무시
+                            if not article.date:
+                                continue
+                                
+                            # 날짜 형식 정규화 (YYYY.MM.DD -> YYYY-MM-DD) 및 오늘 날짜 확인
+                            article_date = article.date.replace('.', '-')
+                            if not article_date.startswith(today_str):
+                                continue
+
                             if article.link not in current_links:
                                 all_articles.append(article)
                                 current_links.add(article.link)

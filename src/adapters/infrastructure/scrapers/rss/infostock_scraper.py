@@ -61,7 +61,12 @@ class InfostockScraper(NewsRepository):
                     # Date
                     # Format: "2025-12-04 16:16" or similar
                     date_tag = item.select_one(".list-dated")
-                    date_str = date_tag.text.strip() if date_tag else ""
+                    date_str = ""
+                    if date_tag:
+                        raw_date = date_tag.text.strip()
+                        # "2024.12.04 16:20" -> "2024-12-04 16:20"
+                        if raw_date:
+                            date_str = raw_date.replace('.', '-', 2)
                     
                     # Clean up date string if it contains extra info (e.g. " | 기자명")
                     # Usually it's just date/time or "Author | Date"
