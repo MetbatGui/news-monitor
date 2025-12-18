@@ -14,4 +14,6 @@ dependencies = [
     "win11toast>=0.36.2",
     "pyttsx3>=2.90",
     "lxml>=6.0.2",
+    "returns>=0.26.0",
+    "pydantic>=2.12.5",
 ]
