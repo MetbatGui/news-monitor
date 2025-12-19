@@ -5,16 +5,16 @@ from typing import List, Optional
 from datetime import datetime, timedelta
 import logging
 
-from adapters.dto import ArticleData
-from ports.news_port import NewsRepository
+from infrastructure.news.dto import ArticleData
+from domain.ports.news_port import NewsRepository
 
 logger = logging.getLogger(__name__)
 
 
-class HankyungRssScraper(NewsRepository):
-    """한국경제 RSS 피드에서 뉴스를 가져오는 스크래퍼"""
+class YonhapRssScraper(NewsRepository):
+    """연합뉴스 RSS 피드에서 뉴스를 가져오는 스크래퍼"""
     
-    def __init__(self, rss_url: str = "https://www.hankyung.com/feed/all-news"):
+    def __init__(self, rss_url: str = "https://www.yna.co.kr/rss/news.xml"):
         self.rss_url = rss_url
     
     async def fetch_reports(self, keyword: str = "") -> List[ArticleData]:
@@ -95,11 +95,15 @@ class HankyungRssScraper(NewsRepository):
         Returns:
             추출된 필드 dict
         """
+        # dc 네임스페이스 정의
+        dc_namespace = {'dc': 'http://purl.org/dc/elements/1.1/'}
+        
         return {
             'title': self._get_element_text(item.find('title')),
             'link': self._get_element_text(item.find('link')),
+            'guid': self._get_element_text(item.find('guid')),
             'pub_date': self._get_element_text(item.find('pubDate')),
-            'author': self._get_element_text(item.find('author'))
+            'creator': self._get_element_text(item.find('dc:creator', dc_namespace))
         }
     
     def _get_element_text(self, element: Optional[ET.Element]) -> str:
@@ -143,7 +147,7 @@ class HankyungRssScraper(NewsRepository):
             title=fields['title'],
             link=fields['link'],
             date=date_str,
-            keyword=keyword if keyword else "한국경제",
+            keyword=keyword if keyword else "연합뉴스",
             source=self.get_source_name()
         )
     
@@ -151,32 +155,28 @@ class HankyungRssScraper(NewsRepository):
         """link에서 뉴스 ID 추출
         
         Args:
-            link: 뉴스 링크 (예: "https://www.hankyung.com/article/202512092152i")
+            link: 뉴스 링크 (예: "https://www.yna.co.kr/view/AKR20251209098000057")
             
         Returns:
-            뉴스 ID (정수, 문자열 ID는 해시)
+            뉴스 ID (link 해시값)
         """
         try:
-            match = re.search(r'/article/([a-zA-Z0-9]+)', link)
+            # AKR로 시작하는 ID 추출
+            match = re.search(r'AKR(\d+)', link)
             if match:
-                id_str = match.group(1)
-                # 숫자만 있으면 int로, 아니면 해시값 반환
-                if id_str.isdigit():
-                    return int(id_str)
-                else:
-                    return hash(id_str) & 0x7FFFFFFF  # 양수 해시값
-            return 0
-        except (AttributeError, ValueError):
-            return 0
+                return int(match.group(1))
+            return hash(link) & 0x7FFFFFFF  # 양수 해시값
+        except Exception:
+            return hash(link) & 0x7FFFFFFF
     
     def _convert_date_format(self, pub_date: str) -> str:
         """RFC-822 날짜를 YYYY-MM-DD HH:MM 포맷으로 변환
         
         Args:
-            pub_date: RFC-822 형식 날짜 (예: "Tue, 09 Dec 2025 14:17:26 +0900")
+            pub_date: RFC-822 형식 날짜 (예: "Tue, 9 Dec 2025 14:22:35 +0900")
             
         Returns:
-            변환된 날짜 문자열 (예: "2025-12-09 14:17")
+            변환된 날짜 문자열 (예: "2025-12-09 14:22")
         """
         try:
             # "+0900" 같은 timezone을 제거하고 파싱
@@ -188,4 +188,4 @@ class HankyungRssScraper(NewsRepository):
             return pub_date
     
     def get_source_name(self) -> str:
-        return "한국경제"
+        return "연합뉴스"

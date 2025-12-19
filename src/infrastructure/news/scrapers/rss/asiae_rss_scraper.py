@@ -5,16 +5,16 @@ from typing import List, Optional
 from datetime import datetime, timedelta
 import logging
 
-from adapters.dto import ArticleData
-from ports.news_port import NewsRepository
+from infrastructure.news.dto import ArticleData
+from domain.ports.news_port import NewsRepository
 
 logger = logging.getLogger(__name__)
 
 
-class EtodayRssScraper(NewsRepository):
-    """이투데이 RSS 피드에서 뉴스를 가져오는 스크래퍼"""
+class AsiaeRssScraper(NewsRepository):
+    """아시아경제 RSS 피드에서 뉴스를 가져오는 스크래퍼"""
     
-    def __init__(self, rss_url: str = "https://rss.etoday.co.kr/eto/etoday_news_all.xml"):
+    def __init__(self, rss_url: str = "https://www.asiae.co.kr/rss/all.htm"):
         self.rss_url = rss_url
     
     async def fetch_reports(self, keyword: str = "") -> List[ArticleData]:
@@ -62,7 +62,7 @@ class EtodayRssScraper(NewsRepository):
             return None
     
     def _process_rss_item(self, item: ET.Element, keyword: str) -> Optional[ArticleData]:
-        """단일 RSS item을 처리하여 ArticleData로 변환합니다.
+        """단일 RSS item을 처리하여 Article로 변환합니다.
         
         Args:
             item: RSS item element
@@ -79,7 +79,7 @@ class EtodayRssScraper(NewsRepository):
             if keyword and not self._matches_keyword(keyword, fields['title']):
                 return None
             
-            # ArticleData 생성
+            # Article 생성
             return self._create_article_from_fields(fields, keyword)
             
         except Exception as e:
@@ -96,6 +96,7 @@ class EtodayRssScraper(NewsRepository):
             추출된 필드 dict
         """
         return {
+            'guid': self._get_element_text(item.find('guid')),
             'title': self._get_element_text(item.find('title')),
             'link': self._get_element_text(item.find('link')),
             'pub_date': self._get_element_text(item.find('pubDate')),
@@ -126,16 +127,16 @@ class EtodayRssScraper(NewsRepository):
         return keyword.lower() in title.lower()
     
     def _create_article_from_fields(self, fields: dict, keyword: str) -> ArticleData:
-        """추출된 필드로 ArticleData 객체를 생성합니다.
+        """추출된 필드로 Article 객체를 생성합니다.
         
         Args:
             fields: _extract_item_fields에서 반환된 필드 dict
             keyword: 검색 키워드
             
         Returns:
-            ArticleData 객체
+            Article 객체
         """
-        article_id = self._extract_news_id(fields['link'])
+        article_id = self._extract_news_id(fields['guid'])
         date_str = self._convert_date_format(fields['pub_date'])
         
         return ArticleData(
@@ -143,33 +144,32 @@ class EtodayRssScraper(NewsRepository):
             title=fields['title'],
             link=fields['link'],
             date=date_str,
-            keyword=keyword if keyword else "이투데이",
+            keyword=keyword if keyword else "아시아경제",
             source=self.get_source_name()
         )
     
-    def _extract_news_id(self, link: str) -> int:
-        """link에서 뉴스 ID 추출
+    def _extract_news_id(self, guid: str) -> int:
+        """guid에서 뉴스 ID 추출
         
         Args:
-            link: 뉴스 링크 (예: "https://www.etoday.co.kr/news/view/2534246")
+            guid: 뉴스 GUID (예: "2025120913415374072")
             
         Returns:
             뉴스 ID (정수)
         """
         try:
-            match = re.search(r'/view/(\d+)', link)
-            return int(match.group(1)) if match else 0
-        except (AttributeError, ValueError):
+            return int(guid) if guid else 0
+        except ValueError:
             return 0
     
     def _convert_date_format(self, pub_date: str) -> str:
         """RFC-822 날짜를 YYYY-MM-DD HH:MM 포맷으로 변환
         
         Args:
-            pub_date: RFC-822 형식 날짜 (예: "Tue, 09 Dec 2025 14:28:00 +0900")
+            pub_date: RFC-822 형식 날짜 (예: "Tue, 09 Dec 2025 14:25:17 +0900")
             
         Returns:
-            변환된 날짜 문자열 (예: "2025-12-09 14:28")
+            변환된 날짜 문자열 (예: "2025-12-09 14:25")
         """
         try:
             # "+0900" 같은 timezone을 제거하고 파싱
@@ -181,4 +181,4 @@ class EtodayRssScraper(NewsRepository):
             return pub_date
     
     def get_source_name(self) -> str:
-        return "이투데이"
+        return "아시아경제"

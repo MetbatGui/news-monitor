@@ -5,16 +5,16 @@ from typing import List, Optional
 from datetime import datetime, timedelta
 import logging
 
-from adapters.dto import ArticleData
-from ports.news_port import NewsRepository
+from infrastructure.news.dto import ArticleData
+from domain.ports.news_port import NewsRepository
 
 logger = logging.getLogger(__name__)
 
 
-class MKRssScraper(NewsRepository):
-    """매일경제 RSS 피드에서 뉴스를 가져오는 스크래퍼"""
+class NewspimRssScraper(NewsRepository):
+    """뉴스핌 RSS 피드에서 뉴스를 가져오는 스크래퍼"""
     
-    def __init__(self, rss_url: str = "https://www.mk.co.kr/rss/40300001/"):
+    def __init__(self, rss_url: str = "http://rss.newspim.com/news/category/1"):
         self.rss_url = rss_url
     
     async def fetch_reports(self, keyword: str = "") -> List[ArticleData]:
@@ -96,10 +96,8 @@ class MKRssScraper(NewsRepository):
             추출된 필드 dict
         """
         return {
-            'no': self._get_element_text(item.find('no')),
             'title': self._get_element_text(item.find('title')),
             'link': self._get_element_text(item.find('link')),
-            'category': self._get_element_text(item.find('category')),
             'pub_date': self._get_element_text(item.find('pubDate')),
             'author': self._get_element_text(item.find('author'))
         }
@@ -137,7 +135,7 @@ class MKRssScraper(NewsRepository):
         Returns:
             ArticleData 객체
         """
-        article_id = self._extract_news_id(fields['no'])
+        article_id = self._extract_news_id(fields['link'])
         date_str = self._convert_date_format(fields['pub_date'])
         
         return ArticleData(
@@ -145,35 +143,36 @@ class MKRssScraper(NewsRepository):
             title=fields['title'],
             link=fields['link'],
             date=date_str,
-            keyword=keyword if keyword else fields['category'],
+            keyword=keyword if keyword else "뉴스핌",
             source=self.get_source_name()
         )
     
-    def _extract_news_id(self, no: str) -> int:
-        """no 필드에서 뉴스 ID 추출
+    def _extract_news_id(self, link: str) -> int:
+        """link에서 뉴스 ID 추출
         
         Args:
-            no: 뉴스 번호 (예: "11487648")
+            link: 뉴스 링크 (예: "http://www.newspim.com/news/view/20251209000122")
             
         Returns:
             뉴스 ID (정수)
         """
         try:
-            return int(no) if no else 0
-        except ValueError:
+            match = re.search(r'/view/(\d+)', link)
+            return int(match.group(1)) if match else 0
+        except (AttributeError, ValueError):
             return 0
     
     def _convert_date_format(self, pub_date: str) -> str:
         """RFC-822 날짜를 YYYY-MM-DD HH:MM 포맷으로 변환
         
         Args:
-            pub_date: RFC-822 형식 날짜 (예: "Tue, 09 Dec 2025 14:21:46 +09:00")
+            pub_date: RFC-822 형식 날짜 (예: "Tue, 09 Dec 2025 14:36:16 +0900")
             
         Returns:
-            변환된 날짜 문자열 (예: "2025-12-09 14:21")
+            변환된 날짜 문자열 (예: "2025-12-09 14:36")
         """
         try:
-            # "+09:00" 같은 timezone을 제거하고 파싱
+            # "+0900" 같은 timezone을 제거하고 파싱
             date_without_tz = pub_date.rsplit(' ', 1)[0] if '+' in pub_date else pub_date
             dt = datetime.strptime(date_without_tz, "%a, %d %b %Y %H:%M:%S")
             return dt.strftime("%Y-%m-%d %H:%M")
@@ -182,4 +181,4 @@ class MKRssScraper(NewsRepository):
             return pub_date
     
     def get_source_name(self) -> str:
-        return "매일경제"
+        return "뉴스핌"

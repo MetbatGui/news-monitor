@@ -5,7 +5,7 @@ from typing import Set
 import logging
 
 from domain.model import Article
-from ports.storage_port import StorageRepository
+from domain.ports.storage_port import StorageRepository
 
 logger = logging.getLogger(__name__)
 

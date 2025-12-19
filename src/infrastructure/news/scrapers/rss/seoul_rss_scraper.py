@@ -5,16 +5,16 @@ from typing import List, Optional
 from datetime import datetime, timedelta
 import logging
 
-from adapters.dto import ArticleData
-from ports.news_port import NewsRepository
+from infrastructure.news.dto import ArticleData
+from domain.ports.news_port import NewsRepository
 
 logger = logging.getLogger(__name__)
 
 
-class AsiaeRssScraper(NewsRepository):
-    """아시아경제 RSS 피드에서 뉴스를 가져오는 스크래퍼"""
+class SeoulRssScraper(NewsRepository):
+    """서울경제 RSS 피드에서 뉴스를 가져오는 스크래퍼"""
     
-    def __init__(self, rss_url: str = "https://www.asiae.co.kr/rss/all.htm"):
+    def __init__(self, rss_url: str = "https://www.sedaily.com/rss"):
         self.rss_url = rss_url
     
     async def fetch_reports(self, keyword: str = "") -> List[ArticleData]:
@@ -56,13 +56,33 @@ class AsiaeRssScraper(NewsRepository):
                 response = await client.get(self.rss_url, headers=headers, timeout=20)
                 response.raise_for_status()
             
-            return ET.fromstring(response.content)
+            # lxml을 사용하여 malformed XML을 복구 모드로 파싱
+            try:
+                from lxml import etree as lxml_ET
+                parser = lxml_ET.XMLParser(recover=True, encoding='utf-8')
+                root = lxml_ET.fromstring(response.content, parser=parser)
+                
+                # lxml Element를 표준 ET Element로 변환
+                xml_str = lxml_ET.tostring(root, encoding='unicode')
+                return ET.fromstring(xml_str)
+            except ImportError:
+                logger.warning("lxml not installed, falling back to standard ET")
+                # lxml이 없으면 기존 방식 사용
+                xml_text = response.text
+                import re
+                xml_text = re.sub(r'&(?!(amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)', '&amp;', xml_text)
+                return ET.fromstring(xml_text.encode('utf-8'))
+                
+        except ET.ParseError as e:
+            logger.error(f"RSS XML 파싱 오류: {e}")
+            logger.debug(f"문제 라인 근처: {str(e)}")
+            return None
         except Exception as e:
             logger.error(f"RSS 가져오기 오류: {e}", exc_info=True)
             return None
     
     def _process_rss_item(self, item: ET.Element, keyword: str) -> Optional[ArticleData]:
-        """단일 RSS item을 처리하여 Article로 변환합니다.
+        """단일 RSS item을 처리하여 ArticleData로 변환합니다.
         
         Args:
             item: RSS item element
@@ -79,7 +99,7 @@ class AsiaeRssScraper(NewsRepository):
             if keyword and not self._matches_keyword(keyword, fields['title']):
                 return None
             
-            # Article 생성
+            # ArticleData 생성
             return self._create_article_from_fields(fields, keyword)
             
         except Exception as e:
@@ -96,7 +116,6 @@ class AsiaeRssScraper(NewsRepository):
             추출된 필드 dict
         """
         return {
-            'guid': self._get_element_text(item.find('guid')),
             'title': self._get_element_text(item.find('title')),
             'link': self._get_element_text(item.find('link')),
             'pub_date': self._get_element_text(item.find('pubDate')),
@@ -127,16 +146,16 @@ class AsiaeRssScraper(NewsRepository):
         return keyword.lower() in title.lower()
     
     def _create_article_from_fields(self, fields: dict, keyword: str) -> ArticleData:
-        """추출된 필드로 Article 객체를 생성합니다.
+        """추출된 필드로 ArticleData 객체를 생성합니다.
         
         Args:
             fields: _extract_item_fields에서 반환된 필드 dict
             keyword: 검색 키워드
             
         Returns:
-            Article 객체
+            ArticleData 객체
         """
-        article_id = self._extract_news_id(fields['guid'])
+        article_id = self._extract_news_id(fields['link'])
         date_str = self._convert_date_format(fields['pub_date'])
         
         return ArticleData(
@@ -144,32 +163,36 @@ class AsiaeRssScraper(NewsRepository):
             title=fields['title'],
             link=fields['link'],
             date=date_str,
-            keyword=keyword if keyword else "아시아경제",
+            keyword=keyword if keyword else "서울경제",
             source=self.get_source_name()
         )
     
-    def _extract_news_id(self, guid: str) -> int:
-        """guid에서 뉴스 ID 추출
+    def _extract_news_id(self, link: str) -> int:
+        """link에서 뉴스 ID 추출
         
         Args:
-            guid: 뉴스 GUID (예: "2025120913415374072")
+            link: 뉴스 링크 (예: "https://www.sedaily.com/NewsView/2H1NWAOCSH")
             
         Returns:
-            뉴스 ID (정수)
+            뉴스 ID (해시값)
         """
         try:
-            return int(guid) if guid else 0
-        except ValueError:
+            match = re.search(r'/NewsView/([A-Z0-9]+)', link)
+            if match:
+                id_str = match.group(1)
+                return hash(id_str) & 0x7FFFFFFF  # 양수 해시값
+            return 0
+        except (AttributeError, ValueError):
             return 0
     
     def _convert_date_format(self, pub_date: str) -> str:
         """RFC-822 날짜를 YYYY-MM-DD HH:MM 포맷으로 변환
         
         Args:
-            pub_date: RFC-822 형식 날짜 (예: "Tue, 09 Dec 2025 14:25:17 +0900")
+            pub_date: RFC-822 형식 날짜 (예: "Tue, 09 Dec 2025 14:30:00 +0900")
             
         Returns:
-            변환된 날짜 문자열 (예: "2025-12-09 14:25")
+            변환된 날짜 문자열 (예: "2025-12-09 14:30")
         """
         try:
             # "+0900" 같은 timezone을 제거하고 파싱
@@ -181,4 +204,4 @@ class AsiaeRssScraper(NewsRepository):
             return pub_date
     
     def get_source_name(self) -> str:
-        return "아시아경제"
+        return "서울경제"

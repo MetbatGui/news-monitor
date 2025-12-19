@@ -3,12 +3,12 @@ from datetime import datetime
 from typing import Set
 import logging
 
-from config import Config
+from core import Config
 from domain.model import Article
-from adapters.dto import ArticleData
-from ports.news_port import NewsRepository
-from ports.storage_port import StorageRepository
-from ports.alert_port import AlertSystem
+from infrastructure.news.dto import ArticleData
+from domain.ports.news_port import NewsRepository
+from domain.ports.storage_port import StorageRepository
+from domain.ports.alert_port import AlertSystem
 
 logger = logging.getLogger(__name__)
 

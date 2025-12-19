@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from adapters.dto import ArticleData
+from infrastructure.news.dto import ArticleData
 
 class NewsRepository(ABC):
     @abstractmethod

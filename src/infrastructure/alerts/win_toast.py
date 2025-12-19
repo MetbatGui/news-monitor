@@ -6,7 +6,7 @@ from domain.model import Article
 import logging
 
 logger = logging.getLogger(__name__)
-from ports.alert_port import AlertSystem
+from domain.ports.alert_port import AlertSystem
 
 # Monkeypatch win11toast.activated_args to fix TypeError with winrt
 # The original code tries to call e.user_input(), but it's a property returning a ValueSet (not callable).

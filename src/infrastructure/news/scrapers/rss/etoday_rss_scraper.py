@@ -5,30 +5,27 @@ from typing import List, Optional
 from datetime import datetime, timedelta
 import logging
 
-from adapters.dto import ArticleData
-from ports.news_port import NewsRepository
+from infrastructure.news.dto import ArticleData
+from domain.ports.news_port import NewsRepository
 
 logger = logging.getLogger(__name__)
 
 
-class DartRssScraper(NewsRepository):
-    """DART 전자공시 RSS 피드에서 공시 정보를 가져오는 스크래퍼"""
+class EtodayRssScraper(NewsRepository):
+    """이투데이 RSS 피드에서 뉴스를 가져오는 스크래퍼"""
     
-    # RSS 네임스페이스
-    RSS_NAMESPACE = {'dc': 'http://purl.org/dc/elements/1.1/'}
-    
-    def __init__(self, rss_url: str = "https://dart.fss.or.kr/api/todayRSS.xml"):
+    def __init__(self, rss_url: str = "https://rss.etoday.co.kr/eto/etoday_news_all.xml"):
         self.rss_url = rss_url
     
     async def fetch_reports(self, keyword: str = "") -> List[ArticleData]:
-        """RSS 피드에서 공시 정보를 가져옵니다.
+        """RSS 피드에서 뉴스를 가져옵니다.
         
         Args:
-            keyword: 필터링할 키워드 (제목 또는 회사명에서 검색)
+            keyword: 필터링할 키워드 (제목에서만 검색)
                     빈 문자열이면 모든 항목 반환
         
         Returns:
-            Article 리스트
+            ArticleData 리스트
         """
         articles = []
         
@@ -53,7 +50,7 @@ class DartRssScraper(NewsRepository):
         """
         try:
             headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
             }
             async with httpx.AsyncClient() as client:
                 response = await client.get(self.rss_url, headers=headers, timeout=20)
@@ -65,29 +62,24 @@ class DartRssScraper(NewsRepository):
             return None
     
     def _process_rss_item(self, item: ET.Element, keyword: str) -> Optional[ArticleData]:
-        """단일 RSS item을 처리하여 Article로 변환합니다.
+        """단일 RSS item을 처리하여 ArticleData로 변환합니다.
         
         Args:
             item: RSS item element
             keyword: 필터링할 키워드
             
         Returns:
-            Article 객체, 필터링되거나 오류시 None
+            ArticleData 객체, 필터링되거나 오류시 None
         """
         try:
             # 필드 추출
             fields = self._extract_item_fields(item)
             
-            # 키워드 필터링
-            if keyword and not self._matches_keyword(
-                keyword, 
-                fields['title'], 
-                fields['creator'], 
-                fields['category']
-            ):
+            # 키워드 필터링 (제목에서만)
+            if keyword and not self._matches_keyword(keyword, fields['title']):
                 return None
             
-            # Article 생성
+            # ArticleData 생성
             return self._create_article_from_fields(fields, keyword)
             
         except Exception as e:
@@ -106,10 +98,8 @@ class DartRssScraper(NewsRepository):
         return {
             'title': self._get_element_text(item.find('title')),
             'link': self._get_element_text(item.find('link')),
-            'category': self._get_element_text(item.find('category')),
             'pub_date': self._get_element_text(item.find('pubDate')),
-            'creator': self._get_element_text(item.find('dc:creator', self.RSS_NAMESPACE)),
-            'guid': self._get_element_text(item.find('guid'))
+            'author': self._get_element_text(item.find('author'))
         }
     
     def _get_element_text(self, element: Optional[ET.Element]) -> str:
@@ -123,74 +113,72 @@ class DartRssScraper(NewsRepository):
         """
         return element.text if element is not None and element.text else ""
     
-    def _matches_keyword(self, keyword: str, title: str, creator: str, category: str) -> bool:
-        """키워드가 title, creator, category 중 하나에 포함되는지 확인합니다.
+    def _matches_keyword(self, keyword: str, title: str) -> bool:
+        """키워드가 제목에 포함되는지 확인합니다.
         
         Args:
             keyword: 검색 키워드
             title: 제목
-            creator: 회사명
-            category: 카테고리
             
         Returns:
             매칭 여부
         """
-        keyword_lower = keyword.lower()
-        return (keyword_lower in title.lower() or 
-                keyword_lower in creator.lower() or 
-                keyword_lower in category.lower())
+        return keyword.lower() in title.lower()
     
     def _create_article_from_fields(self, fields: dict, keyword: str) -> ArticleData:
-        """추출된 필드로 Article 객체를 생성합니다.
+        """추출된 필드로 ArticleData 객체를 생성합니다.
         
         Args:
             fields: _extract_item_fields에서 반환된 필드 dict
             keyword: 검색 키워드
             
         Returns:
-            Article 객체
+            ArticleData 객체
         """
-        article_id = self._extract_rcp_no(fields['guid'])
+        article_id = self._extract_news_id(fields['link'])
         date_str = self._convert_date_format(fields['pub_date'])
-        full_title = f"({fields['category']}){fields['creator']} - {fields['title']}"
         
         return ArticleData(
             id=article_id,
-            title=full_title,
+            title=fields['title'],
             link=fields['link'],
             date=date_str,
-            keyword=keyword if keyword else fields['category'],
+            keyword=keyword if keyword else "이투데이",
             source=self.get_source_name()
         )
     
-    def _extract_rcp_no(self, guid: str) -> int:
-        """GUID에서 rcpNo 추출
+    def _extract_news_id(self, link: str) -> int:
+        """link에서 뉴스 ID 추출
         
         Args:
-            guid: GUID 문자열 (예: "https://dart.fss.or.kr/api/link.jsp?rcpNo=20251205000173")
+            link: 뉴스 링크 (예: "https://www.etoday.co.kr/news/view/2534246")
             
         Returns:
-            rcpNo (정수)
+            뉴스 ID (정수)
         """
-        match = re.search(r'rcpNo=(\d+)', guid)
-        return int(match.group(1)) if match else 0
+        try:
+            match = re.search(r'/view/(\d+)', link)
+            return int(match.group(1)) if match else 0
+        except (AttributeError, ValueError):
+            return 0
     
     def _convert_date_format(self, pub_date: str) -> str:
         """RFC-822 날짜를 YYYY-MM-DD HH:MM 포맷으로 변환
         
         Args:
-            pub_date: RFC-822 형식 날짜 (예: "Fri, 05 Dec 2025 04:28:00 GMT")
+            pub_date: RFC-822 형식 날짜 (예: "Tue, 09 Dec 2025 14:28:00 +0900")
             
         Returns:
-            변환된 날짜 문자열 (예: "2025-12-05 04:28")
+            변환된 날짜 문자열 (예: "2025-12-09 14:28")
         """
         try:
-            dt = datetime.strptime(pub_date, "%a, %d %b %Y %H:%M:%S %Z")
-            dt_kst = dt + timedelta(hours=9)
-            return dt_kst.strftime("%Y-%m-%d %H:%M")
+            # "+0900" 같은 timezone을 제거하고 파싱
+            date_without_tz = pub_date.rsplit(' ', 1)[0] if '+' in pub_date else pub_date
+            dt = datetime.strptime(date_without_tz, "%a, %d %b %Y %H:%M:%S")
+            return dt.strftime("%Y-%m-%d %H:%M")
         except Exception as e:
             logger.warning(f"날짜 변환 오류 '{pub_date}': {e}")
             return pub_date
     
     def get_source_name(self) -> str:
-        return "DART"
+        return "이투데이"

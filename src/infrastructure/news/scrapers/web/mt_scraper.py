@@ -1,8 +1,8 @@
 import re
 from typing import Optional
 
-from adapters.dto import ArticleData
-from adapters.infrastructure.scrapers.base_web_scraper import BaseWebScraper
+from infrastructure.news.dto import ArticleData
+from infrastructure.news.scrapers.base_web_scraper import BaseWebScraper
 
 
 class MTScraper(BaseWebScraper):
