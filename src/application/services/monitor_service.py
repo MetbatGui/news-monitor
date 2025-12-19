@@ -9,15 +9,17 @@ from infrastructure.news.dto import ArticleData
 from domain.ports.news_port import NewsRepository
 from domain.ports.storage_port import StorageRepository
 from domain.ports.alert_port import AlertSystem
-from domain.logic.monitor_policy import MonitorPolicy, OperatingHours
-from domain.logic.news_engine import NewsEngine
+
+# 순수 함수 import (테스트 용이)
+from domain.logic import monitor_policy
+from domain.logic import news_engine
 
 logger = logging.getLogger(__name__)
 
 class MonitorService:
     """모니터링 서비스 (Orchestrator)
     
-    이 서비스는 순수한 비즈니스 로직(Policy, Engine)과
+    이 서비스는 순수한 비즈니스 로직(policy, engine)과
     부작용을 가진 작업(Repository, AlertSystem)을 조율합니다.
     """
     
@@ -65,17 +67,17 @@ class MonitorService:
         """실제 크롤링 및 알림 처리를 수행하는 동기 메서드
         
         이 메서드는 다음 순서로 동작합니다:
-        1. 정책: 날짜 변경 감지 및 캐시 초기화
-        2. 정책: 운영 시간 체크
-        3. 데이터 획득: 기사 목록 조회
-        4. 엔진: 새 기사 필터링
-        5. 실행: 알림 발송 및 저장
+        1. 정책: 날짜 변경 감지 및 캐시 초기화 (순수 함수)
+        2. 정책: 운영 시간 체크 (순수 함수)
+        3. 데이터 획득: 기사 목록 조회 (불순)
+        4. 엔진: 새 기사 필터링 (순수 함수)
+        5. 실행: 알림 발송 및 저장 (불순)
         """
         now = datetime.now()
-        today_str = MonitorPolicy.get_date_string(now)
+        today_str = monitor_policy.get_date_string(now)
         
-        # 1. 정책: 날짜 변경 체크
-        if MonitorPolicy.is_date_changed(today_str, self._last_check_date):
+        # 1. 정책: 날짜 변경 체크 (순수 함수)
+        if self._last_check_date and monitor_policy.check_day_changed(self._last_check_date, today_str):
             logger.info(f"날짜 변경: {self._last_check_date} -> {today_str}. 캐시 초기화")
             self.seen_ids.clear()
             self._last_check_date = today_str
@@ -83,9 +85,8 @@ class MonitorService:
             # 초기 실행 시
             self._last_check_date = today_str
         
-        # 2. 정책: 운영 시간 체크
-        hours = OperatingHours(Config.START_HOUR, Config.END_HOUR)
-        if not MonitorPolicy.is_operating_time(now, hours):
+        # 2. 정책: 운영 시간 체크 (순수 함수)
+        if not monitor_policy.is_work_time(now, Config.START_HOUR, Config.END_HOUR):
             logger.debug(f"운영 시간 외 ({now.strftime('%H:%M')})")
             return
 
@@ -95,7 +96,7 @@ class MonitorService:
         article_data_list = self.news_repo.fetch_reports(Config.KEYWORD)
         
         # 4. 엔진: 새 기사 필터링 (순수 함수)
-        new_articles = NewsEngine.process_articles(
+        new_articles = news_engine.process_articles(
             article_data_list,
             today_str,
             self.seen_ids
