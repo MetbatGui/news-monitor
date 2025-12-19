@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import List
-from domain.model import Article
+from adapters.dto import ArticleData
 
 class NewsRepository(ABC):
     @abstractmethod
-    async def fetch_reports(self, keyword: str) -> List[Article]:
-        """키워드로 기사를 검색하여 반환한다."""
+    async def fetch_reports(self, keyword: str) -> List[ArticleData]:
+        """키워드로 기사 데이터를 검색하여 반환한다."""
         pass
+
 

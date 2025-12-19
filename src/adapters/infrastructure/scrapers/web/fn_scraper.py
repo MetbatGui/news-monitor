@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 
-from domain.model import Article
+from adapters.dto import ArticleData
 from adapters.infrastructure.scrapers.base_web_scraper import BaseWebScraper
 
 
@@ -14,7 +14,7 @@ class FnScraper(BaseWebScraper):
     def get_news_list_selector(self) -> str:
         return 'ul.list_article > li'
     
-    def parse_article(self, item, keyword: str) -> Optional[Article]:
+    def parse_article(self, item, keyword: str) -> Optional[ArticleData]:
         # 제목 & 링크 추출
         title_elem = item.select_one('strong.tit_thumb a')
         
@@ -43,7 +43,7 @@ class FnScraper(BaseWebScraper):
             # 이미 표준 형식이므로 그대로 사용
             date_str = date_text
         
-        return Article(
+        return ArticleData(
             id=article_id,
             title=title,
             link=link,

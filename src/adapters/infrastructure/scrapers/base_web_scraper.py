@@ -5,7 +5,7 @@ from typing import List, Optional
 from datetime import datetime
 import logging
 
-from domain.model import Article
+from adapters.dto import ArticleData
 from ports.news_port import NewsRepository
 
 logger = logging.getLogger(__name__)
@@ -31,14 +31,14 @@ class BaseWebScraper(NewsRepository, ABC):
     USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     TIMEOUT = 20
     
-    async def fetch_reports(self, keyword: str) -> List[Article]:
+    async def fetch_reports(self, keyword: str) -> List[ArticleData]:
         """뉴스 기사 목록 가져오기 (템플릿 메서드 패턴)
         
         Args:
             keyword: 검색할 키워드
             
         Returns:
-            Article 리스트
+            ArticleData 리스트
         """
         url = self.build_search_url(keyword)
         articles = []
@@ -67,7 +67,7 @@ class BaseWebScraper(NewsRepository, ABC):
             response.raise_for_status()
             return response.text
     
-    async def _parse_articles(self, soup: BeautifulSoup, keyword: str) -> List[Article]:
+    async def _parse_articles(self, soup: BeautifulSoup, keyword: str) -> List[ArticleData]:
         """HTML에서 기사 목록 파싱 (공통 로직 + 추상 메서드 호출)
         
         Args:
@@ -75,7 +75,7 @@ class BaseWebScraper(NewsRepository, ABC):
             keyword: 검색 키워드
             
         Returns:
-            Article 리스트
+            ArticleData 리스트
         """
         articles = []
         selector = self.get_news_list_selector()
@@ -166,7 +166,7 @@ class BaseWebScraper(NewsRepository, ABC):
         pass
     
     @abstractmethod
-    def parse_article(self, item, keyword: str) -> Optional[Article]:
+    def parse_article(self, item, keyword: str) -> Optional[ArticleData]:
         """개별 기사 파싱
         
         Args:
@@ -174,7 +174,7 @@ class BaseWebScraper(NewsRepository, ABC):
             keyword: 검색 키워드
             
         Returns:
-            Article 객체 또는 None (파싱 실패 시)
+            ArticleData 객체 또는 None (파싱 실패 시)
         """
         pass
     

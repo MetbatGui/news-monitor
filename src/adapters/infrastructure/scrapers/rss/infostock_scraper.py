@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from typing import List
 import logging
 
-from domain.model import Article
+from adapters.dto import ArticleData
 from ports.news_port import NewsRepository
 
 logger = logging.getLogger(__name__)
@@ -13,7 +13,7 @@ class InfostockScraper(NewsRepository):
     BASE_URL = "https://www.infostockdaily.co.kr"
     SEARCH_URL = "https://www.infostockdaily.co.kr/news/articleList.html"
 
-    async def fetch_reports(self, keyword: str) -> List[Article]:
+    async def fetch_reports(self, keyword: str) -> List[ArticleData]:
         articles = []
         
         try:
@@ -76,7 +76,7 @@ class InfostockScraper(NewsRepository):
                     # Example: "2024.12.04 16:20" or "기자명 | 2024.12.04 16:20"
                     # Simple regex to find date pattern might be good, but let's stick to raw first.
                     
-                    articles.append(Article(
+                    articles.append(ArticleData(
                         id=article_id,
                         title=title,
                         link=link,

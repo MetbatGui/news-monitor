@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 
-from domain.model import Article
+from adapters.dto import ArticleData
 from adapters.infrastructure.scrapers.base_web_scraper import BaseWebScraper
 
 
@@ -14,7 +14,7 @@ class MTScraper(BaseWebScraper):
     def get_news_list_selector(self) -> str:
         return 'ul.list_wrap > li.article_item'
     
-    def parse_article(self, item, keyword: str) -> Optional[Article]:
+    def parse_article(self, item, keyword: str) -> Optional[ArticleData]:
         # 제목 & 링크 추출
         title_link = item.select_one('h3.headline a')
         if not title_link:
@@ -38,7 +38,7 @@ class MTScraper(BaseWebScraper):
             # "2025.12.08 14:30" -> "2025-12-08 14:30"
             date_str = self.normalize_date(date_text)
         
-        return Article(
+        return ArticleData(
             id=article_id,
             title=title,
             link=link,

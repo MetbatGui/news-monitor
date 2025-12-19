@@ -5,7 +5,7 @@ from typing import List, Optional
 from datetime import datetime, timedelta
 import logging
 
-from domain.model import Article
+from adapters.dto import ArticleData
 from ports.news_port import NewsRepository
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ class DartRssScraper(NewsRepository):
     def __init__(self, rss_url: str = "https://dart.fss.or.kr/api/todayRSS.xml"):
         self.rss_url = rss_url
     
-    async def fetch_reports(self, keyword: str = "") -> List[Article]:
+    async def fetch_reports(self, keyword: str = "") -> List[ArticleData]:
         """RSS 피드에서 공시 정보를 가져옵니다.
         
         Args:
@@ -64,7 +64,7 @@ class DartRssScraper(NewsRepository):
             logger.error(f"RSS 가져오기 오류: {e}", exc_info=True)
             return None
     
-    def _process_rss_item(self, item: ET.Element, keyword: str) -> Optional[Article]:
+    def _process_rss_item(self, item: ET.Element, keyword: str) -> Optional[ArticleData]:
         """단일 RSS item을 처리하여 Article로 변환합니다.
         
         Args:
@@ -140,7 +140,7 @@ class DartRssScraper(NewsRepository):
                 keyword_lower in creator.lower() or 
                 keyword_lower in category.lower())
     
-    def _create_article_from_fields(self, fields: dict, keyword: str) -> Article:
+    def _create_article_from_fields(self, fields: dict, keyword: str) -> ArticleData:
         """추출된 필드로 Article 객체를 생성합니다.
         
         Args:
@@ -154,7 +154,7 @@ class DartRssScraper(NewsRepository):
         date_str = self._convert_date_format(fields['pub_date'])
         full_title = f"({fields['category']}){fields['creator']} - {fields['title']}"
         
-        return Article(
+        return ArticleData(
             id=article_id,
             title=full_title,
             link=fields['link'],

@@ -4,6 +4,8 @@ from typing import Set
 import logging
 
 from config import Config
+from domain.model import Article
+from adapters.dto import ArticleData
 from ports.news_port import NewsRepository
 from ports.storage_port import StorageRepository
 from ports.alert_port import AlertSystem
@@ -71,18 +73,21 @@ class MonitorService:
 
         logger.debug(f"스캔 중... {now.strftime('%H:%M:%S')}")
         
-        # 기사 조회
-        articles = self.news_repo.fetch_reports(Config.KEYWORD)
+        # 기사 데이터 조회 (어댑터가 ArticleData 반환)
+        article_data_list = self.news_repo.fetch_reports(Config.KEYWORD)
         
         today_str = now.strftime("%Y-%m-%d")
         
-        for article in articles:
+        for article_data in article_data_list:
             # 날짜 필터링: 오늘 작성된 기사만 처리
-            # article.date 형식: "2025-12-02 10:22"
-            if not article.date.startswith(today_str):
+            # article_data.date 형식: "2025-12-02 10:22"
+            if not article_data.date.startswith(today_str):
                 continue
 
-            if article.id not in self.seen_ids:
+            if article_data.id not in self.seen_ids:
+                # ArticleData를 도메인 모델 Article로 변환
+                article = self._create_article(article_data)
+                
                 logger.info(f"새 기사 발견: {article.title}")
                 
                 # 알림 발송
@@ -93,3 +98,21 @@ class MonitorService:
                 
                 # 메모리 업데이트
                 self.seen_ids.add(article.id)
+    
+    def _create_article(self, data: ArticleData) -> Article:
+        """ArticleData DTO를 도메인 모델 Article로 변환
+        
+        Args:
+            data: 어댑터가 반환한 원시 데이터
+            
+        Returns:
+            검증된 도메인 모델 Article
+        """
+        return Article(
+            id=data.id,
+            title=data.title,
+            link=data.link,
+            date=data.date,
+            keyword=data.keyword,
+            source=data.source
+        )

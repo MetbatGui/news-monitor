@@ -5,7 +5,7 @@ from typing import List, Optional
 from datetime import datetime, timedelta
 import logging
 
-from domain.model import Article
+from adapters.dto import ArticleData
 from ports.news_port import NewsRepository
 
 logger = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ class MKRssScraper(NewsRepository):
     def __init__(self, rss_url: str = "https://www.mk.co.kr/rss/40300001/"):
         self.rss_url = rss_url
     
-    async def fetch_reports(self, keyword: str = "") -> List[Article]:
+    async def fetch_reports(self, keyword: str = "") -> List[ArticleData]:
         """RSS 피드에서 뉴스를 가져옵니다.
         
         Args:
@@ -25,7 +25,7 @@ class MKRssScraper(NewsRepository):
                     빈 문자열이면 모든 항목 반환
         
         Returns:
-            Article 리스트
+            ArticleData 리스트
         """
         articles = []
         
@@ -61,15 +61,15 @@ class MKRssScraper(NewsRepository):
             logger.error(f"RSS 가져오기 오류: {e}", exc_info=True)
             return None
     
-    def _process_rss_item(self, item: ET.Element, keyword: str) -> Optional[Article]:
-        """단일 RSS item을 처리하여 Article로 변환합니다.
+    def _process_rss_item(self, item: ET.Element, keyword: str) -> Optional[ArticleData]:
+        """단일 RSS item을 처리하여 ArticleData로 변환합니다.
         
         Args:
             item: RSS item element
             keyword: 필터링할 키워드
             
         Returns:
-            Article 객체, 필터링되거나 오류시 None
+            ArticleData 객체, 필터링되거나 오류시 None
         """
         try:
             # 필드 추출
@@ -79,7 +79,7 @@ class MKRssScraper(NewsRepository):
             if keyword and not self._matches_keyword(keyword, fields['title']):
                 return None
             
-            # Article 생성
+            # ArticleData 생성
             return self._create_article_from_fields(fields, keyword)
             
         except Exception as e:
@@ -127,20 +127,20 @@ class MKRssScraper(NewsRepository):
         """
         return keyword.lower() in title.lower()
     
-    def _create_article_from_fields(self, fields: dict, keyword: str) -> Article:
-        """추출된 필드로 Article 객체를 생성합니다.
+    def _create_article_from_fields(self, fields: dict, keyword: str) -> ArticleData:
+        """추출된 필드로 ArticleData 객체를 생성합니다.
         
         Args:
             fields: _extract_item_fields에서 반환된 필드 dict
             keyword: 검색 키워드
             
         Returns:
-            Article 객체
+            ArticleData 객체
         """
         article_id = self._extract_news_id(fields['no'])
         date_str = self._convert_date_format(fields['pub_date'])
         
-        return Article(
+        return ArticleData(
             id=article_id,
             title=fields['title'],
             link=fields['link'],
