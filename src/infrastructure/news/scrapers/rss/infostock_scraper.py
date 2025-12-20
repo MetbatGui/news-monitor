@@ -59,22 +59,21 @@ class InfostockScraper(NewsRepository):
                         continue
 
                     # Date
-                    # Format: "2025-12-04 16:16" or similar
+                    # Format: "국내주식 | 박상인 기자 | 2025-12-19 17:21"
+                    # 또는 "정책·이슈 | 윤서연 기자 | 2025-12-19 13:55"
                     date_tag = item.select_one(".list-dated")
                     date_str = ""
                     if date_tag:
                         raw_date = date_tag.text.strip()
-                        # "2024.12.04 16:20" -> "2024-12-04 16:20"
-                        if raw_date:
-                            date_str = raw_date.replace('.', '-', 2)
-                    
-                    # Clean up date string if it contains extra info (e.g. " | 기자명")
-                    # Usually it's just date/time or "Author | Date"
-                    # Let's try to extract just the date/time part if possible, or keep as is.
-                    # The user's code just prints it. We'll keep it as is for now, 
-                    # but typically we want "YYYY-MM-DD HH:MM" for consistency.
-                    # Example: "2024.12.04 16:20" or "기자명 | 2024.12.04 16:20"
-                    # Simple regex to find date pattern might be good, but let's stick to raw first.
+                        # "카테고리 | 기자명 | 날짜 시간" 형식에서 날짜 부분만 추출
+                        if '|' in raw_date:
+                            # 마지막 '|' 이후가 날짜
+                            parts = raw_date.split('|')
+                            if len(parts) >= 3:
+                                date_str = parts[-1].strip()
+                        else:
+                            # '|'가 없으면 그대로 사용
+                            date_str = raw_date
                     
                     articles.append(ArticleData(
                         id=article_id,

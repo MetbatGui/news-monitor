@@ -1,0 +1,1229 @@
+<!doctype html>
+<html class="no-js" lang="ko" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=1080">
+<meta name="apple-mobile-web-app-title" content="인포스탁데일리" />
+<!-- 메타태그정보 //-->
+<meta name="description" content="기업, 투자 정보, 정책분석 경제미디어. 증시뉴스, 기업동향, 정책, 기업 심층분석, 방송서비스 제공."/>
+<meta property="og:title" content="인포스탁데일리"/>
+<meta property="og:site_name" content="인포스탁데일리"/>
+<meta property="og:image" content="http://www.infostockdaily.co.kr/image/logo/snslogo_20190104125926.jpg" />
+<meta property="og:url"	content="http://www.infostockdaily.co.kr" />
+<meta property="og:description" content="기업, 투자 정보, 정책분석 경제미디어. 증시뉴스, 기업동향, 정책, 기업 심층분석, 방송서비스 제공." />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="인포스탁데일리"/>
+<meta name="twitter:description" content="기업, 투자 정보, 정책분석 경제미디어. 증시뉴스, 기업동향, 정책, 기업 심층분석, 방송서비스 제공."/>
+<meta name="twitter:image:src" content="http://www.infostockdaily.co.kr/image/logo/snslogo_20190104125926.jpg"/>
+<!--// 메타태그정보 -->
+<title>인포스탁데일리</title>
+<link rel="canonical"  href="http://www.infostockdaily.co.kr" />
+<link rel="stylesheet" href="/css/jquery-ui.min.css?ver=11">
+<link rel="stylesheet" href="/css/foundation.min.css?ver=11">
+<link rel="stylesheet" href="/css/custom.foundation.min.css?ver=11">
+<link rel="stylesheet" href="/css/app.css?ver=11">
+<link rel="stylesheet" href="/css/slick.min.css?ver=11">
+<link rel="stylesheet" href="/css/font-awesome.min.css?ver=11">
+<link rel="stylesheet" href="/css/pe.icon7.stroke.min.css?ver=11">
+<link rel="stylesheet" href="/css/ndsoft-fonts.css?ver=11">
+<link rel="stylesheet" href="/css/style.min.css?ver=11">
+<link rel="stylesheet" href="/css/design.style.css?ver=11">
+<link rel="stylesheet" href="/menuskin/s_17/menubar.css?ver=11">
+<link rel="stylesheet" href="/adManager/css/adManager.css">
+<link rel="shortcut icon" href="/image/logo/favicon_20181107025509.png">
+<script src="/script/jquery.min.js?ver=11"></script>
+<script src="/script/jquery-ui.min.js?ver=11"></script>
+<script src="/script/slick.min.js?ver=11"></script>
+<script src="/script/jquery.rwdImageMaps.min.js?ver=11"></script>
+<script src="/script/what-input.js?ver=11"></script>
+<script src="/script/foundation.min.js?ver=11"></script>
+<script src="/script/app.js?ver=11"></script>
+<script src="/menuskin/s_17/menubar.js?ver=11"></script>
+<script src="/script/user.style.js?ver=11"></script>
+<script src="/script/bannerpop.js?ver=11"></script>
+<script src="/script/resizePhoto.js?ver=11"></script>
+<script src="/script/onScroll.js?ver=11"></script>
+<script src="/script/floating.banner.js?ver=11"></script>
+<script src="/script/clipboard.min.js?ver=11"></script>
+<script src="/script/common.js?ver=11"></script>
+<script src="/script/mosaic.js?ver=11"></script>
+<script src="/script/jquery.tabslet.min.js?ver=11"></script>
+
+<!--[if lt IE 10]>
+<link rel="stylesheet" href="/css/style.ie9.css?ver=11">
+<script src="/script/html5shiv.min.js?ver=11"></script>
+<![endif]-->
+
+<script type="text/javascript">
+
+	$(document).ready(function(e) {
+		// 이미지맵
+		$('img[usemap]').rwdImageMaps();
+		bannerpop.banner(".banner_event_box");					// 기능성배너 이벤트
+		   bannerpopMulti.bannerLoad();                            // 멀티 기능성 배너 이벤트 
+
+		// 기사뷰 이미지관련
+		
+		// 기사본문 부분 복사하기 저작권 표시
+		$('#article-view-content-div').on('copy', function(e){			
+			var sel = window.getSelection();
+			var copyFooter = "<br/><br/>출처 : 인포스탁데일리(http://www.infostockdaily.co.kr)<br/>";
+			var copyHolder = $('<div>', {html: sel+copyFooter, id:'copy_text', style: {position: 'absolute', left: '-99999px'}});
+			$('body').append(copyHolder);
+			var str = $('#copy_text').html();
+			$('#copy_text').html(str.replace(/(\r\n|\n|\r)/gm, "<br />"));
+			sel.selectAllChildren( copyHolder[0] );
+			window.setTimeout(function() {
+				copyHolder.remove();
+			},0);
+		});
+	});
+
+	// 도메인
+	var SITE_DOMAIN = 'http://www.infostockdaily.co.kr'
+	,___currentTime	= 1766254607;
+
+	// 즐겨찾기 스크립트
+	function bookmark() {
+		window.external.AddFavorite("http://www.infostockdaily.co.kr", "인포스탁데일리")
+	}
+
+</script>
+
+<style type="text/css">
+/* 사이트 기본 색 */
+.user-point,a.user-point,
+.poll-columns .poll-state.going,
+.auto-hr04-2 .auto-nav .slick-slide.slick-current .auto-fontA,.auto-hr05 .auto-nav .slick-slide.slick-current .auto-fontA
+{color:#ed1c24 !important}
+.user-bg,.user-bg:hover,.user-bg:active,.user-bg:focus,li[id*="slick-"].slick-active button[data-role],.tabs .is-active a,
+.checkbox-group > input[type="radio"]:checked + label, .checkbox-group > input[type="checkbox"]:checked + label,
+.radio-group > input[type="radio"]:checked + label, .radio-group > input[type="checkbox"]:checked + label,
+.article-list .article-list-content.type-tm .list-block .links:hover,
+.poll-view .poll-view-state.going,.poll-view .poll-radio input[type="radio"]:checked + label::before,.poll-view .poll-radio input[type="checkbox"]:checked + label::before,
+.auto-dl04 .auto-column::after,.auto-mr01::before,.auto-hp02 a:hover .photo-titbg,.auto-hr04 .auto-nav .slick-slide.slick-current,.auto-hr04-1 .auto-nav .slick-slide.slick-current,
+.nd-switch.user-bg input[type="checkbox"]:checked + label,.nd-switch.user-bg input[type="radio"]:checked + label,
+.nd-switch.user-bg input[type="checkbox"]:checked + label::before,.nd-switch.user-bg input[type="radio"]:checked + label::before,
+.switch-group.user-bg > .nd-switch input[type="checkbox"]:checked + label,.switch-group.user-bg > .nd-switch input[type="radio"]:checked + label,
+.switch-group.user-bg > .nd-switch input[type="checkbox"]:checked + label::before,.switch-group.user-bg > .nd-switch input[type="radio"]:checked + label::before,
+.switch-group.for-ios > .nd-switch.user-bg input[type="checkbox"]:checked + label,.switch-group.for-ios > .nd-switch.user-bg input[type="radio"]:checked + label,
+.switch-group.for-ios > .nd-switch.user-bg input[type="checkbox"]:checked + label::before,.switch-group.for-ios > .nd-switch.user-bg input[type="radio"]:checked + label::before
+{background-color:#ed1c24 !important}
+.user-border,.button.user-bg,
+.poll-view .poll-radio input[type="radio"] + label:hover strong::before,.poll-view .poll-radio input[type="checkbox"] + label:hover strong::before,
+.poll-view .poll-radio input[type="radio"]:checked + label  strong::before,.poll-view .poll-radio input[type="checkbox"]:checked + label  strong::before,
+.auto-pa01 .auto-nav .slick-current .auto-images::before,.auto-hr05-1 .auto-content a:hover .auto-images.line::before,
+.auto-pa02 .auto-nav .slick-current .auto-images::before,.auto-ha08 .auto-columns a:hover .auto-images.line::before,
+.auto-hr05 .auto-nav .slick-slide.slick-current .auto-images.line::before,.auto-hr08 .auto-nav .slick-slide.slick-current .auto-images.line::before,
+.auto-dp03 .auto-columns:hover > a:not(.auto-section)::before,.auto-hr01 .auto-nav .slick-slide.slick-current .auto-images.line::before
+{border-color:#ed1c24 !important}
+.user-border-top {border-top-color:#ed1c24 !important}
+.user-border-bottom {border-bottom-color:#ed1c24 !important}
+.user-border-left {border-left-color:#ed1c24 !important}
+.user-border-right {border-right-color:#ed1c24 !important}
+</style>
+
+<!-- Naver Analytics -->
+<script type="text/javascript" src="//wcs.naver.net/wcslog.js"></script>
+<script type="text/javascript">
+if(!wcs_add) var wcs_add = {};
+wcs_add["wa"] = "f013db99e5950";
+wcs_do();
+</script>
+<!-- 네이버 웹마스터도구 소유확인 메타태그 -->
+<meta name="naver-site-verification" content="f9a1abf53bc044afc50a95a84240a1b42428f144"/>
+
+
+<!-- Naver Analytics -->
+<script type="text/javascript" src="//wcs.naver.net/wcslog.js"></script>
+<script type="text/javascript">
+if(!wcs_add) var wcs_add = {};
+wcs_add["wa"] = "1adfe98306b05c";
+if(window.wcs) {
+wcs_do();
+}
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-182903073-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-182903073-1');
+</script>
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8816008084578237" crossorigin="anonymous"></script>
+
+
+<script type="text/javascript" src="//wcs.naver.net/wcslog.js"></script>
+<script type="text/javascript">
+if(!wcs_add) var wcs_add = {};
+wcs_add["wa"] = "2128b96fdf5720";
+if(window.wcs) {
+  wcs_do();
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7PXD9TYYK7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-7PXD9TYYK7');
+</script></head>
+<body>
+<!--[if lt IE 9]>
+<div id="ie9-guide">
+	<div class="ie9-wrapper border-box">
+		<p class="guide-txt">
+		잠깐! 현재 Internet Explorer 8이하 버전을 이용중이십니다. 최신 브라우저(Browser) 사용을 권장드립니다!
+		</p>
+
+		<div class="guide-right">
+			<dl class="ie9-down nobr">
+				<dt><i class="icon ie-logo">ie</i></dt>
+				<dd>
+					<span>인터넷 익스플로러 11</span>
+					<a href="http://windows.microsoft.com/ko-kr/internet-explorer/download-ie" target="_blank">다운로드</a>
+				</dd>
+			</dl>
+
+			<dl class="ie9-down">
+				<dt><i class="icon cr-logo">chrome</i></dt>
+				<dd>
+					<span>구글 크롬</span>
+					<a href="http://www.google.com/chrome/" target="_blank">다운로드</a>
+				</dd>
+			</dl>
+
+			<dl class="ie9-down">
+				<dt><i class="icon ff-logo">firefox</i></dt>
+				<dd>
+					<span>모질라 파이어폭스</span>
+					<a href="http://www.mozilla.or.kr/" target="_blank">다운로드</a>
+				</dd>
+			</dl>
+		</div>
+	</div>
+</div>
+<![endif]-->
+<div class="off-canvas-wrapper">
+	<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+		<div class="off-canvas user-canvas position-left" id="offCanvas" data-off-canvas>
+			<!-- close //-->
+			<button class="close-button" aria-label="Close menu" type="button" data-close>
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<!--// close -->
+
+			<style type="text/css">
+.user-canvas .user-canvas-navs .menu li > a:hover,.user-canvas .user-canvas-navs .menu li.is-accordion-submenu-parent[aria-expanded="true"] > a {background:#ed1c24}
+.user-canvas .user-canvas-navs .menu li.is-accordion-submenu-parent > a::after,.user-canvas .user-canvas-navs .menu li.is-accordion-submenu-parent[aria-expanded="true"] > a::after {border-top-color:#ed1c24}
+.user-canvas .user-canvas-navs .menu li ul.menu.nested li a:hover {color:#ed1c24}
+</style>
+
+<nav class="user-canvas-navs">
+	<!-- 1차 //-->
+	<ul class="vertical menu" data-multi-open="false" data-accordion-menu>
+		<!--<li><a href="/news/articleList.html?view_type=sm">전체기사</a></li>-->
+			<li>
+		<a href="/news/articleList.html?sc_section_code=S1N17&view_type=sm" target="_top">국내주식</a>
+	</li>
+	<li>
+		<a href="/news/articleList.html?sc_section_code=S1N9&view_type=sm" target="_top">해외주식</a>
+	</li>
+	<li>
+		<a href="/news/articleList.html?sc_section_code=S1N1&view_type=sm" target="_top">비상장</a>
+	</li>
+	<li>
+		<a href="/news/articleList.html?sc_section_code=S1N25&view_type=sm" target="_top">원자재·부동산</a>
+	</li>
+	<li>
+		<a href="/news/articleList.html?sc_section_code=S1N22&view_type=sm" target="_top">기획연재</a>
+	</li>
+	<li>
+		<a href="/news/articleList.html?sc_section_code=S1N23&view_type=sm" target="_top">정책·이슈</a>
+	</li>
+	<li>
+		<a href="/news/articleList.html?sc_section_code=S1N26&view_type=sm" target="_top">카드뉴스</a>
+	</li>
+	<li>
+		<a href="/news/articleList.html?sc_section_code=S1N16&view_type=sm" target="_top">AD</a>
+	</li>
+	</ul>
+</nav>		</div>
+		<div class="off-canvas-content" data-off-canvas-content>
+
+			<!-- wrap //-->
+			<div id="user-wrap" class="min-width-1080">
+
+				<!-- header //-->
+				<header id="user-header" class="posi-re float-center">
+
+					<!-- 상단 HTML //-->	
+												<div class="clearfix text-center">
+													</div>
+										<!--// 상단 HTML -->
+					
+					<!-- 메뉴 //-->
+					<script type="text/javascript">
+<!--
+//메뉴 스타일 불러옴 : 메뉴 /script/menubar.js 와 같이 사용되어야 함
+//submenuStyle	: 서브메뉴 펼침 스타일 (horizon : 가로로, vertical : 세로 슬라이딩)
+var exceptIdx = new Array(); //제외할 메뉴 인덱스번호 (0부터 시작:type integer)
+var submenuStyle="vertical";
+//-->
+</script>
+
+<style type="text/css">
+#user-nav .mega-menu li.megaline > a.a-hover {color:#ed1c24}
+#user-gnb .user-search-form button {background-color:#ed1c24}
+</style>
+
+<!-- 메뉴 시작 //-->
+
+<div id="header-gnb">
+
+	<!-- 최상단영역 //-->
+	<div id="user-gnb">
+		<div class="float-center width-1080">
+
+			<!-- banner -->
+			<!-- <div class="user-top-banner">
+				!--190104_인베스팅닷컴제휴--<script type="text/javascript">var ___BANNER = "ban_1546584340234";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/35.js?1546584340234" id="ban_1546584340234"></script>!--//190104_인베스팅닷컴제휴--
+			</div>
+				<div class="user-top-banner">
+				!--상하이저널제휴190201--<script type="text/javascript">var ___BANNER = "ban_1548983746324";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/63.js?1548983746324" id="ban_1548983746324"></script>!--//상하이저널제휴190201--
+			</div>
+							<div class="user-top-banner">
+				!--베한타임즈제휴190513--<script type="text/javascript">var ___BANNER = "ban_1557726607553";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/83.js?1557726607553" id="ban_1557726607553"></script>!--//베한타임즈제휴190513--
+			</div> -->
+
+			<!-- 로그인 //-->
+			<ul class="user-logbox">
+				<li>UPDATED. 2025-12-20 12:42 (토) </li>
+									<li><a href="/member/login.html" target="_top">로그인</a></li>
+					<li><a href="/member/index.html" target="_top">회원가입</a></li>
+								<li><a href="http://www.infostockdaily.co.kr/news/articleList.html" onclick="setCookie('view_pc', 'n', 1);" target="_top"><i class="fa fa-mobile fa-fw"></i>모바일웹</a></li>
+			</ul>
+			<!--// 로그인 -->
+
+		</div>
+	</div>
+	<!--// 최상단영역 -->
+</div>
+
+<div id="header-wrapper" class="float-center width-1080">
+
+	<!-- 로고영역 //-->
+	<header id="nav-header">
+		<div id="nav-header-wrap" class="float-center width-1080">
+			<div class="dis-table">
+				<div class="dis-table-cell user-banner">
+					<!--인포스탁미디어그룹_20191002<script type="text/javascript">var ___BANNER = "ban_1570003856560";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/115.js?1570003856560" id="ban_1570003856560"></script>인포스탁미디어그룹_20191002-->
+					<!--인포스탁데일리--<script type="text/javascript">var ___BANNER = "ban_1574042216867";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js_activity/1.js?1574042216867" id="ban_1574042216867"></script><!--//인포스탁데일리-->
+					<!--200629_카카오--<script type="text/javascript">var ___BANNER = "ban_1593395804228";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/155.js?1593395804228" id="ban_1593395804228"></script><!--//200629_카카오-->
+					<!--210106_sk 텔레콤--<script type="text/javascript">var ___BANNER = "ban_1609915201703";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/181.js?1609915201703" id="ban_1609915201703"></script><!--//210106_sk 텔레콤-->
+					<!--두나무--<script type="text/javascript">var ___BANNER = "ban_1623743893190";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/124.js?1623743893190" id="ban_1623743893190"></script><!--//두나무-->
+                    <!--210106_sk 텔레콤--<script type="text/javascript">var ___BANNER = "ban_1628837394913";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/181.js?1628837394913" id="ban_1628837394913"></script><!--//210106_sk 텔레콤-->
+					<!--210929_두나무--<script type="text/javascript">var ___BANNER = "ban_1632903177504";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/231.js?1632903177504" id="ban_1632903177504"></script><!--//210929_두나무-->
+                    <!--211025_카카오--<script type="text/javascript">var ___BANNER = "ban_1635147140895";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/238.js?1635147140895" id="ban_1635147140895"></script><!--//211025_카카오-->
+				</div>
+				<div class="dis-table-cell">
+					<a href="http://www.infostockdaily.co.kr" target="_top"><img src="/image/logo/toplogo_20210129014511.png" alt="인포스탁데일리" /></a>
+					<!-- <a href="http://www.infostockdaily.co.kr" target="_top"><img src="/image/logo/toplogo_10th.png" alt="인포스탁데일리" /></a> -->
+				</div>
+				<div class="dis-table-cell user-banner">
+				<!--kt190930--<script type="text/javascript">var ___BANNER = "ban_1585284839349";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/114.js?1585284839349" id="ban_1585284839349"></script><!--//kt190930-->
+				<!--kt190930--<script type="text/javascript">var ___BANNER = "ban_1569830103440";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/114.js?1569830103440" id="ban_1569830103440"></script><!--//kt190930-->
+				<!--KB금융그룹-1--<script type="text/javascript">var ___BANNER = "ban_1564017370010";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/60.js?1564017370010" id="ban_1564017370010"></script><!--//KB금융그룹-1-->
+				<!--KT190625--<script type="text/javascript">var ___BANNER = "ban_1561428469364";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/94.js?1561428469364" id="ban_1561428469364"></script><!--//KT190625-->
+				<!--181220_KT--<script type="text/javascript">var ___BANNER = "ban_1546585049207";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/24.js?1546585049207" id="ban_1546585049207"></script><!--//181220_KT-->
+					<!--190104_콜대원--<script type="text/javascript">var ___BANNER = "ban_1546586167966";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/36.js?1546586167966" id="ban_1546586167966"></script><!--//190104_콜대원-->
+					<!--LG유플러스_200529--<script type="text/javascript">var ___BANNER = "ban_1590715422631";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/152.js?1590715422631" id="ban_1590715422631"></script><!--//LG유플러스_200529-->
+					<!--lg_20200831--><!-- <script type="text/javascript">var ___BANNER = "ban_1598838078903";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/168.js?1598838078903" id="ban_1598838078903"></script> --><!--//lg_20200831-->
+					<!--201202_e편한세상--<script type="text/javascript">var ___BANNER = "ban_1607000397961";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/176.js?1607000397961" id="ban_1607000397961"></script><!--//201202_e편한세상-->
+					<!--e편한세상_가평_201221--<script type="text/javascript">var ___BANNER = "ban_1608532059553";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/179.js?1608532059553" id="ban_1608532059553"></script><!--//e편한세상_가평_201221-->
+					<!--210630_dlenc--<script type="text/javascript">var ___BANNER = "ban_1625035836360";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/207.js?1625035836360" id="ban_1625035836360"></script><!--//210630_dlenc-->
+				</div>
+			</div>
+		</div>
+	</header>
+	<!--// 로고영역 -->
+
+	<!-- 메뉴바 //-->
+	<nav id="user-nav">
+		<div id="user-nav-wrapper" class="float-center width-1080">
+			<!-- 전체 -->
+			<button type="button" class="all-section" data-toggle="offCanvas"><i class="fa fa-bars fa-fw"></i></button>
+
+			<!-- 섹션 //-->
+			<ul id="mega-menu" class="mega-menu">
+									<li class="megaline"><a href="/news/articleList.html?sc_section_code=S1N17&view_type=sm" target="_top">국내주식</a>
+						<ul class="sub-menu-vertical">
+													</ul>
+					</li>
+									<li class="megaline"><a href="/news/articleList.html?sc_section_code=S1N9&view_type=sm" target="_top">해외주식</a>
+						<ul class="sub-menu-vertical">
+													</ul>
+					</li>
+									<li class="megaline"><a href="/news/articleList.html?sc_section_code=S1N1&view_type=sm" target="_top">비상장</a>
+						<ul class="sub-menu-vertical">
+													</ul>
+					</li>
+									<li class="megaline"><a href="/news/articleList.html?sc_section_code=S1N25&view_type=sm" target="_top">원자재·부동산</a>
+						<ul class="sub-menu-vertical">
+													</ul>
+					</li>
+									<li class="megaline"><a href="/news/articleList.html?sc_section_code=S1N22&view_type=sm" target="_top">기획연재</a>
+						<ul class="sub-menu-vertical">
+													</ul>
+					</li>
+									<li class="megaline"><a href="/news/articleList.html?sc_section_code=S1N23&view_type=sm" target="_top">정책·이슈</a>
+						<ul class="sub-menu-vertical">
+													</ul>
+					</li>
+									<li class="megaline"><a href="/news/articleList.html?sc_section_code=S1N26&view_type=sm" target="_top">카드뉴스</a>
+						<ul class="sub-menu-vertical">
+													</ul>
+					</li>
+							</ul>
+			<!--// 섹션 -->
+
+			<!-- 검색 //-->
+			<div class="user-search">
+				<fieldset class="user-search-form">
+					<form name="head-search" method="post" action="/news/articleList.html">
+						<input type="hidden" name="sc_area" value="A">
+						<input type="hidden" name="view_type" value="sm">
+						<label class="show-for-sr" for="search">기사검색</label>
+						<input type="text" name="sc_word" id="search" onkeydown="if(event.keyCode==13){if(this.form.sc_word.value != ''){this.form.submit();}else{alert('검색어를 입력해주세요');return false;}}" placeholder="기사 검색" title="기사검색">
+						<button type="button" title="기사검색" onclick="if(this.form.sc_word.value != ''){this.form.submit();}else{alert('검색어를 입력해주세요');this.form.sc_word.focus();return false;}"><i class="s7-search"></i><span class="show-for-sr">Search</span></button>
+					</form>
+				</fieldset>
+			</div>
+			<!--// 검색 -->
+
+		</div>
+	</nav>
+	<!--// 메뉴바 -->
+</div>
+<!--// 메뉴 끝 -->
+					<!--// 메뉴 -->
+
+				</header>
+				<!--// header -->
+
+								<!-- container //-->
+				<section id="user-container" class="posi-re text-left auto-pady-25 float-center width-1080">
+					<!-- layer popup position  -->
+					<div id="layer-popups" class="float-center width-1080"></div>
+					
+					<!-- 플로팅 좌우 HTML //-->
+					<div class="posi-re float-center width-1080"><div id="floating_banner_left" class="view-aside left-wing" data-scroll="y" data-top-margin="5" data-duration="300" style="left:-215px;">
+<!-- <div style="width:160px; height:600px;">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8816008084578237"
+     crossorigin="anonymous"></script> -->
+<!-- 사이드 바 -->
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8816008084578237"
+     data-ad-slot="4866882165"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> --></div>
+<div id="floating_banner_right" class="view-aside right-wing" data-scroll="y" data-top-margin="5" data-duration="300">
+<!-- <div style="width:160px; height:600px;">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8816008084578237"
+     crossorigin="anonymous"></script> -->
+<!-- 사이드바 2 -->
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8816008084578237"
+     data-ad-slot="3809785517"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> --></div>
+</div>					<!--// 플로팅 좌우 HTML -->
+
+					<!-- 광고관리용 날개배너 //-->
+                    <div class="posi-re float-center width-1080" id="wingBanner">
+                        <div class="wing-banner-left">
+                                                    </div>
+                        <div class="wing-banner-right">
+                                                    </div>
+                    </div>
+                    <!--// 광고관리용 날개배너 -->
+<div class="float-center max-width-1080">
+
+	<!-- 편집패널 //-->
+	<div class="clearfix">
+
+	</div>
+	<!--// 편집패널 -->
+
+	
+
+	<!-- article view wrapper //-->
+	<div class="user-content">
+
+		<!-- 기사본문 내용 //-->
+		<section class="user-snb">								
+			<!-- contents //-->
+			<article class="article-veiw-body">
+				<!-- 편집패널 //-->
+				<div class="clearfix">
+
+				</div>
+				<!--// 편집패널 -->
+				
+				
+<!-- 기사리스트 //-->
+<div class="article-list">
+	<!-- header //-->
+	<header class="article-list-header">
+		<!-- title -->
+		<div class="float-left article-list-header-title"><strong>기사</strong> <small class="text-muted">(5,577건)</small></div>
+
+		<div class="float-right button-group small">
+			<a href="/news/articleList.html?page=1&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_word=AI" class="button nd-white" data-tooltip title="리스트형"><i class="fa fa-bars fa-fw"></i><span class="sr-only">리스트형</span></a>
+			<a href="/news/articleList.html?page=1&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_word=AI&view_type=sm" class="button user-bg" data-tooltip title="웹진형"><i class="fa fa-list fa-fw"></i><span class="sr-only">웹진형</span></a>
+			<a href="/news/articleList.html?page=1&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_word=AI&view_type=tm" class="button nd-white" data-tooltip title="타일형"><i class="fa fa-th-large fa-fw"></i><span class="sr-only">타일형</span></a>
+		</div>
+	</header>
+	<!--// header -->
+
+	<!-- 웹진형 //-->
+<section class="article-list-content type-sm text-left">
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212915_216000_2021_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212915" target="_top">
+					<span class="show-for-sr">크래프톤, 네이버·미래에셋과 최대 1조 원 규모 아시아 펀드 설립</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212915" target="_top"><strong>크래프톤, 네이버·미래에셋과 최대 1조 원 규모 아시아 펀드 설립</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212915" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=박상인 기자] 크래프톤(259960)이 네이버(035420), 미래에셋그룹과 함께 최대 1조원 규모 아시아 펀드를 조성한다고 19일 밝혔다.펀드 명칭은 ‘크래프톤·네이버·미래에셋 유니콘 그로쓰 펀드’(유니콘 그로쓰 펀드)로 한국과 인도를 비롯한 아시아 주요 기술기업에 투자한다. 미래에셋캐피탈이 운용사(GP)를 맡고, 크래프톤과 네이버가 출자자(LP)로 참여하는 구조다.크래프톤은 초기 투자금 2000억 원을 출자하며, 세 기업과 외부 투자금을 합쳐 5000억 원 이상 규모로 운용을 시작한다. 이후 외부 자금 유치를 통				</a>
+			</p>
+			<div class="list-dated">국내주식 | 박상인 기자 | 2025-12-19 17:21</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212914_215995_300_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212914" target="_top">
+					<span class="show-for-sr">[1219마감체크] 코스피, 기관 8800억 매수에 4020.55 마감</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212914" target="_top"><strong>[1219마감체크] 코스피, 기관 8800억 매수에 4020.55 마감</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212914" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=윤서연 기자]▶마감체크■ 코스피 지수밤사이 뉴욕증시가 CPI 소화 속 마이크론 호실적 등에 상승했고, 유럽 주요국 증시는 일제히 상승.이날 코스피지수는 美 11월 소비자물가지수(CPI) 안도감 속 기관 순매수 등에 0.65% 상승한 4020.55에 장을 마감했다.마이크론 실적 호조 속 AI 거품 논란이 다소 진정된 모습을 보인 점도 투자심리를 개선시키는 모습이다. 수급별로는 기관이 8805억 순매수했고, 외국인과 개인은 각각 7788억, 1109억 순매도했다. 선물시장에서는 반대로 외국인과 개인이 각각 1601계약,				</a>
+			</p>
+			<div class="list-dated">국내주식 | 윤서연 기자 | 2025-12-19 17:12</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212905_215975_1832_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212905" target="_top">
+					<span class="show-for-sr">공정위, 3년 연속 '공공데이터 품질인증 최우수기관' 선정</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212905" target="_top"><strong>공정위, 3년 연속 '공공데이터 품질인증 최우수기관' 선정</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212905" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=(세종)윤서연 기자] 공정거래위원회가 행정안전부가 행정·공공기관을 대상으로 실시하는 &#39;2025년 공공데이터 품질인증&#39; 심사에서 인증 최고등급인 &#39;최우수등급(ALL)&#39;을 3연속 획득했다.공공데이터 품질인증은 기관 전체의 공공데이터 품질관리체계와 보유 데이터베이스(DB) 전반의 품질이 일정한 수준에 적합한지를 점검해 우수기관에 인증을 부여하는 제도다.행안부는 행정·공공기관이 보유중인 공공데이터 품질을 체계적으로 관리하고 고품질의 공공데이터를 개방해 대국민 활용을 강화하고자 &#39;공공데이터				</a>
+			</p>
+			<div class="list-dated">정책·이슈 | 윤서연 기자 | 2025-12-19 13:55</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212909_215984_4757_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212909" target="_top">
+					<span class="show-for-sr">BOJ, 만장일치로 금리 인상 단행… 통화정책 정상화 가속</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212909" target="_top"><strong>BOJ, 만장일치로 금리 인상 단행… 통화정책 정상화 가속</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212909" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=박세진 기자] 일본은행(BOJ)이 12월 금융정책결정회의를 통해 단기 정책금리를 기존 0.5%에서 0.75%로 0.25%포인트 인상했다. 이는 1995년 이후 30년 만에 가장 높은 수준의 금리 운용으로, 일본 경제가 장기간 지속된 디플레이션 체제에서 벗어나 통화정책 정상화 단계로 완전히 진입했음을 시사한다. 우에다 가즈오 총재가 이끄는 일본은행은 지난 3월 마이너스 금리 종료, 7월 금리 인상에 이어 이번 12월 추가 인상까지 단행하며 연내 총 세 차례 금리를 올렸다. 이번 결정은 정책위원 만장일치로 이루어졌으며,				</a>
+			</p>
+			<div class="list-dated">정책·이슈 | 박세진 기자 | 2025-12-19 13:53</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212904_215976_2057_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212904" target="_top">
+					<span class="show-for-sr">SK하이닉스 등 반도체 관련주, 마이크론 훈풍에 동반 상승</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212904" target="_top"><strong>SK하이닉스 등 반도체 관련주, 마이크론 훈풍에 동반 상승</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212904" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=신민재 기자] 19일 오전 국내 증시에서는 반도체 및 전력설비 관련 종목들이 강세를 보이고 있다. 이는 간밤 뉴욕증시에서 마이크론 테크놀로지(Micron Technology, MU)가 시장 예상치를 상회하는 실적을 발표하고, 미국 소비자물가지수(CPI)가 안정적인 흐름을 보인 데 따른 영향으로 풀이된다. 특히 반도체 업황 개선 기대감이 구체적인 수치로 확인되면서 국내 반도체 밸류체인 전반으로 매수세가 확산되고 있으며, 인공지능(AI) 산업 성장에 필수적인 전력 인프라 관련주까지 동반 상승하는 흐름이 나타나고 있다.상				</a>
+			</p>
+			<div class="list-dated">국내주식 | 신민재 기자 | 2025-12-19 11:22</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212901_215971_547_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212901" target="_top">
+					<span class="show-for-sr">트럼프, 생물보안법 최종 서명… 韓 바이오 '반사이익' 기대감 고조</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212901" target="_top"><strong>트럼프, 생물보안법 최종 서명… 韓 바이오 '반사이익' 기대감 고조</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212901" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=김연수 기자] 미국발(發) 정책 모멘텀이 국내 제약·바이오 섹터에 강력한 훈풍을 불어넣고 있다. 도널드 트럼프 미국 대통령이 ‘생물보안법(Biosecure Act)’이 포함된 국방수권법안(NDAA)에 최종 서명했다는 소식이 전해지면서, 19일 오전 국내 증시에서는 CDMO(위탁개발생산) 및 제약 바이오 관련주들이 강세를 보이고 있다.현지시간으로 18일, 트럼프 미국 대통령은 국방수권법안(NDAA)에 최종 서명했다. 이번 법안의 핵심은 제851조에 포함된 ‘특정 바이오기술 제공자와의 계약 금지’ 조항이다. 해당 조항은				</a>
+			</p>
+			<div class="list-dated">국내주식 | 김연수 기자 | 2025-12-19 11:06</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212900_215970_2552_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212900" target="_top">
+					<span class="show-for-sr">정부, 바디프랜드 찾아 ‘AI 헬스케어로봇’ 지원책 의견 수렴</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212900" target="_top"><strong>정부, 바디프랜드 찾아 ‘AI 헬스케어로봇’ 지원책 의견 수렴</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212900" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=이동희 선임기자] 헬스케어로봇 기업 바디프랜드(대표이사 곽도연·김철환)는 산업통상부 문신학 차관이 18일 도곡 본사를 방문했다고 밝혔다.문신학 차관을 비롯한 산업통상부 관계자들은 이 날 CES 2025 혁신상 수상작인 웨어러블 AI 헬스케어로봇 ‘733’을 비롯, 바디프랜드 주요 제품을 시찰했다. 또 바디프랜드 곽도연, 김철환 대표와 함께 헬스케어로봇을 대한민국 신성장동력으로 육성, 지원하는 방안에 대해 중점 논의했다.더불어 국내 마사지체어 시장의 40% 이상을 헬스케어로봇으로 전환시키고, 글로벌 시장에서도 전년동기				</a>
+			</p>
+			<div class="list-dated">비상장 | 이동희 선임기자 | 2025-12-19 10:26</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212891_215960_750_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212891" target="_top">
+					<span class="show-for-sr">카카오, 에이전틱 AI 구현 최적화 ‘Kanana-2’ 모델 오픈소스 공개</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212891" target="_top"><strong>카카오, 에이전틱 AI 구현 최적화 ‘Kanana-2’ 모델 오픈소스 공개</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212891" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=이동희 선임기자] 카카오(035720)가 19일 허깅페이스에 자체 개발한 차세대 언어모델 ‘Kanana-2’를 오픈소스로 공개했다. 이를 통해 카카오는 에이전틱(Agentic) AI 구현에 최적화된 고성능·고효율 기술 경쟁력을 입증했다. 카카오는 지난해 자체 개발 AI 모델 ‘카나나(Kanana)’의 라인업을 선보인 이래, 경량 사이즈의 모델부터 고난이도 문제 해결에 특화된 ‘Kanana-1.5’까지 꾸준히 오픈소스로 추가 공개해왔다. 이번에 선보인 ‘Kanana-2’ 모델은 성능과 효율을 획기적으로 개선한 최신 연				</a>
+			</p>
+			<div class="list-dated">국내주식 | 이동희 선임기자 | 2025-12-19 09:07</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212881_215939_405_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212881" target="_top">
+					<span class="show-for-sr">허트 8, 앤스로픽·플루이드스택과 대규모 AI 인프라 동맹</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212881" target="_top"><strong>허트 8, 앤스로픽·플루이드스택과 대규모 AI 인프라 동맹</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212881" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=박세진 기자] 북미 에너지 인프라 및 디지털 자산 기업 허트 8(Hut 8 Corp. HUT)이 인공지능(AI) 기업 앤스로픽(Anthropic), 클라우드 플랫폼 기업 플루이드스택(Fluidstack)과 손잡고 대규모 AI 인프라 구축에 나선다. 회사는 현지시간 17일 공식 발표를 통해 미국 내 하이퍼스케일 AI 인프라 배치를 가속화하기 위한 3자 파트너십을 체결했다고 밝혔다. 이날 비트코인 가격이 8만 6천 달러 선을 하회하며 마라 홀딩스(-7.11%), 라이엇 플랫폼스(-3.79%) 등 주요 채굴주가 약세를 보				</a>
+			</p>
+			<div class="list-dated">해외주식 | 박세진 기자 | 2025-12-19 08:55</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212885_215948_172_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212885" target="_top">
+					<span class="show-for-sr">[1219개장체크] 美 증시, 11월 CPI 전망치 하회 및 마이크론 호실적에 3대 지수 상승</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212885" target="_top"><strong>[1219개장체크] 美 증시, 11월 CPI 전망치 하회 및 마이크론 호실적에 3대 지수 상승</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212885" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=박상철 기자]인포스탁데일리가 매일 아침 전 세계 투자 정보를 담은 뉴스를 배달해드립니다. 미국증시 마감과 시장 이슈, 주목할만한 인사이트가 담긴 주요 외신, 국내 시장 종목들의 시세를 움직일 뉴스 등을 엄선했습니다. 증시 개장 전 빠르게 변하는 시장 현황을 살펴보고 이를 통해 투자전략을 점검할 수 있도록 마련된 코너입니다.■ 국내증시코스피 지수는 1.53% 하락한 3994.51에 장을 마감했다.수급별로는 외국인과 기관이 각각 3566억, 1005억 순매도, 개인은 4229억 순매수했다. 선물시장에서도 외국인과 기관이				</a>
+			</p>
+			<div class="list-dated">국내주식 | 박상철 기자 | 2025-12-19 08:18</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212884_215944_033_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212884" target="_top">
+					<span class="show-for-sr">대덕전자, FC BGA 턴어라운드…목표가↑-대신</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212884" target="_top"><strong>대덕전자, FC BGA 턴어라운드…목표가↑-대신</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212884" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=김문영 기자] 대신증권은 19일 대덕전자에 대해 FC BGA 사업의 흑자전환과 AI·자율주행 반도체향 매출 확대를 반영해 실적 개선이 본격화될 것으로 전망했다. 이에 ‘매수’의견을 유지하고 목표주가를 4만7000원에서 5만7000원으로 상향했다.박강호 대신증권 연구원은 목표주가 상향과 관련해 “대덕전자의 목표주가를 5만7000원으로 상향(2026년 주당순이익(EPS) X 목표 P/E 26.8배, 실적 확장기 상단밴드 적용)하며 투자의견은 매수(BUY)를 유지한다”고 밝혔다. 그는 “내년 FC BGA의 흑자전환(yoy				</a>
+			</p>
+			<div class="list-dated">국내주식 | 김문영 기자 | 2025-12-19 08:01</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212883_215956_5042_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212883" target="_top">
+					<span class="show-for-sr">유라클, AI 전환 가속…내년 하반기 이익 개선 기대-키움</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212883" target="_top"><strong>유라클, AI 전환 가속…내년 하반기 이익 개선 기대-키움</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212883" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=김문영 기자] 키움증권은 19일 유라클에 대해 모바일 플랫폼 사업을 기반으로 AI 서비스로의 전환이 빠르게 진행되고 있다고 밝혔다. 투자의견과 목표주가는 제시하지 않았다.김학준 키움증권 연구원은 AI 사업 전환과 관련해 “유라클은 모바일 어플리케이션 및 서비스 개발에 필요한 프레임워크를 공급 및 운영해주는 모바일 환경 개발 플랫폼 회사에서 AI서비스로 빠르게 전환하고 있다”고 말했다. 이어 “아테나AI를 통해 다양한 LLM들을 기업 특성에 맞게 최적화 시켜줄 수 있으며 특화 서비스인 오르다 AI 서비스를 통해 AI인				</a>
+			</p>
+			<div class="list-dated">국내주식 | 김문영 기자 | 2025-12-19 08:01</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212876_215932_1527_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212876" target="_top">
+					<span class="show-for-sr">[1219주요일정] LG화학·GS칼텍스, 여수산단 NCC 사업재편계획 초안 제출 전망 등</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212876" target="_top"><strong>[1219주요일정] LG화학·GS칼텍스, 여수산단 NCC 사업재편계획 초안 제출 전망 등</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212876" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=박상철 기자]■ 美 11월 기존주택판매 발표 - 미국 부동산중개인협회(NAR)가 현지시간으로 12월 19일(한국시간 20일 오전 0시) 11월 기존주택 판매건수를 발표한다. 주택시장의 선행지표로 활용되는 이 지표는 미국 주택 경기를 파악하는 중요한 데이터다.■ 美 선물/옵션 동시 만기일 - 미국 증시가 현지시간으로 12월 19일 선물과 옵션 만기일이 겹치는 동시 만기일을 맞이한다. 매년 3월, 6월, 9월, 12월 세 번째 주 금요일에 진행되며 시장 변동성이 커질 수 있다.■ 이노스페이스, 첫 상업발사체 &#39;한				</a>
+			</p>
+			<div class="list-dated">국내주식 | 박상철 기자 | 2025-12-19 06:00</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212878_215936_534_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212878" target="_top">
+					<span class="show-for-sr">[1218마감체크] 코스피, AI 거품 우려 재부각되며 하루만에 4000선 붕괴</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212878" target="_top"><strong>[1218마감체크] 코스피, AI 거품 우려 재부각되며 하루만에 4000선 붕괴</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212878" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=윤서연 기자]▶마감체크■ 코스피지수코스피 지수는 1.53% 하락한 3994.51에 장을 마감했다.밤사이 뉴욕증시가 오라클발 AI 거품 우려 지속 등에 하락했고, 유럽 주요국 증시는 영국 인플레이션 둔화, 주요국 금리 결정 주시 속 혼조 마감했다.이날 코스피지수는 3989.60으로 갭하락 출발했다. 장초반 낙폭을 키우는 모습을 보이기도 했지만, 이내 낙폭을 만회하며 오전 중 4030.65에서 고점을 형성했다. 이후 낙폭을 키워 4000선 부근에서 하락세를 이어가던 지수는 오후 들어 낙폭을 더욱 확대하며 3975.50에				</a>
+			</p>
+			<div class="list-dated">국내주식 | 윤서연 기자 | 2025-12-18 17:15</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212879_215953_2042_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212879" target="_top">
+					<span class="show-for-sr">[미주M&amp;A] 코세라, 유데미 품는다... 25억 달러 규모 '에듀테크 빅딜' 성사</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212879" target="_top"><strong>[미주M&A] 코세라, 유데미 품는다... 25억 달러 규모 '에듀테크 빅딜' 성사</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212879" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=박종현 기자] 미국 온라인 교육 플랫폼 유데미(Udemy, UDMY)가 경쟁사인 코세라(Coursera, COUR)에 인수된다는 소식에 주가가 급등했다. 현지시간 12월 17일 미국증시에서 유데미는 전 거래일 대비 12.66% 상승 마감했다. 코세라는 유데미를 기업가치 약 25억 달러(한화 약 3조 5천억 원)로 평가하고, 유데미 주식 전량을 코세라 주식으로 교환하는 방식의 합병 계획을 발표했다. 이번 거래는 팬데믹 이후 성장 정체기를 맞은 에듀테크 시장에서 규모의 경제를 확보하고 수익성을 개선하기 위한 움직임으로				</a>
+			</p>
+			<div class="list-dated">해외주식 | 박종현 기자 | 2025-12-18 16:47</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212875_215930_242_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212875" target="_top">
+					<span class="show-for-sr">고려아연, 울산 등 1.5조원 국내 투자 2029년가지 차질없이 이행</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212875" target="_top"><strong>고려아연, 울산 등 1.5조원 국내 투자 2029년가지 차질없이 이행</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212875" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=이동희 선임기자] 고려아연(010130)이 오는 2029년까지 울산 등 국내에 약 1조5000억 원 규모의 투자를 차질 없이 이행할 계획이라고 18일 밝혔다. 국내 전략광물 및 비철금속 허브로서 국가기간산업의 역량을 강화하기 위해 연구개발(R&D)부터 전략광물, 자원 순환, 환경, 안전 인프라 등 전방위에 걸쳐 자금을 집행한다. 이를 통해 소재와 핵심광물 자립 기반을 조성하고 글로벌 공급망 허브 역할도 더욱 확대해 나간다는 구상이다.고려아연에 따르면, 우선 국내 전략광물 생산 허브로서 기능을 강화하기 위한 적극적인				</a>
+			</p>
+			<div class="list-dated">국내주식 | 이동희 선임기자 | 2025-12-18 16:02</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212869_215922_3120_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212869" target="_top">
+					<span class="show-for-sr">임광현 국세청장 &quot;중소·벤처기업 AI 혁신·성장 세정 지원 아끼지 않겠다&quot;</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212869" target="_top"><strong>임광현 국세청장 "중소·벤처기업 AI 혁신·성장 세정 지원 아끼지 않겠다"</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212869" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=이동희 선임기자] 임광현 국세청장은 18일 “우리 경제의 주축인 중소·벤처기업과 스타트업이 AI 기술을 바탕으로 혁신과 성장을 이루어 나가는 것이 무엇보다 중요하다"고 강조했다. 국세청과 중소벤처기업부는 이날 서울지방국세청에서 &#39;AI 중소·스타트업 성장지원 업무협약(MOU)&#39;을 체결했다. 임 청장은 "단순한 선언에 그치지 않고 AI 기업이 현장에서 체감할 수 있는 실질적인 도움이 되도록 중기부와 지속적으로 협력해 나가겠다"고 말했다.이번 MOU는 중기부가 AI 전용 지원사업에 세정지원 사항을 명시하고				</a>
+			</p>
+			<div class="list-dated">정책·이슈 | 이동희 선임기자 | 2025-12-18 12:32</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212868_215920_2216_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212868" target="_top">
+					<span class="show-for-sr">[1218시황레이더] 두산, SK실트론 인수 관련 단기 부담 전망 등</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212868" target="_top"><strong>[1218시황레이더] 두산, SK실트론 인수 관련 단기 부담 전망 등</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212868" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=박상철 기자]◇ 삼화페인트(000390), 김장연 회장 별세 소식 속 경영승계 및 지배구조 변화 기대감 등에 상한가40여 년간 국내 페인트 업계 발전에 기여한 김장연 동사 회장이 지난 16일 별세했다고 전해졌다. 김장연 회장은 1994년 4월 대표이사로 취임해 동사가 국내 대표 페인트 회사로 성장하는 데 큰 역할을 했으며, 특히 화학적 전문성을 바탕으로 국내 페인트 제조 기술을 글로벌 기업 수준으로 끌어올렸다는 평가를 받고 있다. 오너 2세인 김장연 동사 회장이 별세했다는 소식에 시장에서는 승계 및 지배구조 변화에				</a>
+			</p>
+			<div class="list-dated">국내주식 | 박상철 기자 | 2025-12-18 12:24</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212859_215907_574_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212859" target="_top">
+					<span class="show-for-sr">삼성자산, 'KODEX 미국반도체' 미국 반도체 ETF 중 연초이후 수익률 1위</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212859" target="_top"><strong>삼성자산, 'KODEX 미국반도체' 미국 반도체 ETF 중 연초이후 수익률 1위</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212859" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=윤서연 기자] 삼성자산운용은 ‘KODEX 미국반도체’ ETF가 연초 이후 수익률 41.8%를 기록하며 국내 상장된 미국 반도체 투자 ETF(레버리지 제외) 중 가장 높은 성과를 달성했다고 18일 밝혔다. 이는 AI 반도체 랠리가 본격화된 올해, 투자자들에게 가장 확실한 수익을 안겨준 상품임을 입증한 결과다.KODEX 미국반도체가 AI 반도체 시대에서도 다시한번 보여준 독보적인 성과 비결은 검증된 지수 추종 전략에 있다. 미국 시장에 상장된 세계 최대 반도체 ETF인 &#39;SMH(VanEck Semiconducto				</a>
+			</p>
+			<div class="list-dated">국내주식 | 윤서연 기자 | 2025-12-18 11:32</div>
+		</div>
+		<!--// group -->
+
+
+		<!-- group //-->
+		<div class="list-block">			
+						<div class="list-image" style="background-image:url(./thumbnail/202512/212863_215911_2910_v150.jpg)">
+				<a href="/news/articleView.html?idxno=212863" target="_top">
+					<span class="show-for-sr">에스알, KAIST AI챔피언팀과 AI 감사 혁신 가속</span>
+				</a>
+			</div>
+						<div class="list-titles"><a href="/news/articleView.html?idxno=212863" target="_top"><strong>에스알, KAIST AI챔피언팀과 AI 감사 혁신 가속</strong></a></div>
+			<p class="list-summary">
+				<a href="/news/articleView.html?idxno=212863" target="_top" class="line-height-3-2x">
+				[인포스탁데일리=이동희 선임기자] SRT 운영사 에스알(SR)은 KAIST 소프트웨어대학원과 인공지능(AI) 기반 감사 기술 협력을 위한 업무협약을 체결했다고 18일 밝혔다. 국내 최고 수준의 AI 기술력을 도입해 공공감사 업무의 IT기술력 및 투명성 강화에 나선다. 이번 업무협약으로 에스알 감사실과 AI 감사기술 고도화에 협력할 KAIST 소프트웨어대학원 신인식 교수 연구팀은 과학기술정보통신부 주관 AI 챔피언 대회에서 1등을 차지하며 실력을 입증했다. 에스알은 신인식 교수팀의 기술력을 접목해 AI 감사시스템을 한층 지능화할 방침				</a>
+			</p>
+			<div class="list-dated">비상장 | 이동희 선임기자 | 2025-12-18 10:29</div>
+		</div>
+		<!--// group -->
+
+	
+</section>
+<!--// 웹진형 -->
+	<hr>
+
+	<div class="clearfix"><ul class="pagination text-center"><li class="pagination-start"><a href="./articleList.html?page=1&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm" title="처음"><i class="fa fa-angle-double-left fa-fw"><span class="show-for-sr">처음</span></i><span class="show-static-small-only">처음</span></a></li><li class="current user-bg">1</li><li><a href="./articleList.html?page=2&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm">2</a></li><li><a href="./articleList.html?page=3&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm">3</a></li><li><a href="./articleList.html?page=4&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm">4</a></li><li><a href="./articleList.html?page=5&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm">5</a></li><li><a href="./articleList.html?page=6&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm">6</a></li><li><a href="./articleList.html?page=7&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm">7</a></li><li><a href="./articleList.html?page=8&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm">8</a></li><li><a href="./articleList.html?page=9&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm">9</a></li><li><a href="./articleList.html?page=10&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm">10</a></li><li><a href="./articleList.html?page=11&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm">11</a></li><li class="pagination-onenext"><a href="./articleList.html?page=2&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm" title="다음"><span class="show-static-small-only">다음</span><i class="fa fa-angle-right fa-fw"><span class="show-for-sr">다음</span></i></a></li><li class="pagination-next"><a href="./articleList.html?page=12&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm" title="다음"><i class="fa fa-angle-right fa-fw"><span class="show-for-sr">다음</span></i></a></li><li class="pagination-end"><a href="./articleList.html?page=279&total=5577&sc_section_code=&sc_sub_section_code=&sc_serial_code=&sc_area=A&sc_level=&sc_article_type=&sc_view_level=&sc_sdate=&sc_edate=&sc_serial_number=&sc_multi_code=&sc_word=AI&sc_word2=&sc_andor=&sc_order_by=E&view_type=sm" title="끝"><span class="show-static-small-only">끝</span><i class="fa fa-angle-double-right fa-fw"><span class="show-for-sr">끝</span></i></a></li></ul></div>
+</div>
+<!--// 기사리스트 예시 -->
+				<!-- 편집패널 //-->
+				<div class="clearfix">
+
+				</div>
+				<!--// 편집패널 -->
+			</article>
+			<!--// contents -->
+
+		</section>
+		<!--// 기사본문 내용 -->
+
+		<!-- 기사본문 우측 //-->
+		<aside class="user-aside">
+<article class="box-skin design-7">
+<header class="header"><strong>인기기사</strong></header>
+<section class="content"><div class="auto-article auto-db01">
+<ul><li class="clearfix"><div class="number count1 user-bg">1</div><a href="/news/articleView.html?idxno=212905" target="_top" class="size-14 line-height-4-x auto-fontA onload">공정위, 3년 연속 '공공데이터 품질인증 최우수기관' 선정</a></li>
+<li class="clearfix auto-martop-8"><div class="number count2 user-bg">2</div><a href="/news/articleView.html?idxno=212914" target="_top" class="size-14 line-height-4-x auto-fontA onload">[1219마감체크] 코스피, 기관 8800억 매수에 4020.55 마감</a></li>
+<li class="clearfix auto-martop-8"><div class="number count3 user-bg">3</div><a href="/news/articleView.html?idxno=212878" target="_top" class="size-14 line-height-4-x auto-fontA onload">[1218마감체크] 코스피, AI 거품 우려 재부각되며 하루만에 4000선 붕괴</a></li>
+<li class="clearfix auto-martop-8"><div class="number count4 default-bg">4</div><a href="/news/articleView.html?idxno=212909" target="_top" class="size-14 line-height-4-x auto-fontA onload">BOJ, 만장일치로 금리 인상 단행… 통화정책 정상화 가속</a></li>
+<li class="clearfix auto-martop-8"><div class="number count5 default-bg">5</div><a href="/news/articleView.html?idxno=212915" target="_top" class="size-14 line-height-4-x auto-fontA onload">크래프톤, 네이버·미래에셋과 최대 1조 원 규모 아시아 펀드 설립</a></li>
+<li class="clearfix auto-martop-8"><div class="number count6 default-bg">6</div><a href="/news/articleView.html?idxno=212906" target="_top" class="size-14 line-height-4-x auto-fontA onload">넥슨 마비노기M 사행성 논란 증폭…李정부, 확률형 아이템에 칼 빼들었다</a></li>
+<li class="clearfix auto-martop-8"><div class="number count7 default-bg">7</div><a href="/news/articleView.html?idxno=212879" target="_top" class="size-14 line-height-4-x auto-fontA onload">[미주M&A] 코세라, 유데미 품는다... 25억 달러 규모 '에듀테크 빅딜' 성사</a></li>
+<li class="clearfix auto-martop-8"><div class="number count8 default-bg">8</div><a href="/news/articleView.html?idxno=212880" target="_top" class="size-14 line-height-4-x auto-fontA onload">[신세계푸드 상폐 진단] ①밸류업 역주행? 신세계푸드 상폐, 지배구조 선진화인가 개악인가</a></li>
+<li class="clearfix auto-martop-8"><div class="number count9 default-bg">9</div><a href="/news/articleView.html?idxno=212877" target="_top" class="size-14 line-height-4-x auto-fontA onload">넷마블 나혼랩:어라이즈, 신규 SSR 헌터 ‘크리스토퍼 리드’ 등 업데이트</a></li>
+<li class="clearfix auto-martop-8"><div class="number count10 default-bg">10</div><a href="/news/articleView.html?idxno=212875" target="_top" class="size-14 line-height-4-x auto-fontA onload">고려아연, 울산 등 1.5조원 국내 투자 2029년가지 차질없이 이행</a></li>
+</ul>
+</div></section>
+</article><!--블로그 배너 2--><script type="text/javascript">var ___BANNER = "ban_1737088969";</script><script type="text/javascript" charset="utf-8" src="/bannerpop/uploads/js/445.js?1737088969" id="ban_1737088969"></script><!--//블로그 배너 2--><div class="box-margins height-35"></div><article class="box-skin design-7">
+<header class="header"><strong>최신기사</strong></header>
+<section class="content"><div class="auto-article auto-dl04">
+<ul><li class="auto-column">
+		<div class="size-14 auto-padbtm-8"><a href="/news/articleView.html?idxno=212911" target="_top" class="line-height-3-2x auto-fontA onload">[카드뉴스] 넥슨, 유료모델 구조적 한계 노출...李 대통령, 확률형 아이템 제재 언급</a></div><a href="/news/articleView.html?idxno=212911" target="_top" class="auto-images cover line max-width-165 height-100" style="background-image:url(/news/thumbnail/202512/212911_215991_345_v150.jpg)">
+				<span class="show-for-sr">[카드뉴스] 넥슨, 유료모델 구조적 한계 노출...李 대통령, 확률형 아이템 제재 언급</span>
+			</a></li>
+<li class="auto-column auto-padtop-25">
+		<div class="size-14 auto-padbtm-8"><a href="/news/articleView.html?idxno=212910" target="_top" class="line-height-3-2x auto-fontA onload">[카드뉴스] 이마트, 신세계푸드 공개매수 발표…소액주주 "헐값 매수" 강력 반발</a></div><a href="/news/articleView.html?idxno=212910" target="_top" class="auto-images cover line max-width-165 height-100" style="background-image:url(/news/thumbnail/202512/212910_215987_1252_v150.jpg)">
+				<span class="show-for-sr">[카드뉴스] 이마트, 신세계푸드 공개매수 발표…소액주주 "헐값 매수" 강력 반발</span>
+			</a></li>
+<li class="auto-column auto-padtop-25">
+		<div class="size-14 auto-padbtm-8"><a href="/news/articleView.html?idxno=212912" target="_top" class="line-height-3-2x auto-fontA onload">[1220주요일정] 中 인민은행, 12월 대출우대금리 발표 예정 등</a></div><a href="/news/articleView.html?idxno=212912" target="_top" class="auto-images cover line max-width-165 height-100" style="background-image:url(/news/thumbnail/202512/212912_215993_1644_v150.jpg)">
+				<span class="show-for-sr">[1220주요일정] 中 인민은행, 12월 대출우대금리 발표 예정 등</span>
+			</a></li>
+<li class="auto-column auto-padtop-25">
+		<div class="size-14 auto-padbtm-8"><a href="/news/articleView.html?idxno=212915" target="_top" class="line-height-3-2x auto-fontA onload">크래프톤, 네이버·미래에셋과 최대 1조 원 규모 아시아 펀드 설립</a></div><a href="/news/articleView.html?idxno=212915" target="_top" class="auto-images cover line max-width-165 height-100" style="background-image:url(/news/thumbnail/202512/212915_216000_2021_v150.jpg)">
+				<span class="show-for-sr">크래프톤, 네이버·미래에셋과 최대 1조 원 규모 아시아 펀드 설립</span>
+			</a></li>
+<li class="auto-column auto-padtop-25">
+		<div class="size-14 auto-padbtm-8"><a href="/news/articleView.html?idxno=212914" target="_top" class="line-height-3-2x auto-fontA onload">[1219마감체크] 코스피, 기관 8800억 매수에 4020.55 마감</a></div><a href="/news/articleView.html?idxno=212914" target="_top" class="auto-images cover line max-width-165 height-100" style="background-image:url(/news/thumbnail/202512/212914_215995_300_v150.jpg)">
+				<span class="show-for-sr">[1219마감체크] 코스피, 기관 8800억 매수에 4020.55 마감</span>
+			</a></li>
+<li class="auto-column auto-padtop-25">
+		<div class="size-14 auto-padbtm-8"><a href="/news/articleView.html?idxno=212905" target="_top" class="line-height-3-2x auto-fontA onload">공정위, 3년 연속 '공공데이터 품질인증 최우수기관' 선정</a></div><a href="/news/articleView.html?idxno=212905" target="_top" class="auto-images cover line max-width-165 height-100" style="background-image:url(/news/thumbnail/202512/212905_215975_1832_v150.jpg)">
+				<span class="show-for-sr">공정위, 3년 연속 '공공데이터 품질인증 최우수기관' 선정</span>
+			</a></li>
+<li class="auto-column auto-padtop-25">
+		<div class="size-14 auto-padbtm-8"><a href="/news/articleView.html?idxno=212909" target="_top" class="line-height-3-2x auto-fontA onload">BOJ, 만장일치로 금리 인상 단행… 통화정책 정상화 가속</a></div><a href="/news/articleView.html?idxno=212909" target="_top" class="auto-images cover line max-width-165 height-100" style="background-image:url(/news/thumbnail/202512/212909_215984_4757_v150.jpg)">
+				<span class="show-for-sr">BOJ, 만장일치로 금리 인상 단행… 통화정책 정상화 가속</span>
+			</a></li>
+<li class="auto-column auto-padtop-25">
+		<div class="size-14 auto-padbtm-8"><a href="/news/articleView.html?idxno=212906" target="_top" class="line-height-3-2x auto-fontA onload">넥슨 마비노기M 사행성 논란 증폭…李정부, 확률형 아이템에 칼 빼들었다</a></div><a href="/news/articleView.html?idxno=212906" target="_top" class="auto-images cover line max-width-165 height-100" style="background-image:url(/news/thumbnail/202512/212906_215978_3533_v150.jpg)">
+				<span class="show-for-sr">넥슨 마비노기M 사행성 논란 증폭…李정부, 확률형 아이템에 칼 빼들었다</span>
+			</a></li>
+<li class="auto-column auto-padtop-25">
+		<div class="size-14 auto-padbtm-8"><a href="/news/articleView.html?idxno=212908" target="_top" class="line-height-3-2x auto-fontA onload">[1219시황레이더] LIG넥스원, 장기간 실적 성장 전망 등</a></div><a href="/news/articleView.html?idxno=212908" target="_top" class="auto-images cover line max-width-165 height-100" style="background-image:url(/news/thumbnail/202512/212908_215981_4927_v150.jpg)">
+				<span class="show-for-sr">[1219시황레이더] LIG넥스원, 장기간 실적 성장 전망 등</span>
+			</a></li>
+<li class="auto-column auto-padtop-25">
+		<div class="size-14 auto-padbtm-8"><a href="/news/articleView.html?idxno=212907" target="_top" class="line-height-3-2x auto-fontA onload">철도노조, 23일 총파업 돌입…SRT 비상수송 계획 수립</a></div><a href="/news/articleView.html?idxno=212907" target="_top" class="auto-images cover line max-width-165 height-100" style="background-image:url(/news/thumbnail/202512/212907_215980_406_v150.jpg)">
+				<span class="show-for-sr">철도노조, 23일 총파업 돌입…SRT 비상수송 계획 수립</span>
+			</a></li>
+</ul>
+</div></section>
+</article><div class="box-margins height-30"></div><!-- AD175677740137 -->
+		</aside>
+		<!--// 기사본문 우측 -->
+	</div>
+	<!--// article view wrapper -->
+
+	<!-- 편집패널 //-->
+	<div class="clearfix">
+
+	</div>
+	<!--// 편집패널 -->
+
+</div>
+				</section>
+				<!--// container -->
+
+				
+				<!-- footer //-->
+				<footer id="user-footer" class="float-center custom-style">	
+					<div class="float-center width-1080">
+						<div class="wrapper-inner">
+						
+							<div class="footer-menu">
+								<!-- logo //-->
+								<!--<div class="footer-columns user-logo"><img src="/image/logo/downlogo_20190104125926.png" alt="인포스탁데일리" /></div>-->
+								<div class="footer-columns user-logo"><img src="/image/logo/watermark_20190104011518.png" alt="인포스탁데일리" /></div>
+								<!--// logo -->
+
+								<!-- nav //-->
+								<nav class="dis-inblock float-center user-nav">
+									<a href="/com/com-1.html" class="deco-none"><strong>매체소개</strong></a>
+									<!--<a href="http://www.isdcpr.co.kr/" class="deco-none"><strong>ISD기업정책연구원</strong></a>
+									 <a href="/com/com-6.html" class="deco-none"><strong>부설 연구소</strong></a> -->
+									<a href="/com/com-5.html" class="deco-none"><strong>연혁</strong></a>
+									<a href="/com/jb.html" class="deco-none"><strong>기사제보</strong></a>
+									<a href="/com/com-2.html" class="deco-none"><strong>인재채용</strong></a>
+									<a href="/com/ad.html" class="deco-none"><strong>광고문의</strong></a>
+									<a href="/com/bp.html" class="deco-none"><strong>불편신고</strong></a>
+									<a href="/com/privacy.html" class="deco-none"><strong>개인정보취급방침</strong></a>
+									<a href="/com/youthpolicy.html" class="deco-none"><strong>청소년보호정책</strong></a>
+									<a href="/com/emailno.html" class="deco-none"><strong>이메일무단수집거부</strong></a>
+									<a href="/rssIndex.html" class="deco-none"><strong>RSS</strong></a>
+								</nav>
+								<!--// nav  -->
+							</div>
+
+							<address class="user-address">
+								<ul class="no-bullet">
+									<!--<li class="bars">본사 : 서울특별시 강남구 봉은사로 129 거평타운 1713호 (서울특별시 강남구 논현동 203-1)</li>-->
+									<!--<li class="bars">주소 : 서울특별시 강남구 봉은사로 129 거평타운 1801호</li>
+									<li class="bars">주소 : 서울특별시 동대문구 장안동 423-2(도로명: 장한로5길 17) 두원빌딩 301호, 401호 (우)02636</li>-->
+									
+									<li class="bars">주소 : 서울특별시 강남구 봉은사로 129 거평타운 1713호 (서울특별시 강남구 논현동 203-1) (우)06121</li>
+									<li >대표전화 : 02-3447-2114 / 02-1522-1730</li>
+																		<!--<li class="bars clear">법인명 : 인포스탁데일리(주)</li>-->
+									<!--<li class="bars clear">(주)유스넷코리아 : 경기도 성남시 분당구 정자일로 1 코오롱트리폴리스 C동 3203호</li>
+									<li >대표전화 : 1522-1730</li>-->
+
+									<li class="bars clear">제호 : 인포스탁데일리</li>
+									<li class="bars">등록번호 : 서울 아 53145</li>
+									<li class="bars">등록일 : 2014-06-23</li>
+									<li class="bars">발행일 : 2014-06-23</li>
+									<li class="bars ">발행인 : 안호현</li>
+									<li class="bars">편집인 : 권용호</li>
+									<li>청소년보호책임자 : 안호현</li>
+									<li class="clear">인포스탁데일리 모든 콘텐츠(영상,기사, 사진)는 저작권법의 보호를 받은바, 무단 전재와 복사, 배포 등을 금합니다.</li>
+									<li class="clear">C<a href="http://www.infostockdaily.co.kr/admin/adminLoginForm.html" class="deco-none">o</a>pyright © 2025 인포스탁데일리. <a href="http://www.infostockdaily.co.kr/news/articleList.html" onclick="setCookie('view_pc', 'n', 1);">All</a> rights reserved. mail to <a href="mailto:vicahh@infostock.co.kr" class="deco-none">vicahh@infostock.co.kr</a></li>
+								</ul>
+								
+
+								<!--한국인터넷신문협회-->
+								<a href="https://www.kina.or.kr/" target="blank" class="kina"><img src="/image/kina.png" alt="한국인터넷신문협회" /></a>
+								<a href="https://www.inc.or.kr/" target="blank" class="ins2"><img src="/image/ins2.png" alt="한국인터넷신문협회" /></a>
+								<!-- 인터넷신문위원회
+								<a href="https://www.inc.or.kr/" target="_blank" class="ins"><img src="http://www.infostockdaily.co.kr/bannerpop/uploads/image/1546934406721904931.png" alt="인터넷신문위원회" /></a> -->
+								
+								<a href="https://www.ndsoft.co.kr/" target="_blank" class="ndsoft"><img src="/image/ndsoft.gif" alt="ND소프트" /></a>						
+							</address>		
+
+						</div>
+					</div>
+				</footer>
+				<!--// footer -->
+
+				<!-- 하단 HTML //-->	
+										<div class="clearfix text-center">
+											</div>
+								<!--// 하단 HTML -->
+
+				<!-- back to the top //-->
+				<button type="button" id="back-to-top" class="back-to-top" title="위로"><i class="s7-angle-up"><span class="show-for-sr">위로</span></i></button>
+				<!--// back to the top -->
+
+				
+			</div>
+			<!--// wrap -->
+
+		</div>
+	</div>
+</div>
+
+<script>
+// Popup Json
+var ___popup = [];
+bannerpop.popup();
+</script>
+
+<ins name="deepdive" data-wid="IFS018001"></ins>
+
+<script type="text/javascript">
+<!--
+// back to the top		
+$(document).scroll(function(){
+	var sDocumentHeight = $(document).height() - $(window).height();
+	if($(document).scrollTop() > 0){	
+		$('#back-to-top').fadeIn();
+	}else{
+		$('#back-to-top').fadeOut();
+	}
+});
+
+$('#back-to-top').click(function(){
+	$('html, body').animate( {scrollTop:0}, 100);
+});
+//-->
+</script>
+
+
+<!-- 구글 애드센스 S -->
+<script src="/adManager/js/lab.js"></script>
+<script>
+jQuery(function($) {
+	setTimeout(function() {
+		$LAB
+		.script("//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
+		.wait(function () {
+			var adn = jQuery('.adsbygoogle').length;
+		  console.log(adn);
+			if (adn > 0) {
+				for (var i = 0; i < adn; i++) {
+					(adsbygoogle = window.adsbygoogle || []).push({});
+				}
+			}
+		});
+	}, 1000);
+});
+</script>
+<!-- 구글 애드센스 E -->
+
+
+<link rel="stylesheet" href="/adManager/css/adManager.css"><!-- 날개 광고 노출시 로딩 관련 깜빡임이 심할경우 top.html head 측으로 이동 -->
+<script type="text/javascript" src="/library/isND/"></script>
+<script>
+$(document).ready(function(){
+	// 닫기 버튼 자동 노출
+	$('.ad-template.ad-close .ad-view').each(function(){
+		$(this).append('<div class="ad-close-btn"><i class="fa fa-close"></i></div>');
+	})
+
+	// 닫기 버튼 클릭 시 이벤트
+	$('body').on('click', '.ad-close-btn', function(){
+		$(this).closest('.ad-view').slideUp();
+	})
+
+	
+	if(____is_nd) {
+
+				// ND IP만 광고 ID 보이기
+		$('.ad-template').each(function(){
+			$(this).append('<div class="ad-code-id">'+$(this).attr('id')+'</div>');
+		})
+		
+				// 광고 ID 자동 숨김 설정 시
+		$('.ad-code-id').hide();
+
+		$('.ad-template').mouseenter(function(){
+			$(this).find('.ad-code-id').show();
+		}).mouseleave(function(){
+			$(this).find('.ad-code-id').hide();
+		})
+		
+
+		
+		// 소스 코드 복사 기능 추가 :: 2019-11-29
+		$('.ad-template .ad-code-id').on('click', function(){
+			var adManagerTempElem = document.createElement('textarea');
+			adManagerTempElem.value = $(this).closest('.ad-template').html().trim();
+			document.body.appendChild(adManagerTempElem);
+
+			adManagerTempElem.select();
+			document.execCommand("copy");
+			document.body.removeChild(adManagerTempElem);
+
+			alert('[AD Manager]\n'+$(this).text()+' 소스 복사 완료!');
+		})
+	}
+
+	})
+
+
+
+/* ****************************************** */
+/* 날개배너 스크립트  */
+/* ****************************************** */
+$('#wingBanner .wing-banner-left .wing-banner').each(function(){
+	if( $(this).data('scroll') == 'y' ) $(this).addClass('scroll-on');
+});
+
+$(window).scroll(function() {
+	if( $('#wingBanner .wing-banner').length > 0 ){											// 날개배너가 있으면 작동
+
+		var scrollingHeight_L = nonScrollingHeight_L = scrollingHeight_R = nonScrollingHeight_R = 0;
+
+		$('#wingBanner .wing-banner').each(function(idx){
+			var $_this		= $(this),														// 날개배너
+				scroll		= $_this.data('scroll'),										// 날개배너 스크롤 여부
+				topMargin	= $_this.data('top-margin'),									// 날개배너 상단여백
+				downMargin	= $_this.data('down-margin'),									// 날개배너 하단여백
+				duration	= $_this.data('duration'),										// 날개배너 스크롤 속도
+				direction	= $_this.data('direction'),										// 날개배너 위치
+				// bannerTop	= $_this.offset().top,											// 날개배너 상단 위치 (가변)
+				bannderHeight = $_this.outerHeight();										// 날개배너 높이 (고정)
+
+			var fixWingBannertop	= $('#wingBanner').offset().top;						// 날개배너 상단 위치 (고정)
+
+			var articleTitleHeight	= $('#article-header-title.scroll').height();			// 날개배너 스크롤 시 상단 타이틀 높이 (기사 본문 시)
+			if(!articleTitleHeight) articleTitleHeight = 0;
+
+			var $_userFooter		= $('#user-footer'),									// 사이트 Footer
+				userFooterHeight	= $_userFooter.outerHeight();							// 사이트 Footer 높이 (고정)
+
+			var winScrollTop		= $(window).scrollTop(),								// 윈도우 스크롤 위치 (가변)
+				winHeight			= $(window).height(),									// 윈도우 높이
+				docHeight			= $(document).height();									// 페이지 높이
+
+			switch (direction) {															// 날개 배너 위치 별
+				case 'left':
+					if(scroll == 'y') scrollingHeight_L += bannderHeight;					// 순서대로 노출되는 날개배너 중 스크롤 하는 배너의 높이값 (좌)
+					else nonScrollingHeight_L += bannderHeight;								// 순서대로 노출되는 날개배너 중 스크롤 하지 않는 배너의 높이값 (좌)
+					break;
+
+				case 'right':
+					if(scroll == 'y') scrollingHeight_R += bannderHeight;					// 순서대로 노출되는 날개배너 중 스크롤 하는 배너의 높이값 (우)
+					else nonScrollingHeight_R += bannderHeight;								// 순서대로 노출되는 날개배너 중 스크롤 하지 않는 배너의 높이값 (우)
+					break;
+			}
+
+			if(scroll == 'y') {																// 스크롤 배너만 움직임 처리
+				var bannerAllHeight = siteAllHeight = 0;
+
+				// 좌우측 각각 배너 스크롤 처리를 위해 나눠서 처리
+				if(direction == 'left'){																			// 좌측 날개
+					var wingBnTop_L = winScrollTop - fixWingBannertop + topMargin - nonScrollingHeight_L;			// 날개배너 스크롤 위치 (가변)
+
+					if( articleTitleHeight ) wingBnTop_L += articleTitleHeight;										// 기사본문 시 상단 스크롤 타이틀이 나타나면 스크롤 타이틀 만큼 날개배너 위치 조정
+
+					if((fixWingBannertop + nonScrollingHeight_L) < winScrollTop) {
+
+						bannerAllHeight = articleTitleHeight + scrollingHeight_L + 1;								// 상단 타이틀 + 스크롤배너의 총 높이
+						siteAllHeight = winHeight - userFooterHeight + downMargin;									// 윈도우 높이 + 사이트 Footer 높이
+
+						if( (winScrollTop >= ((docHeight - userFooterHeight) - winHeight)) && (bannerAllHeight >= siteAllHeight) ) {					// 사이트 Footer 넘어가는 경우 처리
+							wingBnTop_L -= ((userFooterHeight + downMargin) - (winHeight - (scrollingHeight_L + topMargin + articleTitleHeight)));
+							$('#wingBanner .wing-banner-left .wing-banner.scroll-on').animate({top:wingBnTop_L+"px" },{queue: false, duration: duration});		// 마지막 배너 움직임 처리
+						}
+					} else {
+						wingBnTop_L = 0;																			// 최상단 처리
+					}
+					$_this.animate({top:wingBnTop_L+"px" },{queue: false, duration: duration});
+
+				} else {																							// 우측 날개
+
+					var wingBnTop_R = winScrollTop - fixWingBannertop + topMargin - nonScrollingHeight_R;			// 날개배너 스크롤 위치 (가변)
+
+					if( articleTitleHeight ) wingBnTop_R += articleTitleHeight;										// 기사본문 시 상단 스크롤 타이틀이 나타나면 스크롤 타이틀 만큼 날개배너 위치 조정
+
+					if((fixWingBannertop + nonScrollingHeight_R) < winScrollTop) {
+
+						bannerAllHeight = articleTitleHeight + scrollingHeight_R + 1;								// 상단 타이틀 + 스크롤배너의 총 높이
+						siteAllHeight = winHeight - userFooterHeight + downMargin;									// 윈도우 높이 + 사이트 Footer 높이
+
+						if( (winScrollTop >= ((docHeight - userFooterHeight) - winHeight)) && (bannerAllHeight >= siteAllHeight) ) {					// 사이트 Footer 넘어가는 경우 처리
+							wingBnTop_R -= ((userFooterHeight + downMargin) - (winHeight - (scrollingHeight_R + topMargin + articleTitleHeight)));
+							$('#wingBanner .wing-banner-right .wing-banner.scroll-on').animate({top:wingBnTop_R+"px" },{queue: false, duration: duration});		// 마지막 배너 움직임 처리
+						}
+					} else {
+						wingBnTop_R = 0;																			// 최상단 처리
+					}
+					$_this.animate({top:wingBnTop_R+"px" },{queue: false, duration: duration});
+				}
+			}
+		});
+	}
+
+});
+</script>
+</body>
+</html>
