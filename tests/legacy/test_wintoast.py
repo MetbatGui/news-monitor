@@ -2,7 +2,7 @@
 import sys
 sys.path.insert(0, 'src')
 
-from adapters.infrastructure.win_toast import WinToast
+from infrastructure.alerts.win_toast import WinToast
 from domain.model import Article
 
 print("WinToast 초기화 중...")

@@ -14,3 +14,7 @@ config/keywords.json
 
 *.zip
 /assets/audio
+
+# Test data (allowed)
+!tests/data/*.html
+!tests/data/.gitkeep
