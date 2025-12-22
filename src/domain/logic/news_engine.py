@@ -33,7 +33,7 @@ def filter_by_date(
     """
     return [
         article for article in articles
-        if article.date.startswith(target_date)
+        if article.date and article.date.startswith(target_date)
     ]
 
 

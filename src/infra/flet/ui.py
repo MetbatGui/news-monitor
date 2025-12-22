@@ -10,25 +10,25 @@ import win32gui
 import win32con
 import logging
 
-from adapters.infrastructure.scrapers.web.mt_scraper import MTScraper
-from adapters.infrastructure.scrapers.web.fn_scraper import FnScraper
-from adapters.infrastructure.scrapers.rss.newspim_rss_scraper import NewspimRssScraper
-from adapters.infrastructure.scrapers.rss.edaily_rss_scraper import EdailyRssScraper
-from adapters.infrastructure.scrapers.rss.hankyung_rss_scraper import HankyungRssScraper
-from adapters.infrastructure.scrapers.rss.mk_rss_scraper import MKRssScraper
-from adapters.infrastructure.scrapers.rss.yonhap_rss_scraper import YonhapRssScraper
-from adapters.infrastructure.scrapers.rss.asiae_rss_scraper import AsiaeRssScraper
-from adapters.infrastructure.scrapers.rss.etoday_rss_scraper import EtodayRssScraper
-from adapters.infrastructure.scrapers.rss.herald_rss_scraper import HeraldRssScraper
-from adapters.infrastructure.scrapers.rss.seoul_rss_scraper import SeoulRssScraper  # lxml recover 모드로 수정
-from adapters.infrastructure.scrapers.rss.infostock_scraper import InfostockScraper
-from adapters.infrastructure.scrapers.rss.dart_rss_scraper import DartRssScraper
-from adapters.infrastructure.keyword_storage import KeywordStorage
-from adapters.infrastructure.win_toast import WinToast
-from adapters.infrastructure.tts_service import TTSService
+from infrastructure.news.scrapers.web.mt_scraper import MTScraper
+from infrastructure.news.scrapers.web.fn_scraper import FnScraper
+from infrastructure.news.scrapers.rss.newspim_rss_scraper import NewspimRssScraper
+from infrastructure.news.scrapers.rss.edaily_rss_scraper import EdailyRssScraper
+from infrastructure.news.scrapers.rss.hankyung_rss_scraper import HankyungRssScraper
+from infrastructure.news.scrapers.rss.mk_rss_scraper import MKRssScraper
+from infrastructure.news.scrapers.rss.yonhap_rss_scraper import YonhapRssScraper
+from infrastructure.news.scrapers.rss.asiae_rss_scraper import AsiaeRssScraper
+from infrastructure.news.scrapers.rss.etoday_rss_scraper import EtodayRssScraper
+from infrastructure.news.scrapers.rss.herald_rss_scraper import HeraldRssScraper
+from infrastructure.news.scrapers.rss.seoul_rss_scraper import SeoulRssScraper  # lxml recover 모드로 수정
+from infrastructure.news.scrapers.rss.infostock_scraper import InfostockScraper
+from infrastructure.news.scrapers.rss.dart_rss_scraper import DartRssScraper
+from infrastructure.storage.keyword_storage import KeywordStorage
+from infrastructure.alerts.win_toast import WinToast
+from infrastructure.alerts.tts_service import TTSService
 from infra.flet.views.main_view import MainView
 from domain.model import Article
-from config import DartConfig
+from core.config import DartConfig
 
 logger = logging.getLogger(__name__)
 
