@@ -13,7 +13,7 @@ class InfostockScraper(NewsRepository):
     BASE_URL = "https://www.infostockdaily.co.kr"
     SEARCH_URL = "https://www.infostockdaily.co.kr/news/articleList.html"
 
-    async def fetch_reports(self, keyword: str) -> List[ArticleData]:
+    def fetch_reports(self, keyword: str) -> List[ArticleData]:
         articles = []
         
         try:
@@ -28,8 +28,8 @@ class InfostockScraper(NewsRepository):
                 "sc_word": keyword
             }
             
-            async with httpx.AsyncClient() as client:
-                response = await client.post(self.SEARCH_URL, headers=headers, data=data, timeout=20)
+            with httpx.Client() as client:
+                response = client.post(self.SEARCH_URL, headers=headers, data=data, timeout=20)
                 response.raise_for_status()
                 # Fix encoding issue
                 response.encoding = 'utf-8'

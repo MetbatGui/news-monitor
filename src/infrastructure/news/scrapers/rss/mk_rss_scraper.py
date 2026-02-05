@@ -17,7 +17,7 @@ class MKRssScraper(NewsRepository):
     def __init__(self, rss_url: str = "https://www.mk.co.kr/rss/40300001/"):
         self.rss_url = rss_url
     
-    async def fetch_reports(self, keyword: str = "") -> List[ArticleData]:
+    def fetch_reports(self, keyword: str = "") -> List[ArticleData]:
         """RSS 피드에서 뉴스를 가져옵니다.
         
         Args:
@@ -30,7 +30,7 @@ class MKRssScraper(NewsRepository):
         articles = []
         
         # RSS XML 가져오기
-        root = await self._fetch_rss_content()
+        root = self._fetch_rss_content()
         if root is None:
             return articles
         
@@ -42,7 +42,7 @@ class MKRssScraper(NewsRepository):
         
         return articles
     
-    async def _fetch_rss_content(self) -> Optional[ET.Element]:
+    def _fetch_rss_content(self) -> Optional[ET.Element]:
         """RSS XML 콘텐츠를 가져와서 파싱합니다.
         
         Returns:
@@ -52,8 +52,8 @@ class MKRssScraper(NewsRepository):
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
             }
-            async with httpx.AsyncClient() as client:
-                response = await client.get(self.rss_url, headers=headers, timeout=20)
+            with httpx.Client() as client:
+                response = client.get(self.rss_url, headers=headers, timeout=20)
                 response.raise_for_status()
             
             return ET.fromstring(response.content)
