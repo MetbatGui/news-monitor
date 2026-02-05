@@ -31,6 +31,33 @@ class MainView(ft.Column):
         self.status_bar = StatusBar()
         self.article_table = ArticleTable()
         
+        # 탭 필터 추가
+        self.all_articles: List[Article] = []
+        self.current_filter = "전체"
+        
+        self.tabs = ft.Tabs(
+            selected_index=0,
+            animation_duration=300,
+            scrollable=True,
+            on_change=self._handle_tab_change,
+            tabs=[
+                ft.Tab(text="전체"),
+                ft.Tab(text="DART"),
+                ft.Tab(text="인포스탁"),
+                ft.Tab(text="뉴스핌"),
+                ft.Tab(text="이데일리"),
+                ft.Tab(text="한국경제"),
+                ft.Tab(text="매일경제"),
+                ft.Tab(text="머니투데이"),
+                ft.Tab(text="연합뉴스"),
+                ft.Tab(text="아시아경제"),
+                ft.Tab(text="이투데이"),
+                ft.Tab(text="헤럴드경제"),
+                ft.Tab(text="서울경제"),
+                ft.Tab(text="파이낸셜뉴스"),
+            ]
+        )
+        
         self.controls = [
             ft.Row(
                 [
@@ -42,10 +69,40 @@ class MainView(ft.Column):
                 vertical_alignment=ft.CrossAxisAlignment.START
             ),
             ft.Divider(),
+            self.tabs,  # 탭 추가
             self.status_bar,
             self.article_table
         ]
         self.expand = True
+
+    def _handle_tab_change(self, e):
+        """탭 변경 시 필터 업데이트 및 테이블 갱신"""
+        self.current_filter = e.control.tabs[e.control.selected_index].text
+        self._update_table()
+
+    def _update_table(self):
+        """현재 필터와 정렬 기준에 따라 테이블 업데이트"""
+        # 1. 필터링
+        if self.current_filter == "전체":
+            filtered_articles = self.all_articles
+        else:
+            filtered_articles = [
+                a for a in self.all_articles 
+                if a.source == self.current_filter
+            ]
+            
+        # 2. 정렬 (DART 우선 + 최신순)
+        def sort_key(article: Article):
+            is_dart = "dart.fss.or.kr" in article.link
+            source_priority = 1 if is_dart else 0
+            return (source_priority, article.date)
+        
+        sorted_articles = sorted(filtered_articles, key=sort_key, reverse=True)
+        
+        # 3. 하이라이트 및 테이블 업데이트
+        highlighted_links = self._get_recent_links(sorted_articles)
+        self.article_table.set_articles(sorted_articles, highlighted_links)
+        self.article_table.update()
 
     def _handle_change(self):
         if self.on_keyword_change:
@@ -69,24 +126,12 @@ class MainView(ft.Column):
         return recent_links
 
     async def set_articles(self, articles: List[Article]):
-        # 정렬: 1. DART 우선, 2. 시간순 (최신순)
-        def sort_key(article: Article):
-            # DART 여부 판단
-            is_dart = "dart.fss.or.kr" in article.link
-            # DART면 1, 아니면 0 (reverse=True이므로 1이 먼저)
-            source_priority = 1 if is_dart else 0
-            # 시간은 역순 (최신이 먼저)
-            return (source_priority, article.date)
-        
-        sorted_articles = sorted(articles, key=sort_key, reverse=True)
-        
-        highlighted_links = self._get_recent_links(sorted_articles)
-        self.article_table.set_articles(sorted_articles, highlighted_links)
-        self.article_table.update()
+        self.all_articles = articles
+        self._update_table()
 
     def clear_results(self):
-        self.article_table.set_articles([])
-        self.article_table.update()
+        self.all_articles = []
+        self._update_table()
 
     async def update_status(self, msg: str):
         self.status_bar.update_status(msg)
