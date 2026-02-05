@@ -227,8 +227,9 @@ def main(page: ft.Page):
             for term in search_terms:
                 if not is_monitoring: break
                 
-                # 모든 스크래퍼를 병렬로 실행하여 베이스라인 수집
-                tasks = [scraper.fetch_reports(term) for scraper in scrapers]
+                # 모든 스크래퍼를 스레드 풀에서 병렬로 실행하여 베이스라인 수집
+                loop = asyncio.get_running_loop()
+                tasks = [loop.run_in_executor(None, scraper.fetch_reports, term) for scraper in scrapers]
                 results = await asyncio.gather(*tasks, return_exceptions=True)
                 
                 for result in results:
@@ -263,8 +264,9 @@ def main(page: ft.Page):
                 for term in search_terms:
                     if not is_monitoring: break
                     
-                    # 모든 스크래퍼를 병렬로 실행
-                    tasks = [scraper.fetch_reports(term) for scraper in scrapers]
+                    # 모든 스크래퍼를 스레드 풀에서 병렬로 실행
+                    loop = asyncio.get_running_loop()
+                    tasks = [loop.run_in_executor(None, scraper.fetch_reports, term) for scraper in scrapers]
                     results = await asyncio.gather(*tasks, return_exceptions=True)
                     
                     # 결과 처리
