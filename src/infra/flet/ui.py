@@ -246,6 +246,9 @@ def main(page: ft.Page):
         await view.update_status(f"모니터링 시작... ({datetime.now().strftime('%H:%M:%S')}) - 새로운 기사 대기 중")
 
         while is_monitoring:
+            # 루프 시작 시간 기록 (Drift 보정용)
+            loop_start_time = asyncio.get_running_loop().time()
+            
             keywords = view.get_keywords()
             stock_names = view.get_stock_names()
             search_terms = keywords + stock_names
@@ -332,7 +335,19 @@ def main(page: ft.Page):
                 await view.update_status(f"오류 발생: {str(e)}")
             
             # Wait for 60 seconds
-            for _ in range(60):
+            # Drift 보정 대기 로직
+            # 작업에 소요된 시간을 계산하여 남은 시간만큼만 대기
+            elapsed = asyncio.get_running_loop().time() - loop_start_time
+            wait_time = max(0, 60 - elapsed)
+            
+            logger.debug(f"작업 소요 시간: {elapsed:.2f}초, 대기 시간: {wait_time:.2f}초")
+            
+            # 대기 시간 동안 0.5초 간격으로 중단 요청 확인
+            end_wait_time = asyncio.get_running_loop().time() + wait_time
+            while asyncio.get_running_loop().time() < end_wait_time:
                 if not is_monitoring:
                     break
-                await asyncio.sleep(1)
+                
+                remaining = end_wait_time - asyncio.get_running_loop().time()
+                # 0.5초 단위로 체크하거나 남은 시간이 더 적으면 그만큼 대기
+                await asyncio.sleep(min(0.5, remaining))
