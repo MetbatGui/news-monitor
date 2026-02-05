@@ -49,10 +49,13 @@ def create_image():
         logger.error(f"이미지 생성 오류: {e}")
         return None
 
-def main(page: ft.Page):
+from application.services.monitor_service import MonitorService
+
+def main(page: ft.Page, monitor_service: MonitorService):
     logger.info("앱 시작")
     page.title = "Newspim Monitor"
     page.padding = 20
+
     page.theme_mode = ft.ThemeMode.LIGHT
     page.window_prevent_close = True # Prevent app from closing on X click
 
@@ -191,25 +194,6 @@ def main(page: ft.Page):
     
     async def monitor_loop():
         nonlocal is_monitoring
-        all_articles = []
-        current_links = set()
-        
-        # 스크래퍼 초기화
-        scrapers = [
-            NewspimRssScraper(),
-            EdailyRssScraper(),
-            HankyungRssScraper(),
-            MKRssScraper(),
-            MTScraper(),
-            YonhapRssScraper(),
-            AsiaeRssScraper(),
-            EtodayRssScraper(),
-            HeraldRssScraper(),
-            SeoulRssScraper(),  # lxml recover 모드로 수정
-            FnScraper(),
-            InfostockScraper(),
-            DartRssScraper()
-        ]
         
         # Baseline fetch - get current articles but don't display them
         keywords = view.get_keywords()
@@ -224,26 +208,20 @@ def main(page: ft.Page):
 
         await view.update_status("초기 데이터 수집 중... (화면에 표시되지 않음)")
         try:
-            for term in search_terms:
-                if not is_monitoring: break
-                
-                # 모든 스크래퍼를 스레드 풀에서 병렬로 실행하여 베이스라인 수집
-                loop = asyncio.get_running_loop()
-                tasks = [loop.run_in_executor(None, scraper.fetch_reports, term) for scraper in scrapers]
-                results = await asyncio.gather(*tasks, return_exceptions=True)
-                
-                for result in results:
-                    if isinstance(result, Exception):
-                        logger.debug(f"베이스라인 가져오기 오류: {result}")
-                        continue
-                    
-                    articles = result
-                    for article in articles:
-                        current_links.add(article.link)
+            # Baseline: 알림 없이 데이터만 수집
+            articles = await monitor_service.scan_once(search_terms, notify=False)
+            
+            # 초기 로드된 데이터 화면에 표시 (선택 사항 - 원본 로직은 표시 안함)
+            # 원본 로직: "current_links.add(article.link)" 만 하고 화면 표시는 안 함
+            # 여기서는 scan_once가 이미 중복 필터링을 하고 새 기사만 반환함
+            # 하지만 scan_once는 seen_ids에 등록하므로, 다음에 같은 기사가 오면 무시됨
+            
+            await view.set_articles(monitor_service.storage_repo.articles) # 전체 기사 목록 사용
+            await view.update_status(f"모니터링 시작... ({datetime.now().strftime('%H:%M:%S')}) - 새로운 기사 대기 중")
+            
         except Exception as e:
             logger.error(f"베이스라인 가져오기 오류: {e}")
-            
-        await view.update_status(f"모니터링 시작... ({datetime.now().strftime('%H:%M:%S')}) - 새로운 기사 대기 중")
+            await view.update_status(f"초기화 오류: {e}")
 
         while is_monitoring:
             # 루프 시작 시간 기록 (Drift 보정용)
@@ -258,96 +236,50 @@ def main(page: ft.Page):
                  await view.set_monitoring_state(False)
                  break
             
-            
             try:
-                new_articles_this_cycle = []  # Track new articles in this cycle
+                # MonitorService를 통해 데이터 수집 및 알림 처리
+                new_articles = await monitor_service.scan_once(search_terms, notify=True)
                 
-                today_str = datetime.now().strftime("%Y-%m-%d")
-                
-                for term in search_terms:
-                    if not is_monitoring: break
+                # TTS 알림 처리 (MonitorService에서 할 수도 있지만 UI 특화 기능이라 여기 유지)
+                if new_articles:
+                    logger.debug(f"새 기사 {len(new_articles)}개 발견")
                     
-                    # 모든 스크래퍼를 스레드 풀에서 병렬로 실행
-                    loop = asyncio.get_running_loop()
-                    tasks = [loop.run_in_executor(None, scraper.fetch_reports, term) for scraper in scrapers]
-                    results = await asyncio.gather(*tasks, return_exceptions=True)
+                    platform_groups = {}
+                    for article in new_articles:
+                         # article.keyword가 없으면 source로 대체하거나 로직 확인 필요
+                         # fetch_all_keywords에서 create_article 시 keyword가 들어감
+                         term = article.keyword if article.keyword else "알 수 없음"
+                         source_name = article.source if article.source else "알 수 없음"
+                         
+                         if source_name not in platform_groups:
+                             platform_groups[source_name] = []
+                         platform_groups[source_name].append(term)
                     
-                    # 결과 처리
-                    for result in results:
-                        if isinstance(result, Exception):
-                            logger.debug(f"스크래퍼 오류: {result}")
-                            continue
-                        
-                        articles = result
-                        for article in articles:
-                            # 날짜 필터링: 오늘 기사가 아니면 무시
-                            if not article.date:
-                                continue
-                                
-                            # 날짜 형식 정규화 (YYYY.MM.DD -> YYYY-MM-DD) 및 오늘 날짜 확인
-                            article_date = article.date.replace('.', '-')
-                            if not article_date.startswith(today_str):
-                                continue
-
-                            if article.link not in current_links:
-                                all_articles.append(article)
-                                current_links.add(article.link)
-                                new_articles_this_cycle.append((article, term))
-                                
-                                # Send notification
-                                try:
-                                    if toaster:
-                                        logger.info(f"알림 전송: {article.source} - {article.title[:30]}...")
-                                        toaster.send_notification(article)
-                                    else:
-                                        logger.warning("toaster가 None이어서 알림을 전송할 수 없습니다")
-                                except Exception as e:
-                                    logger.error(f"알림 오류: {e}", exc_info=True)
-                
-                 # Group new articles by platform and play TTS
-                if new_articles_this_cycle:
-                    logger.debug(f"새 기사 {len(new_articles_this_cycle)}개 발견")
-                    for article, term in new_articles_this_cycle:
-                        logger.debug(f"  - {article.source}: {term} ({article.title[:30]}...)")
-                    
-                    platform_groups = {}  # {platform_name: [keyword1, keyword2, ...]} 시간순
-                    
-                    for article, term in new_articles_this_cycle:
-                        # article에서 source 사용 (스크래퍼가 이미 설정함)
-                        source_name = article.source if article.source else "알 수 없음"
-                            
-                        if source_name not in platform_groups:
-                            platform_groups[source_name] = []
-                        platform_groups[source_name].append(term)  # 시간순으로 추가 (중복 허용)
-                    
-                    # Play TTS: platform name once, then all keywords in chronological order
                     for platform_name, keywords in platform_groups.items():
-                        logger.debug(f"TTS 재생: {platform_name} + {keywords}")
                         tts.play_sequence([platform_name] + keywords)
-                    
-                # Sort by date descending (newest first)
-                all_articles.sort(key=lambda x: x.date, reverse=True)
                 
-                await view.set_articles(all_articles)
-                await view.update_status(f"업데이트 완료 ({datetime.now().strftime('%H:%M:%S')}) - 총 {len(all_articles)}건")
+                # UI 업데이트 (전체 기사 목록)
+                # MonitorService.storage_repo는 MemoryStorage이므로 articles 목록 보유
+                # 최신순 정렬은 view._update_table에서 수행됨
+                await view.set_articles(monitor_service.storage_repo.articles)
+                
+                msg = f"업데이트 완료 ({datetime.now().strftime('%H:%M:%S')}) - 총 {len(monitor_service.storage_repo.articles)}건"
+                if new_articles:
+                    msg += f" (신규 {len(new_articles)}건)"
+                await view.update_status(msg)
                 
             except Exception as e:
+                logger.error(f"모니터링 루프 오류: {e}", exc_info=True)
                 await view.update_status(f"오류 발생: {str(e)}")
             
-            # Wait for 60 seconds
-            # Drift 보정 대기 로직
-            # 작업에 소요된 시간을 계산하여 남은 시간만큼만 대기
+            # Wait with Drift Correction
             elapsed = asyncio.get_running_loop().time() - loop_start_time
             wait_time = max(0, 60 - elapsed)
             
             logger.debug(f"작업 소요 시간: {elapsed:.2f}초, 대기 시간: {wait_time:.2f}초")
             
-            # 대기 시간 동안 0.5초 간격으로 중단 요청 확인
             end_wait_time = asyncio.get_running_loop().time() + wait_time
             while asyncio.get_running_loop().time() < end_wait_time:
                 if not is_monitoring:
                     break
-                
-                remaining = end_wait_time - asyncio.get_running_loop().time()
-                # 0.5초 단위로 체크하거나 남은 시간이 더 적으면 그만큼 대기
-                await asyncio.sleep(min(0.5, remaining))
+                await asyncio.sleep(min(0.5, end_wait_time - asyncio.get_running_loop().time()))
