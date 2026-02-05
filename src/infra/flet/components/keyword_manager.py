@@ -18,7 +18,7 @@ class KeywordManager(ft.Column):
             on_click=self.add_keyword
         )
         
-        self.chips_row = ft.Row(wrap=True, spacing=5)
+        self.chips_row = ft.Row(wrap=False, scroll=ft.ScrollMode.HIDDEN, spacing=5)
         self.update_chips()
         
         self.controls = [
