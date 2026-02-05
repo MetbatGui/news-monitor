@@ -54,7 +54,7 @@ class MainView(ft.Column):
                 ft.Tab(text="이투데이"),
                 ft.Tab(text="헤럴드경제"),
                 ft.Tab(text="서울경제"),
-                ft.Tab(text="FnGuide"),  # 추가
+                ft.Tab(text="파이낸셜뉴스"),  # 수정: FnGuide -> 파이낸셜뉴스
             ]
         )
         
