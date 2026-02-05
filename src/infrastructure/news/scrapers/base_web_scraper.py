@@ -31,7 +31,7 @@ class BaseWebScraper(NewsRepository, ABC):
     USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     TIMEOUT = 20
     
-    async def fetch_reports(self, keyword: str) -> List[ArticleData]:
+    def fetch_reports(self, keyword: str) -> List[ArticleData]:
         """뉴스 기사 목록 가져오기 (템플릿 메서드 패턴)
         
         Args:
@@ -44,15 +44,15 @@ class BaseWebScraper(NewsRepository, ABC):
         articles = []
         
         try:
-            html = await self._fetch_html(url)
+            html = self._fetch_html(url)
             soup = BeautifulSoup(html, 'html.parser')
-            articles = await self._parse_articles(soup, keyword)
+            articles = self._parse_articles(soup, keyword)
         except Exception as e:
             logger.error(f"{self.get_source_name()} 스크래핑 오류: {e}", exc_info=True)
             
         return articles
     
-    async def _fetch_html(self, url: str) -> str:
+    def _fetch_html(self, url: str) -> str:
         """HTTP 요청하여 HTML 가져오기 (공통 로직)
         
         Args:
@@ -62,12 +62,12 @@ class BaseWebScraper(NewsRepository, ABC):
             HTML 텍스트
         """
         headers = {'User-Agent': self.USER_AGENT}
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url, headers=headers, timeout=self.TIMEOUT)
+        with httpx.Client() as client:
+            response = client.get(url, headers=headers, timeout=self.TIMEOUT)
             response.raise_for_status()
             return response.text
     
-    async def _parse_articles(self, soup: BeautifulSoup, keyword: str) -> List[ArticleData]:
+    def _parse_articles(self, soup: BeautifulSoup, keyword: str) -> List[ArticleData]:
         """HTML에서 기사 목록 파싱 (공통 로직 + 추상 메서드 호출)
         
         Args:
