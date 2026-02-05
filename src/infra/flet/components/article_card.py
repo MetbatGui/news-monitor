@@ -9,7 +9,7 @@ class ArticleCard(ft.Card):
         self.color = ft.Colors.YELLOW_50 if is_highlighted else None
         
         # 출처 자동 감지 (링크 기반)
-        source = self._get_source_name(article.link)
+        source = self._get_source_name(str(article.link))
         
         self.content = ft.Container(
             content=ft.Row(
@@ -40,7 +40,7 @@ class ArticleCard(ft.Card):
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN
             ),
             padding=15,
-            on_click=lambda _: webbrowser.open(article.link)
+            on_click=lambda _: webbrowser.open(str(article.link))
         )
     
     def _get_source_name(self, link: str) -> str:

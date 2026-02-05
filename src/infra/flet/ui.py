@@ -195,6 +195,9 @@ def main(page: ft.Page, monitor_service: MonitorService):
     async def monitor_loop():
         nonlocal is_monitoring
         
+        # 화면에 표시할 기사 목록 (Baseline 제외, 신규 기사만 누적)
+        display_articles = []
+        
         # Baseline fetch - get current articles but don't display them
         keywords = view.get_keywords()
         stock_names = view.get_stock_names()
@@ -208,15 +211,11 @@ def main(page: ft.Page, monitor_service: MonitorService):
 
         await view.update_status("초기 데이터 수집 중... (화면에 표시되지 않음)")
         try:
-            # Baseline: 알림 없이 데이터만 수집
-            articles = await monitor_service.scan_once(search_terms, notify=False)
+            # Baseline: 알림 없이 데이터만 수집 (seen_ids 등록)
+            # 여기서 반환된 articles는 이미 이전에 작성된 기사들이므로 화면에 표시하지 않음
+            await monitor_service.scan_once(search_terms, notify=False)
             
-            # 초기 로드된 데이터 화면에 표시 (선택 사항 - 원본 로직은 표시 안함)
-            # 원본 로직: "current_links.add(article.link)" 만 하고 화면 표시는 안 함
-            # 여기서는 scan_once가 이미 중복 필터링을 하고 새 기사만 반환함
-            # 하지만 scan_once는 seen_ids에 등록하므로, 다음에 같은 기사가 오면 무시됨
-            
-            await view.set_articles(monitor_service.storage_repo.articles) # 전체 기사 목록 사용
+            # Baseline 완료 후 화면 갱신 없이 상태 메시지만 업데이트
             await view.update_status(f"모니터링 시작... ({datetime.now().strftime('%H:%M:%S')}) - 새로운 기사 대기 중")
             
         except Exception as e:
@@ -240,14 +239,15 @@ def main(page: ft.Page, monitor_service: MonitorService):
                 # MonitorService를 통해 데이터 수집 및 알림 처리
                 new_articles = await monitor_service.scan_once(search_terms, notify=True)
                 
-                # TTS 알림 처리 (MonitorService에서 할 수도 있지만 UI 특화 기능이라 여기 유지)
                 if new_articles:
                     logger.debug(f"새 기사 {len(new_articles)}개 발견")
                     
+                    # 화면 표시 목록에 추가
+                    display_articles.extend(new_articles)
+                    
+                    # TTS 알림 처리
                     platform_groups = {}
                     for article in new_articles:
-                         # article.keyword가 없으면 source로 대체하거나 로직 확인 필요
-                         # fetch_all_keywords에서 create_article 시 keyword가 들어감
                          term = article.keyword if article.keyword else "알 수 없음"
                          source_name = article.source if article.source else "알 수 없음"
                          
@@ -258,12 +258,11 @@ def main(page: ft.Page, monitor_service: MonitorService):
                     for platform_name, keywords in platform_groups.items():
                         tts.play_sequence([platform_name] + keywords)
                 
-                # UI 업데이트 (전체 기사 목록)
-                # MonitorService.storage_repo는 MemoryStorage이므로 articles 목록 보유
+                # UI 업데이트 (누적된 display_articles 사용)
                 # 최신순 정렬은 view._update_table에서 수행됨
-                await view.set_articles(monitor_service.storage_repo.articles)
+                await view.set_articles(display_articles)
                 
-                msg = f"업데이트 완료 ({datetime.now().strftime('%H:%M:%S')}) - 총 {len(monitor_service.storage_repo.articles)}건"
+                msg = f"업데이트 완료 ({datetime.now().strftime('%H:%M:%S')}) - 표시 {len(display_articles)}건"
                 if new_articles:
                     msg += f" (신규 {len(new_articles)}건)"
                 await view.update_status(msg)

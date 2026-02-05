@@ -71,7 +71,7 @@ class ArticleTable(ft.Column):
             source = article.source if article.source else "알 수 없음"
             
             # 하이라이트 여부
-            is_highlighted = article.link in highlighted_links
+            is_highlighted = str(article.link) in highlighted_links
             bg_color = ft.Colors.YELLOW_50 if is_highlighted else None
             
             # DataRow 생성 (순서: 시간, 제목, 키워드, 출처)
@@ -125,7 +125,7 @@ class ArticleTable(ft.Column):
                         )
                     ),
                 ],
-                on_select_changed=lambda e, link=article.link: webbrowser.open(link),
+                on_select_changed=lambda e, link=str(article.link): webbrowser.open(link),
                 color=bg_color,
             )
             

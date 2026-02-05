@@ -33,6 +33,7 @@ class MonitorService:
         self.storage_repo = storage_repo
         self.alert_system = alert_system
         self.seen_ids: Set[int] = set()
+        self.seen_links: Set[str] = set()
         self._last_check_date: str | None = None
 
     async def run(self):
@@ -102,11 +103,7 @@ class MonitorService:
         # 1. 정책: 운영 시간 체크
         now = datetime.now()
         if not monitor_policy.is_work_time(now, Config.START_HOUR, Config.END_HOUR):
-            # UI 모드에서는 사용자 강제 실행일 수 있으므로 로그만 남기고 진행할 수도 있으나,
-            # 정책 일관성을 위해 체크. 단, keywords가 있다는건 실행 의지가 있다는 것.
-            # 일단 정책을 따르되, 필요하면 강제 실행 플래그 추가
             logger.debug(f"운영 시간 외 ({now.strftime('%H:%M')})")
-            # return []  <-- UI에서는 사용자가 원하면 돌려야 함. 일단 주석 처리하여 허용
             pass
 
         # 2. 데이터 획득
@@ -115,25 +112,21 @@ class MonitorService:
         # 3. 중복 제거 및 알림
         new_articles = []
         for article in articles:
-            # 중복 체크: ID 기준 + 링크 기준
+            # 중복 체크: Link(우선) + ID(보조)
             is_new = False
+            link_str = str(article.link)
             
-            if article.id and article.id != 0:
-                if article.id not in self.seen_ids:
-                    is_new = True
+            if link_str in self.seen_links:
+                is_new = False
+            elif article.id and article.id != 0 and article.id in self.seen_ids:
+                is_new = False
             else:
-                # ID가 없는 경우 (RSS 일부 등) 링크로 체크할 수 있어야 하나,
-                # 현재 seen_ids는 Set[int]임.
-                # 임시로 ID가 0인 경우 해시값을 ID로 쓰거나 해야 함.
-                # ArticleData 생성 시 0이면 해시를 넣도록 수정하거나 여기서 처리.
-                # 여기서는 ID가 없으면 무조건 새 기사로 취급하되 알림 남발 주의
-                # 하지만 UI의 current_links 로직을 대체하려면 링크 체크가 필요함.
-                # MonitorService에 seen_links 추가 권장.
-                is_new = True # 일단 True, 서비스 개선 필요
+                is_new = True
             
             if is_new:
                 if article.id:
                     self.seen_ids.add(article.id)
+                self.seen_links.add(link_str)
                 
                 # 저장 및 알림
                 self.storage_repo.save_article(article)

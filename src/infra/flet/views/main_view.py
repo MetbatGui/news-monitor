@@ -93,7 +93,9 @@ class MainView(ft.Column):
             
         # 2. 정렬 (DART 우선 + 최신순)
         def sort_key(article: Article):
-            is_dart = "dart.fss.or.kr" in article.link
+            # HttpUrl 객체이므로 문자열 변환 필요
+            link_str = str(article.link)
+            is_dart = "dart.fss.or.kr" in link_str
             source_priority = 1 if is_dart else 0
             return (source_priority, article.date)
         
@@ -119,7 +121,7 @@ class MainView(ft.Column):
                 article_date = datetime.strptime(article.date, "%Y-%m-%d %H:%M")
                 diff = now - article_date
                 if diff <= timedelta(minutes=5):
-                    recent_links.add(article.link)
+                    recent_links.add(str(article.link))
             except Exception:
                 pass
         
