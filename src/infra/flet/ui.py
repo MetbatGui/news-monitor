@@ -51,7 +51,10 @@ def create_image():
 
 from application.services.monitor_service import MonitorService
 
-def main(page: ft.Page, monitor_service: MonitorService):
+from infrastructure.alerts.win_toast import WinToast
+from infrastructure.alerts.tts_service import TTSService
+
+def main(page: ft.Page, monitor_service: MonitorService, win_toast: WinToast, tts_service: TTSService):
     logger.info("앱 시작")
     page.title = "Newspim Monitor"
     page.padding = 20
@@ -61,13 +64,14 @@ def main(page: ft.Page, monitor_service: MonitorService):
 
     # State
     is_monitoring = False
-    scrapers = [
-        NewspimRssScraper(), 
-        InfostockScraper(),
-        DartRssScraper(DartConfig.RSS_URL)
-    ]
+    
+    # Scrapers & Storage는 main.py에서 생성되어 news_repository_impl에 주입됨.
+    # 여기서는 키워드 스토리지 로드용으로만 새로 생성하거나, main.py에서 넘겨받아야 함.
+    # 하지만 기존 코드는 여기서 KeywordStorage를 생성함. (유지)
     storage = KeywordStorage()
-    tts = TTSService()
+    
+    # TTSService는 주입받은 객체 사용
+    tts = tts_service
     
     # Load initial keywords
     initial_data = storage.load()
@@ -111,12 +115,9 @@ def main(page: ft.Page, monitor_service: MonitorService):
         except Exception as e:
             logger.debug(f"창 전면 표시 오류: {e}")
 
-
-    try:
-        toaster = WinToast(on_click=restore_window)
-    except Exception as e:
-        logger.error(f"WinToast 초기화 오류: {e}")
-        toaster = None
+    # WinToast 콜백 설정 (주입받은 객체에 설정)
+    if win_toast:
+        win_toast.on_click = restore_window
     
     # Tray Icon Setup
     def on_open(icon, item):
@@ -236,7 +237,7 @@ def main(page: ft.Page, monitor_service: MonitorService):
                  break
             
             try:
-                # MonitorService를 통해 데이터 수집 및 알림 처리
+                # MonitorService를 통해 데이터 수집 및 알림 처리(TTS, Toast 등)
                 new_articles = await monitor_service.scan_once(search_terms, notify=True)
                 
                 if new_articles:
@@ -245,19 +246,8 @@ def main(page: ft.Page, monitor_service: MonitorService):
                     # 화면 표시 목록에 추가
                     display_articles.extend(new_articles)
                     
-                    # TTS 알림 처리
-                    platform_groups = {}
-                    for article in new_articles:
-                         term = article.keyword if article.keyword else "알 수 없음"
-                         source_name = article.source if article.source else "알 수 없음"
-                         
-                         if source_name not in platform_groups:
-                             platform_groups[source_name] = []
-                         platform_groups[source_name].append(term)
-                    
-                    for platform_name, keywords in platform_groups.items():
-                        tts.play_sequence([platform_name] + keywords)
-                
+                    # TTS 알림 처리는 MonitorService 내부의 AlertSystem이 담당하므로 제거됨
+
                 # UI 업데이트 (누적된 display_articles 사용)
                 # 최신순 정렬은 view._update_table에서 수행됨
                 await view.set_articles(display_articles)
@@ -266,6 +256,7 @@ def main(page: ft.Page, monitor_service: MonitorService):
                 if new_articles:
                     msg += f" (신규 {len(new_articles)}건)"
                 await view.update_status(msg)
+
                 
             except Exception as e:
                 logger.error(f"모니터링 루프 오류: {e}", exc_info=True)
