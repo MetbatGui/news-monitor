@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, 'src')
 
-from infra.flet.components.article_table import ArticleTable
+from infrastructure.ui.flet.components.article_table import ArticleTable
 from domain.model import Article
 from datetime import datetime, timedelta
 

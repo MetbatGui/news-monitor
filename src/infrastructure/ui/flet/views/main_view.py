@@ -1,9 +1,9 @@
 import flet as ft
 from typing import List, Callable
-from infra.flet.components.keyword_manager import KeywordManager
-from infra.flet.components.control_panel import ControlPanel
-from infra.flet.components.article_table import ArticleTable
-from infra.flet.components.status_bar import StatusBar
+from infrastructure.ui.flet.components.keyword_manager import KeywordManager
+from infrastructure.ui.flet.components.control_panel import ControlPanel
+from infrastructure.ui.flet.components.article_table import ArticleTable
+from infrastructure.ui.flet.components.status_bar import StatusBar
 from domain.model import Article
 
 from datetime import datetime, timedelta
