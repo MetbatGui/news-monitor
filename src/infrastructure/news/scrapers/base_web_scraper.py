@@ -7,6 +7,7 @@ import logging
 
 from infrastructure.news.dto import ArticleData
 from domain.ports.news_port import NewsScraper
+from infrastructure.network.retry_utils import common_retry
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,7 @@ class BaseWebScraper(NewsScraper, ABC):
             
         return articles
     
+    @common_retry
     def _fetch_html(self, url: str) -> str:
         """HTTP 요청하여 HTML 가져오기 (공통 로직)
         
