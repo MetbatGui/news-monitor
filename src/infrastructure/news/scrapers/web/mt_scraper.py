@@ -1,8 +1,10 @@
 import re
+import httpx
 from typing import Optional
 
 from infrastructure.news.dto import ArticleData
 from infrastructure.news.scrapers.base_web_scraper import BaseWebScraper
+from infrastructure.network.retry_utils import common_retry
 
 
 class MTScraper(BaseWebScraper):
@@ -14,14 +16,22 @@ class MTScraper(BaseWebScraper):
     def get_news_list_selector(self) -> str:
         return 'ul.list_wrap > li.article_item'
     
+    @common_retry
+    def _fetch_html(self, url: str) -> str:
+        return super()._fetch_html(url)
+
     def parse_article(self, item, keyword: str) -> Optional[ArticleData]:
-        # 제목 & 링크 추출
-        title_link = item.select_one('h3.headline a')
-        if not title_link:
+        # 링크 추출 (li > a)
+        link_elem = item.select_one('a')
+        if not link_elem:
             return None
+        link = link_elem.get('href', '')
         
-        title = title_link.get_text(strip=True)
-        link = title_link.get('href', '')
+        # 제목 추출 (a > h3.headline)
+        title_elem = link_elem.select_one('h3.headline')
+        if not title_elem:
+            return None
+        title = title_elem.get_text(strip=True)
         
         # ID 추출: URL에서 마지막 숫자 부분
         article_id = 0
@@ -31,11 +41,10 @@ class MTScraper(BaseWebScraper):
                 article_id = int(match.group(1))
         
         # 날짜 추출
-        meta_span = item.select_one('div.meta span')
+        date_elem = item.select_one('div.article_date')
         date_str = ''
-        if meta_span:
-            date_text = meta_span.get_text(strip=True)  # "2025.12.08 14:30"
-            # "2025.12.08 14:30" -> "2025-12-08 14:30"
+        if date_elem:
+            date_text = date_elem.get_text(strip=True)  # "2025.02.06 11:40"
             date_str = self.normalize_date(date_text)
         
         return ArticleData(
