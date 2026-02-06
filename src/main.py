@@ -1,21 +1,8 @@
 import flet as ft
-from infra.flet.ui import main
+from infrastructure.ui.flet.ui import main
 from config.logging_config import setup_logging
 
-from infrastructure.news.scrapers.rss.newspim_rss_scraper import NewspimRssScraper
-from infrastructure.news.scrapers.rss.edaily_rss_scraper import EdailyRssScraper
-from infrastructure.news.scrapers.rss.hankyung_rss_scraper import HankyungRssScraper
-from infrastructure.news.scrapers.rss.mk_rss_scraper import MKRssScraper
-from infrastructure.news.scrapers.web.mt_scraper import MTScraper
-from infrastructure.news.scrapers.rss.yonhap_rss_scraper import YonhapRssScraper
-from infrastructure.news.scrapers.rss.asiae_rss_scraper import AsiaeRssScraper
-from infrastructure.news.scrapers.rss.etoday_rss_scraper import EtodayRssScraper
-from infrastructure.news.scrapers.rss.herald_rss_scraper import HeraldRssScraper
-from infrastructure.news.scrapers.rss.seoul_rss_scraper import SeoulRssScraper
-from infrastructure.news.scrapers.web.fn_scraper import FnScraper
-from infrastructure.news.scrapers.rss.infostock_scraper import InfostockScraper
-from infrastructure.news.scrapers.rss.dart_rss_scraper import DartRssScraper
-
+from infrastructure.news.scraper_factory import ScraperFactory
 from infrastructure.news.news_repository_impl import NewsRepositoryImpl
 from infrastructure.storage.memory_storage_repository import MemoryStorageRepository
 from infrastructure.alerts.win_toast import WinToast
@@ -30,22 +17,9 @@ if __name__ == "__main__":
     
     # Flet 앱 시작
     # 의존성 주입 (Dependency Injection)
+    
     # 1. Scrapers (Repository)
-    scrapers = [
-        NewspimRssScraper(),
-        EdailyRssScraper(),
-        HankyungRssScraper(),
-        MKRssScraper(),
-        MTScraper(),
-        YonhapRssScraper(),
-        AsiaeRssScraper(),
-        EtodayRssScraper(),
-        HeraldRssScraper(),
-        SeoulRssScraper(),
-        FnScraper(),
-        InfostockScraper(),
-        DartRssScraper()
-    ]
+    scrapers = ScraperFactory.create_all_scrapers()
     news_repo = NewsRepositoryImpl(scrapers)
     
     # 2. Storage

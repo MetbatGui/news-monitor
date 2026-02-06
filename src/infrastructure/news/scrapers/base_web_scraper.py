@@ -6,12 +6,12 @@ from datetime import datetime
 import logging
 
 from infrastructure.news.dto import ArticleData
-from domain.ports.news_port import NewsRepository
+from domain.ports.news_port import NewsScraper
 
 logger = logging.getLogger(__name__)
 
 
-class BaseWebScraper(NewsRepository, ABC):
+class BaseWebScraper(NewsScraper, ABC):
     """웹 스크래핑 기반 뉴스 스크래퍼의 베이스 클래스
     
     공통 로직:
