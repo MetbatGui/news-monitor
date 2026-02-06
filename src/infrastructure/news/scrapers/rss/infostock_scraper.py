@@ -6,6 +6,7 @@ import logging
 
 from infrastructure.news.dto import ArticleData
 from domain.ports.news_port import NewsRepository
+from infrastructure.network.retry_utils import common_retry
 
 logger = logging.getLogger(__name__)
 
@@ -17,24 +18,12 @@ class InfostockScraper(NewsRepository):
         articles = []
         
         try:
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
-                "Referer": "https://www.infostockdaily.co.kr/news/articleList.html"
-            }
+            html = self._fetch_search_result(keyword)
+            # Fix encoding issue if not handled in fetch
+            # Since we return text, encoding should be handled there or here. 
+            # In _fetch, we access response.text which uses response.encoding.
             
-            data = {
-                "sc_area": "A",
-                "view_type": "sm",
-                "sc_word": keyword
-            }
-            
-            with httpx.Client() as client:
-                response = client.post(self.SEARCH_URL, headers=headers, data=data, timeout=20)
-                response.raise_for_status()
-                # Fix encoding issue
-                response.encoding = 'utf-8'
-            
-            soup = BeautifulSoup(response.text, 'html.parser')
+            soup = BeautifulSoup(html, 'html.parser')
             items = soup.select(".list-block")
             
             for item in items:
@@ -95,3 +84,23 @@ class InfostockScraper(NewsRepository):
 
     def get_source_name(self) -> str:
         return "인포스탁"
+
+    @common_retry
+    def _fetch_search_result(self, keyword: str) -> str:
+        """인포스탁 검색 결과를 가져옵니다. (재시도 적용)"""
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+            "Referer": "https://www.infostockdaily.co.kr/news/articleList.html"
+        }
+        
+        data = {
+            "sc_area": "A",
+            "view_type": "sm",
+            "sc_word": keyword
+        }
+        
+        with httpx.Client() as client:
+            response = client.post(self.SEARCH_URL, headers=headers, data=data, timeout=20)
+            response.raise_for_status()
+            response.encoding = 'utf-8'
+            return response.text

@@ -7,6 +7,7 @@ import logging
 
 from infrastructure.news.dto import ArticleData
 from domain.ports.news_port import NewsRepository
+from infrastructure.network.retry_utils import common_retry
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,7 @@ class AsiaeRssScraper(NewsRepository):
         
         return articles
     
+    @common_retry
     def _fetch_rss_content(self) -> Optional[ET.Element]:
         """RSS XML 콘텐츠를 가져와서 파싱합니다.
         
@@ -58,6 +60,18 @@ class AsiaeRssScraper(NewsRepository):
             
             return ET.fromstring(response.content)
         except Exception as e:
+            # common_retry는 httpx exception에 대해 재시도하지만, 
+            # 여기서 Exception을 잡아버리면 retry가 동작하지 않을 수 있음.
+            # 그러나 재시도 후에도 실패하면 None을 리턴해야 하는 구조라면...
+            # retry를 먼저 적용하고, 최종 실패 시 여기서 잡히도록 해야 함.
+            # 하지만 @common_retry가 적용되면 Exception은 상위로 전파됨(reraise=True).
+            # 여기서는 try-except 블록을 제거하거나, retry가 적용된 내부 private 메서드를 따로 두는 것이 좋음.
+            # 일단 간단하게 @common_retry를 적용하되, 내부 try-except를 제거하고
+            # fetch_reports에서 예외를 처리하도록 변경하는 것이 맞음.
+            # 하지만 안전을 위해, httpx 에러는 raise하여 재시도하게 하고, 나머지는 로깅.
+            import httpx
+            if isinstance(e, (httpx.RequestError, httpx.TimeoutException, ConnectionError)):
+                raise e
             logger.error(f"RSS 가져오기 오류: {e}", exc_info=True)
             return None
     

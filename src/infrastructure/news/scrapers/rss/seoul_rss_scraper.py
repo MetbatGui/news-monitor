@@ -7,6 +7,7 @@ import logging
 
 from infrastructure.news.dto import ArticleData
 from domain.ports.news_port import NewsRepository
+from infrastructure.network.retry_utils import common_retry
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,7 @@ class SeoulRssScraper(NewsRepository):
         
         return articles
     
+    @common_retry
     def _fetch_rss_content(self) -> Optional[ET.Element]:
         """RSS XML 콘텐츠를 가져와서 파싱합니다.
         
@@ -78,6 +80,9 @@ class SeoulRssScraper(NewsRepository):
             logger.debug(f"문제 라인 근처: {str(e)}")
             return None
         except Exception as e:
+            import httpx
+            if isinstance(e, (httpx.RequestError, httpx.TimeoutException, ConnectionError)):
+                raise e
             logger.error(f"RSS 가져오기 오류: {e}", exc_info=True)
             return None
     
