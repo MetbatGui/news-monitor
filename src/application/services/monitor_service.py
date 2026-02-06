@@ -6,7 +6,7 @@ import logging
 from core import Config
 from domain.model import Article
 from infrastructure.news.dto import ArticleData
-from domain.ports.news_port import NewsRepository
+from domain.ports.news_port import NewsScraper
 from domain.ports.storage_port import StorageRepository
 from domain.ports.alert_port import AlertSystem
 
@@ -36,10 +36,6 @@ class MonitorService:
         self.seen_links: Set[str] = set()
         self._last_check_date: str | None = None
 
-    async def run(self):
-        """Deprecated: 모니터링 루프는 UI(Flet)의 비동기 루프에서 관리되거나 별도 스케줄러로 이동되었습니다."""
-        logger.warning("MonitorService.run() is deprecated.")
-        pass
 
     async def fetch_all_keywords(self, keywords: list[str]) -> list[Article]:
         """여러 키워드에 대해 기사를 수집하고 도메인 객체로 반환 (UI용)"""
